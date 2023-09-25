@@ -1,0 +1,22 @@
+version: '3'
+services:
+
+  flask_io:
+    env_file: 
+      - .env
+    image: aboglion/test  # if from dockerhub
+    restart: always
+    ports:
+      - "80:5000"
+    networks:
+      - mofet_network
+    volumes:
+      - ../TDC:/TDC
+      #to see volumes :
+                  #enter -> docker exec -it <container_name/ID> sh
+                  #list of volumes -> df -h
+
+networks:
+  mofet_network:
+    driver: bridge
+

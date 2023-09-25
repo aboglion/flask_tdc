@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waiting Page</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: lavender;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 5px;
+            display: inline-block;
+            animation: bounce 1.5s infinite ease-in-out;
+            vertical-align: middle;
+        }
+
+        .blue {
+            background-color: blue;
+        }
+
+        .lavender {
+            background-color: lavender;
+            animation-delay: -0.75s;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-30px);
+            }
+            60% {
+                transform: translateY(-15px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="circle blue"></div>
+        <span id="updatingText">Updating the database<span id="dots">...</span></span>
+        <div class="circle lavender"></div>
+        <h2>Please Wait...</h2>
+    </div>
+
+    <script>
+        // Dot animation for "Updating the database..."
+        let dots = document.getElementById("dots");
+        let count = 0;
+
+        setInterval(() => {
+            count++;
+            switch (count % 3) {
+                case 0:
+                    dots.textContent = "...";
+                    break;
+                case 1:
+                    dots.textContent = ".";
+                    break;
+                case 2:
+                    dots.textContent = "..";
+                    break;
+            }
+        }, 1000);
+
+        // Redirect after 5 seconds
+            window.location.href = "{{url_for('update_LYOUT')}}"; 
+    </script>
+</body>
+</html>

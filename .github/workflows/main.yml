@@ -1,0 +1,42 @@
+name: Run Docker Compose
+
+on:
+  push:
+    branches:
+      - main
+
+env: 
+  username: ${{ secrets.DOCKER_USERNAME }}
+
+jobs:
+  docker:
+    timeout-minutes: 1
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: build_container
+      run: docker build -t test ./flask_app
+
+    - name: tag_it
+      run: docker tag test ${username}/test
+
+    - name: testps
+      run: docker images
+
+    - name: Login_DockerHub
+      uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: bush_it
+      run: docker push ${username}/test
+
+    - name: clean_up
+      if: always()
+      run: docker rmi test:latest ${username}/test
+
+

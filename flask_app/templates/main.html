@@ -1,0 +1,272 @@
+<html>
+
+<head>
+    <title>Card Points</title>
+    <style>
+  /* Define CSS classes */
+
+  
+body {
+    font-family: Arial, sans-serif;
+    background-color:#436d95c2;
+}
+
+a {
+    all: unset;
+}
+
+.navbar {
+    display: flex;
+    background:#5867ee32;
+    backdrop-filter: blur( 10px );
+    -webkit-backdrop-filter: blur( 10px );
+    border: 1px solid rgba( 0, 0, 0, 0.18 );
+    overflow: hidden;
+    position: sticky;
+    top: -30px;
+    width: 95%;
+    margin: 0 auto;
+    z-index: 2;
+    justify-content: center;
+    text-shadow: 1px 1px 2px rgb(0, 0, 0) !important; 
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 20px;
+    box-shadow: 0px 10px 30px -10px rgba(0, 0, 0, 0.75); /* Increase shadow for a more pronounced effect */
+    justify-content: center;
+    overflow-x:auto;
+}
+.navbar:hover{
+    top:5px;
+    background:#5867ee6e;
+
+}
+
+.navbar a {
+    justify-content: center;
+    float: left;
+    color: #0b032cd2;
+    text-align: center;
+    padding: 14px 16px;
+    font-size: calc(15px + (36 - 20) * ((100vw - 300px) / (1600 - 300)));
+    height: 20px;
+    font-weight: bolder;
+    border-radius: 20px;
+    padding: auto;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.navbar a:hover {
+    background-color: #0d2e6159;
+    color: #FFFFFFFF;
+    transition: background-color 0.8s;
+    font-size: 230%;
+    text-shadow: 4px 4px 3px rgb(0, 0, 0);
+    text-decoration:underline;
+    transition: color 0.5s ease-in-out;
+    transition: font-size 0.1s ease-in;
+    animation: float 3s ease-in-out infinite; /* Add animation */
+    height: 35px;
+
+}
+
+/* Table styles */
+.card-table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    margin: 0 auto;
+    border-radius: 50px;
+    overflow: hidden;
+    text-shadow: 4px 4px 3px rgb(0, 0, 0) !important; 
+    box-shadow: 0px 10px 30px -10px rgba(0, 0, 0, 0.88); /* Increase shadow for a more pronounced effect */
+
+}
+
+
+
+
+.card-table th,
+.card-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+
+.card-table th {
+    background-color: #5e8bd7d6;
+    color: white;
+    position: sticky;
+    top: 60px; 
+    z-index: 1;
+
+}
+
+.card-type {
+    font-weight: bold;
+}
+
+.card-name {
+    font-style: italic;
+}
+
+.net_letter{
+    text-align: center;
+    color: rgb(63, 120, 205);
+    text-shadow: 4px 4px 3px rgb(0, 0, 0) !important; 
+}
+
+.planet_class{
+    text-align: center;
+    color: #0088c7;
+    text-shadow: 4px 4px 3px rgb(0, 0, 0) !important; 
+}
+
+.planet_class :hover{
+    color: #005dc7;
+    font-size: 230%;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.linked{
+    margin-top: 14px;
+    margin-bottom: 100px;
+}
+
+
+.key :hover{
+    font-size: 100px !important;
+}
+
+
+
+.pm_class{
+  color:rgb(183, 236, 224);
+}
+
+
+.pm_class :hover{
+    color:rgb(57, 224, 185);
+    font-size: 120%;
+    transition: all 0.1s ease-in-out;
+    cursor: pointer;
+
+}
+
+
+.M-button {
+  position: fixed;
+
+  z-index: 4;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 4px;
+  margin-top: 4px;
+  -webkit-transition-duration: 0.6s; /* Safari */
+  transition-duration: 0.6s;
+  width: 14vh;
+  height: 7vh;
+  background-color:rgba(164, 125, 231, 0.633);
+  border-radius: 20%;
+  /* text-align: center; */
+  line-height: 7vh;
+  border: 3px solid rgba(17, 67, 66, 0.616);
+  transition: all 0.6s ease-in-out;
+  box-shadow: 4 0 10px rgba(255, 255, 0, 0);
+  color: white;
+  text-decoration: none;
+  padding: 0;
+  font-size: 18px;
+  left:-1.5vw;
+}
+
+
+.M-button:hover {
+  border-color: orange;
+  box-shadow: 0 0 10px rgba(255, 255, 0, 1);
+  font-size: 20px;
+  z-index: 10;
+  left:1vw;
+
+}
+
+    </style>
+</head>
+
+<body>
+
+
+    <div class="navbar">
+        {% for plant in data %}
+        <a href="#{{plant}}">{{plant}}</a>
+        {% endfor %}
+
+        {% if session['logged_in'] %}
+        <a style="font-size:50px ;color: #c00000;font-size: medium;" href="{{url_for("log_out")}}" >
+            <i class="key">LOGOUT</i>
+        {% else %}
+        </a>
+        <a style="font-size:50px ;" href="{{url_for("log_in")}}" >
+            <i class="key">🔑</i>
+          </a>
+        {% endif %}
+
+    </div>
+
+    <a style="top:20vh" href="{{url_for("duplication")}}" class="M-button">
+        <i>דוח כפליות</i>
+      </a>
+
+
+    <div >
+        {% for plant in data %}
+        <hr class="linked" id="{{plant}}">
+        <a class="planet_class" href="tags_table/~/~/~/~/~/~/~/{{plant}}/~/~/~/~/~/~/~/~/0/0">
+            <h1 >🔍 {{plant}} </h1>
+        </a>
+        <h1 class="net_letter">&nbsp; NET: {{data[plant][-1]}} &nbsp; &nbsp;  LETTER: {{data[plant][-2]}}</h1>
+        <table class="card-table" style="width: calc(({{ data[plant][:-2]|length }}) * 20%)">
+            <tr>
+                {% for pms_list in data[plant][:-2] %}
+                {% for pm in pms_list %}
+                <th >
+                    <a href="/LYOUT/{{plant}}/{{pm[:2]}}/">
+
+                    <h2 class="pm_class"><p>👁‍🗨 PM : {{pm|safe}}</p></h2>
+                    <hr>
+                    {% for io in pms_list[pm] %}
+                    <p>{{ io }} [{{ pms_list[pm][io][0] }}/{{ pms_list[pm][io][1] }}]
+                        {% if pms_list[pm][io][1] != 0 %}
+                            {% set p = '{:.1f}'.format(100 * pms_list[pm][io][0] / pms_list[pm][io][1]) | int %}
+                            {% if p > 80 %}
+                            <h3 style="color:red">{{p}}% </h3>
+                            <progress style="accent-color: #c00000 !important;"  value="{{p}}" max="100">  </progress>
+                            {% else %}
+                            <h3>{{p}}%</h3>
+                            <progress  value="{{p}}" max="100">  </progress>
+                            {% endif %}
+                        {% else %}
+                        <p> N/A</p>
+                        <progress style="accent-color: #000000 !important;"  value="100" max="100">  </progress>
+                        {% endif %}
+                    </p>
+                    {% endfor %}
+                {% endfor %}
+            </a> </th>
+                {% endfor %}
+            </tr>
+        </table>
+        {% endfor %}
+    </div>
+
+    <script>
+        // Your JavaScript code goes here if needed.
+    </script>
+</body>
+
+</html>

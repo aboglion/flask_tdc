@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Card Points</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #436d95c2;
+            zoom: 90%;
+        }
+
+        .card-table {
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(20px);
+            margin: 0 auto;
+            border-radius: 30px;
+            /* overflow: hidden; */
+            box-shadow: 0px 5px 20px -10px rgba(0, 0, 0, 0.345);
+        }
+
+        .card-table tr:nth-child(odd) {
+            background-color: #f0eedeaf;
+        }
+
+        .card-table tr:nth-child(even) {
+            background-color: #d4dac66c;
+        }
+        
+
+.card-table th,
+.card-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+
+        .card-table th:first-child,
+        .card-type{
+            position:sticky !important;
+            position: -webkit-sticky !important; /* לתמיכה בדפדפנים שלא ב-WebKit */
+            left: 0;
+            font-weight: bold; 
+            z-index: 3 !important;
+            background-color: #041234d2;
+            
+            border-radius: 5px;
+            box-shadow: 0px 10px 30px -10px rgba(0, 0, 0, 0.75);
+            text-shadow: 1px 2px 3px rgb(0, 0, 0);
+                  }
+
+                  .card-table th {
+            background-color: #0059fdd6;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .card-table tr:hover td:first-child {
+            background-color: rgba(255, 157, 9, 0.463);
+            text-shadow: 2px 5px 6px rgb(0, 8, 255);
+        }
+
+        .card-table tr:hover {
+            transition-duration: 2s;
+            background-color: #00f7ff25;
+            color: #FFFFFFFF;
+            text-shadow: 2px 5px 6px rgb(0, 8, 255);
+        }
+
+        .card-table td:hover {
+            color: #0b032cd2;
+            font-weight: bold;
+            -webkit-box-shadow: 0 6px 6px -6px #0E1119;
+            -moz-box-shadow: 0 6px 6px -6px #0E1119;
+            box-shadow: 0 6px 6px -6px #0E1119;
+            transition: box-shadow 2s ease-in-out;
+        }
+
+
+        .card-name {
+            font-style: italic;
+        }
+
+        /* Responsive layout */
+        .container {
+            width: 100%;
+            overflow: auto;
+        }
+
+        .M_L-button {
+            position: fixed;
+            z-index: 4;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            -webkit-transition-duration: 2s;
+            transition-duration: 2s;
+            width: 10vh;
+            height: 10vh;
+            background-color: rgba(51, 51, 95, 0.5);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 10vh;
+            border: 3px solid rgba(239, 202, 157, 0.5);
+            box-shadow: 0 0 10px rgba(255, 255, 0, 0);
+            color: white;
+            text-decoration: none;
+            padding: 0;
+            font-size: 5vh;
+            top: -3.7vh;
+        }
+
+        .M_L-button:hover {
+            transition-duration: 0.5s !important;
+            font-size: 5vh;
+            top: 1vh;
+            box-shadow: 0 0 10px rgba(255, 255, 0, 1);
+            border-color: orange;
+        }
+    </style>
+</head>
+
+<body>
+
+    <a style="left: 7vw" href="{{url_for('main_page')}}" class="M_L-button">
+        <i>🏠</i>
+    </a>
+    {% if session['logged_in'] %}
+    <a style="left: calc(6.3vw*2); color: red; font-size: medium;" href="{{url_for('log_out')}}" class="M_L-button">
+        <i>OUT</i>
+    </a>
+    {% else %}
+    <a style="left: calc(6.3vw*2)" href="{{url_for('log_in')}}" class="M_L-button">
+        <i>🔑</i>
+    </a>
+    {% endif %}
+
+    <div class="container" id="myTable">
+        <table class="card-table">
+            <thead>
+                <tr>
+                    <th>PM {{pm}} - plant {{plant}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set net_ucn = namespace(value=0) %}
+                {% set cardnums = [] %}
+                {% for INDEX, Points in lyout.items() %}
+                {% for Point in Points %}
+                {% set cardnum = Point["CARD_NUM"] %}
+                {% if cardnum not in cardnums %}
+                {% set _ = cardnums.append(cardnum) %}
+                {% if loop.index > 1 %}
+                </tr>
+                {% endif %}
+                <tr class="card-table">
+                    {% if "AI" in Point["TYPE"] %}
+                    {% set color = "red" %}
+                    {% elif "AO" in Point["TYPE"] %}
+                    {% set color = "orange" %}
+                    {% elif "DI" in Point["TYPE"] %}
+                    {% set color = "yellow" %}
+                    {% elif "DO" in Point["TYPE"] %}
+                    {% set color = "Chartreuse" %}
+                    {% endif %}
+                    <td class="card-type" style="color: {{color}};"> {{ cardnum }}
+                        <hr> {{ Point["TYPE"] }}
+                    </td>
+                    {% endif %}
+                    <!-- אם מנה ל + תא שהוא ידני או מחוק או תא לא קיים -->
+                    {% if session['logged_in'] and ((Point["STATUS"] is defined and not (Point["STATUS"]=="existed")) or Point["STATUS"] is not defined) %}
+                    {% set click_func = "addInput({cell:this,CARD_NUM:parseInt(" ~ Point['CARD_NUM'] ~ "),POINT_NUM:parseInt(" ~ loop.index ~ "),TYPE:'" ~ Point['TYPE'] ~ "'})" %}
+                    {% elif Point["STATUS"] is not defined %}
+                    {% set click_func="" %}
+                    {% else %}
+                    {% set click_func = "GOTO('" ~ Point['NAME'] ~ "','" ~ plant ~ "')" %}
+                    {% endif %}
+
+                    {% if Point["STATUS"] is not defined %}
+                    <td onclick="{{click_func}}" title="TYPE:{{Point['TYPE']}}  PM:{{Point['PM']}} CARD:{{Point['CARD_NUM']}} SLOT:{{loop.index}}" style="background-color:#9aa1b0;">-[{{loop.index}}]-</td>
+                    {% elif Point["STATUS"]=="existed" %}
+                    <td onclick="{{click_func}}" title="TYPE:{{Point['TYPE']}}  PM:{{Point['PM']}} CARD:{{Point['CARD_NUM']}} SLOT:{{Point['POINT_NUM']}}" class="card-name">[{{Point["POINT_NUM"]}}] {{ Point["NAME"]}}</td>
+                    {% elif Point["STATUS"]=="manual" %}
+                    <td onclick="{{click_func}}" style="background-color:#9aa1b0;color:rgb(25, 0, 255);">[{{Point["POINT_NUM"]}}] {{ Point["NAME"]}}</td>
+                    {% else %}
+                    <td onclick="{{click_func}}" style="background-color:#9aa1b0;color:red;text-decoration:line-through">[{{Point["POINT_NUM"]}}] {{ Point["NAME"]}}</td>
+                    {% endif %}
+
+                    {% if net_ucn.value==0 and Point["CARD_ID"] is defined %}
+                    {% set net_ucn.value=Point["CARD_ID"][:4] %}
+                    {% endif %}
+                {% endfor %}
+                {% endfor %}
+                {% if cardnums %}
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function GOTO(name_, mitkan) {
+            let name = name_.split(" ")[0]
+            let url = `{{url_for('tags_table')}}${name}/~/~/~/~/~/~/${mitkan}/~/~/~/~/~/~/~/~/0/0`
+            console.log(url)
+            window.location.href = url
+        }
+
+        const tableDiv = document.getElementById('myTable');
+        let startX;
+
+        tableDiv.addEventListener('mouseenter', (e) => {
+            startX = e.clientX;
+            //startY = e.clientY;
+        });
+
+        tableDiv.addEventListener('mousemove', (e) => {
+            let dx = startX - e.clientX;
+           // let dy = startY - e.clientY;
+                    // גלילה למעלה
+                   // tableDiv.scrollTop -= dy * (startY * 0.02)
+                    // גלילה לשמאלה+ גלילה לימין
+                    tableDiv.scrollLeft -= dx * (startX * 0.01)
+                    
+    
+                startX = e.clientX;
+               // startY = e.clientY;
+
+        });
+
+        // למניעת בחירת תוכן בעת הגלילה
+        tableDiv.addEventListener('selectstart', (e) => {
+            e.preventDefault();
+        });
+
+        function addInput(data) {
+            console.log("{{net_ucn.value}}")
+            cell = data["cell"]
+            console.log("daata: ", data)
+            cell.removeAttribute("onclick"); // remove onclick attribute after first click
+
+            var inputElement = document.createElement('input');
+            inputElement.type = 'text';
+
+            var buttonElement = document.createElement('button');
+            buttonElement.innerText = 'Save';
+            inputElement.id = 'inputValue' + Math.random().toString().substring(2); // create a unique ID
+
+            buttonElement.onclick = function () {
+                let inputValue = document.querySelector('#' + inputElement.id).value;
+
+                if (inputValue == "" || inputValue.length > 8) {
+                    alert("קלט לא תקין")
+                    return
+                }
+                delete data.cell;
+                data["NAME"] = inputValue;
+                data["PM"] = '{{pm}}';
+                data["PLANT"] = '{{plant}}';
+                data["STATUS"] = "manual";
+                data['DB_FILE'] = "manual"
+                if (data["PM"].charAt(0) == "0") {
+                    data["PM"] = data["PM"].slice(1);
+                }
+                data["NODENUM"] = data["PM"]
+                data["CARD_ID"] = "{{net_ucn.value}}-" + data["PM"] + "-" + data['CARD_NUM']
+                data["ID"] = data["CARD_ID"] + "-" + data["POINT_NUM"]
+                data["PTDESC"] = "manual"
+                data["SLOTNUM"] = data["POINT_NUM"]
+                console.log(data)
+
+                fetch('/updateit', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                    })
+                    .then(
+                        setTimeout(function () {
+                            window.location.reload(1);
+                        }, 1000)
+                    )
+            };
+
+            cell.appendChild(inputElement);
+            cell.appendChild(buttonElement);
+            inputElement.focus(); // focus the input field
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,33 @@
+# This is the default target. When you run "make -f ssh", it will execute the "init" target.
+default: init
+
+init:
+	@read -p "Enter your email address: " email; \
+	if [ -z "$$email" ]; then \
+		@echo "Email address is required."; \
+		exit 1; \
+	fi; \
+	if [ "$(OS)" = "Windows_NT" ]; then \
+		ssh-keygen -t rsa -b 4096 -C "$$email"; \
+		eval "$$(ssh-agent -s)"; \
+		ssh-add ~/.ssh/id_ed25519; \
+		echo the key is :; \
+		echo "-----------------------"; \
+		echo "-----------------------"; \
+		echo "enter it in this link :"; \
+		echo "https://github.com/settings/keys"; \
+	else \
+		ssh-keygen -t ed25519 -C "$$email"; \
+		eval "$$(ssh-agent -s)"; \
+		ssh-add ~/.ssh/id_ed25519; \
+		echo the key is :; \
+		echo "-----------------------"; \
+		cat  ~/.ssh/id_ed25519.pub; \
+		echo "-----------------------"; \
+		echo "enter it in this link :"; \
+		echo "https://github.com/settings/keys"; \
+	fi
+	@echo to test connection enter :
+	@echo ssh -T git@github.com
+
+	
