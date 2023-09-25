@@ -3,5 +3,4 @@ __pycache__/
 venv/
 .last_update
 DB/
-
-
+.env
