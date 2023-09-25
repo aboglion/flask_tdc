@@ -68,3 +68,4 @@ def Update_Pms_Data():
     PMs_DB.truncate()
     PMs_DB.insert(all)
     PMs_DB.close()
+    print("Update_Pms_Data \n",all)
