@@ -1,7 +1,7 @@
 
 defult_STATUS ="existed"
 # EB_FILES_DIR="../../TDC/DB"
-EB_FILES_DIR="TDC/DB"
+EB_FILES_DIR="/TDC/DB"
 TAGS_TYBE=["*","RC","DI","DO","AI","AO","DC","RPV","SEQ","NM","FL","ARR","TM"]
 NET = "A"
 NET_B = ["930", "800", "690", "650", "651"]
