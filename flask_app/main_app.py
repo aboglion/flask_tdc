@@ -63,7 +63,7 @@ def update_LYOUT():
     print("updated")
     time.sleep(5)
     return redirect(url_for('main_page'))
-Update_Pms_Data
+
 @app.route('/duplication/', methods=['POST', 'GET'])
 def duplication():
     return render_template('duplication.html')
