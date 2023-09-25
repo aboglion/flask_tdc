@@ -6,7 +6,7 @@ on:
       - main
 
 env: 
-  username: ${{ secrets.DOCKER_USERNAME }}
+  dockername: flask_tdc
 
 jobs:
   docker:
@@ -18,10 +18,10 @@ jobs:
       uses: actions/checkout@v4
 
     - name: build_container
-      run: docker build -t test ./flask_app
+      run: docker build -t ${dockername} ./flask_app
 
     - name: tag_it
-      run: docker tag test ${username}/test
+      run: docker tag ${dockername} ${{ secrets.DOCKER_USERNAME }}/${dockername}
 
     - name: testps
       run: docker images
@@ -33,10 +33,10 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: bush_it
-      run: docker push ${username}/test
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/${dockername}
 
     - name: clean_up
       if: always()
-      run: docker rmi test:latest ${username}/test
+      run: docker rmi ${dockername}:latest ${{ secrets.DOCKER_USERNAME }}/${dockername}
 
 
