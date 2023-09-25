@@ -8,7 +8,7 @@ sys.tracebacklimit = -1
 load_dotenv()
 username = os.getenv("DOCKERHUB_USERNAME")
 access_token = os.getenv("DOCKERHUB_ACCESS_TOKEN")
-repository_name = "test"
+repository_name = "flask_tdc"
 api_url = f"https://hub.docker.com/v2/repositories/{username}/{repository_name}"
 
 
