@@ -9,7 +9,7 @@ all_plants = {}
 LYOUT=glob("./DB/LYOUT_DB_*.json")
 print(LYOUT,"--")
 
-# יצירת דף ראשי( סטטיסטיקה + תפריט )לכל המתקןים
+# יצירת דף ראשי( סטטיסטיקה + תפריט ) לכל המתקןים
 def Update_Pms_Data():
     plant_list=[]
     for p in LYOUT:
