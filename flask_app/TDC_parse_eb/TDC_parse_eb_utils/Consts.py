@@ -1,11 +1,11 @@
 
 defult_STATUS ="existed"
-#---------docker_files_path_(TDC mount in when run docker-compose)
+##---------docker_files_path_(TDC mount in when run docker-compose)
 EB_FILES_DIR="/TDC/DB" 
 DB_JASON="/TDC/DB_JASON" 
-#---------local_files_path
+##---------local_files_path
 # EB_FILES_DIR="../../TDC/DB"
-DB_JASON="/DB"   #local
+# DB_JASON="/DB"   #local
 TAGS_TYBE=["*","RC","DI","DO","AI","AO","DC","RPV","SEQ","NM","FL","ARR","TM"]
 NET = "A"
 NET_B = ["930", "800", "690", "650", "651"]
