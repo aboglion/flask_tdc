@@ -2,7 +2,7 @@ from tinydb import TinyDB
 
 # פונקציה לעדכון מצב (סטטוס) של נתונים מסוימים בעץ המידע
 def update_status(parse_EB_DATA, which_plant):
-    TAGS_DB = TinyDB(f'./DB/TAGS_DB_{which_plant}.json')
+    TAGS_DB = TinyDB(f'Consts.DB_JASON/TAGS_DB_{which_plant}.json')
     UPDATED = []
     try:
         DB_DATA = TAGS_DB.all()[0].get(which_plant, [])
