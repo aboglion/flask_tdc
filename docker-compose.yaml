@@ -4,8 +4,8 @@ services:
   flask_io:
     env_file: 
       - .env
-    image: aboglion/flask_tdc  # if from dockerhub
-    # restart: always
+    image: aboglion/flask_tdc  #if image not in local ,will dowload it from dockerhube
+    restart: always
     ports:
       - "80:5000"
     networks:

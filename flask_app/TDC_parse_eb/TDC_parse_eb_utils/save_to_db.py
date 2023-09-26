@@ -1,11 +1,13 @@
 from tinydb import TinyDB
+from .Consts import DB_JASON
+
 
 # פונקציה לשמירת מידע במסדי נתונים
 def save_to_db(which_plant, tags_data, lyout, invalid_lyout):
     try:
-        TAGS_DB = TinyDB(f'{Consts.DB_JASON}/TAGS_DB_{which_plant}.json')
-        LYOUT_DB = TinyDB(f'{Consts.DB_JASON}/LYOUT_DB_{which_plant}.json')
-        Invalid_LYOUT_DB = TinyDB(f'{Consts.DB_JASON}/Invalid_LYOUT_DB_{which_plant}.json')
+        TAGS_DB = TinyDB(f'{DB_JASON}/TAGS_DB_{which_plant}.json')
+        LYOUT_DB = TinyDB(f'{DB_JASON}/LYOUT_DB_{which_plant}.json')
+        Invalid_LYOUT_DB = TinyDB(f'{DB_JASON}/Invalid_LYOUT_DB_{which_plant}.json')
 
         # מנקה ומכניס את הנתונים למסדי הנתונים
         TAGS_DB.truncate()

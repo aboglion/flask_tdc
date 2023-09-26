@@ -58,7 +58,11 @@ def update_LYOUT():
         TDC.main_parser(which_plant)
     with open('templates/duplication.html', 'a', encoding="utf-8") as file:
         file.write("</body>\n</html>")
-    TDC.Parse_Utils.Update_Pms_Data()
+    r=False
+    while (not r):
+        time.sleep(2)
+        r=TDC.Parse_Utils.Update_Pms_Data()
+
     print("updated")
     return redirect(url_for('main_page'))
 
