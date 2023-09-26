@@ -10,7 +10,7 @@ from datetime import datetime,timedelta
 if not os.path.exists(Consts.DB_JASON):
     os.makedirs(Consts.DB_JASON)
 
-# תאריך עדכון הבסיס נתונים יום לפני בהפעלה ראשונה
+#תאריך עדכון הבסיס נתונים יום לפני בהפעלה ראשונה
 try:
     with open(f'./TDC_parse_eb/UPDATE_DATE.log', "r") as UPDATE_DATE_FILE:
         updated_date=int(UPDATE_DATE_FILE.read())
