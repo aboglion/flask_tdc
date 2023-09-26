@@ -1,31 +1,23 @@
 from .Consts import PLANT_LETTER,NET_B,DB_JASON
-import os,time
 from glob import glob
 from tinydb import TinyDB
 
 
 
-all_plants = {}
-LYOUT=glob(f"{DB_JASON}/LYOUT_DB_*.json")
-print(LYOUT,"--")
 
 # יצירת דף ראשי( סטטיסטיקה + תפריט ) לכל המתקןים
-def Update_Pms_Data():
-    plant_list=[]
-    for p in LYOUT:
-        if os.path.getsize(p) > 0:
-            plant=p[:-5].split("_")[-1]# {DB_JASON}/LYOUT_DB_651.json
-            plant_list.append(plant)
-    print(plant_list)
+def Update_Pms_Data(ALL_Plant):
+    print(ALL_Plant)
     all={}
     # for plant in ["800"]:
-    for plant in plant_list:
+    for plant in ALL_Plant:
         try:
             LYOUT_DB = TinyDB(f'{DB_JASON}/LYOUT_DB_{plant}.json')
             PMs_DATA=LYOUT_DB.all()[0][plant]
             LYOUT_DB.close()
         except Exception as e:
             print(e,f"\n Update_Pms_Data NO {DB_JASON}/LYOUT_DB_{plant}.json FILE")
+            continue
         pms=[]
         for pm in PMs_DATA:
             pm_=f'{pm}'
@@ -63,15 +55,11 @@ def Update_Pms_Data():
         pms.append(PLANT_LETTER[plant])
         pms.append("B" if plant in NET_B else "A")
         all[plant]=pms
+        print ( plant,"main ---<")
         pms=[]
     PMs_DB = TinyDB(f'{DB_JASON}/PMs.json')
     PMs_DB.truncate()
     PMs_DB.insert(all)
-    time.sleep(1)
     PMs_DB.close()
-    if len(all)>1:
-        print("Update_Pms_Data \n",all)
-        return True
-    else:
-        print ("main page data empty .. ")
-        return False
+
+

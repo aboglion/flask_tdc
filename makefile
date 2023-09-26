@@ -4,7 +4,7 @@ up_:
 	docker-compose up -d
 
 #localy (build before run)
-local:clear b log up_
+local:clear b log up
 up:
 	docker-compose up
 b:
@@ -14,7 +14,8 @@ b:
 # delet all images 
 clear:
 	docker-compose down --rmi all -v 
-
+stop:
+	docker-compose down
 
 log:
 	docker-compose logs flask_io

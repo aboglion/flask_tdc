@@ -54,14 +54,12 @@ def update_LYOUT():
     with open('templates/duplication.html', 'w', encoding="utf-8") as file:
         file.write("<html>\n<head>\n<title> תגים - כפליות </title>\n</head>\n<body>\n")
         file.write("</body>\n</html>")
+    p=[]
     for which_plant in ALL_Plant:
         TDC.main_parser(which_plant)
     with open('templates/duplication.html', 'a', encoding="utf-8") as file:
         file.write("</body>\n</html>")
-    r=False
-    while (not r):
-        time.sleep(2)
-        r=TDC.Parse_Utils.Update_Pms_Data()
+    TDC.Parse_Utils.Update_Pms_Data(ALL_Plant)
 
     print("updated")
     return redirect(url_for('main_page'))
