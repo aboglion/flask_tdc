@@ -7,8 +7,8 @@ from tinydb import TinyDB, Query
 import hashlib,time
 from datetime import datetime,timedelta
 
-if not os.path.exists("Consts.DB_JASON"):
-    os.makedirs("Consts.DB_JASON")
+if not os.path.exists(Consts.DB_JASON):
+    os.makedirs(Consts.DB_JASON)
 
 # תאריך עדכון הבסיס נתונים יום לפני בהפעלה ראשונה
 try:
@@ -30,7 +30,7 @@ ALL_Plant = Consts.NET_B+Consts.NET_A
 def main_page():
     global updated_date
     # השגת המידע לדף הראשי
-    PMs_DB = TinyDB(f'Consts.DB_JASON/PMs.json')
+    PMs_DB = TinyDB(f'{Consts.DB_JASON}/PMs.json')
     data_main = PMs_DB.all()
     PMs_DB.close()
     # אם לא קיים מידע בבסיס נתונים אז תעשה עדכון לשליפה מהקבצים
@@ -145,7 +145,7 @@ def tags_table(num=0, filter=None, NAME=" ", PTDESC='', SLOTNUM='', ID='', STATU
 def LYOUT(plant=800, pm=5):
     plant = str(plant)
     pm = str(pm) if len(str(pm)) > 1 else "0"+str(pm)
-    LYOUT_DB = TinyDB(f'Consts.DB_JASON/LYOUT_DB_{plant}.json')
+    LYOUT_DB = TinyDB(f'{Consts.DB_JASON}/LYOUT_DB_{plant}.json')
     LYOUT_DATA = LYOUT_DB.all()[0][plant][pm]
     LYOUT_DB.close()
     return render_template('LYOUT.html', lyout=LYOUT_DATA, plant=str(plant), pm=str(pm))
@@ -157,13 +157,13 @@ def updateit() :
         it = request.get_json() 
         lyputpm='0'+it["PM"] if len(it["PM"])<2 else it["PM"]
         # print(it,"<----------------------------==========")
-        LYOUT_DB = TinyDB(f'Consts.DB_JASON/LYOUT_DB_{it["PLANT"]}.json')
+        LYOUT_DB = TinyDB(f'{Consts.DB_JASON}/LYOUT_DB_{it["PLANT"]}.json')
         LYOUT_DATA = LYOUT_DB.all()[0]#[it["PLANT"]][it["PM"]][it["CARD_NUM"]])
         LYOUT_DATA[it["PLANT"]][lyputpm][str(it["CARD_NUM"])][int(it["POINT_NUM"])-1]=it
         LYOUT_DB.truncate()
         LYOUT_DB.insert(LYOUT_DATA)
         LYOUT_DB.close
-        TA_DB = TinyDB(f'Consts.DB_JASON/TAGS_DB_{it["PLANT"]}.json')
+        TA_DB = TinyDB(f'{Consts.DB_JASON}/TAGS_DB_{it["PLANT"]}.json')
         tags=TA_DB.all()[0][it["PLANT"]]
         s_t=[t for t in tags if t["ID"]!=it["ID"]]
         s_t.append(it)
@@ -187,7 +187,7 @@ def GET_TAGS(plants, quary_dict_clean):
         desc = quary_dict_clean["PTDESC"]
         del quary_dict_clean["PTDESC"]
     for which_plant in plants:
-        TAGS_DB = TinyDB(f'Consts.DB_JASON/TAGS_DB_{which_plant}.json')
+        TAGS_DB = TinyDB(f'{Consts.DB_JASON}/TAGS_DB_{which_plant}.json')
         DATA = list(TAGS_DB.all())
         if len(DATA) > 0:
             TAGS_DATA = DATA[0][which_plant]
