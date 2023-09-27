@@ -12,7 +12,7 @@ services:
       - mofet_network
     volumes:
     #  - /TDC:/TDC
-      - ~/TDC:/TDC
+      - /media/TDC_FILES:/TDC
       #to see volumes :
                   #enter -> docker exec -it <container_name/ID> sh
                   #list of volumes -> df -h

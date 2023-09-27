@@ -1,11 +1,9 @@
 import requests
 import time
 import os,sys
-from dotenv import load_dotenv
 import subprocess
 sys.tracebacklimit = -1
 
-load_dotenv()
 username = "aboglion"
 access_token = "dckr_pat_mOPRQtdjZyT2y1tQArOaSaHDdrE"
 repository_name = "flask_tdc"
@@ -19,6 +17,7 @@ def updat_it(last_push):
     make_up_command = ["make", "update"]
         # Use subprocess.run() to execute the make up command
     result = subprocess.run(make_up_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    print(result)
     if result.returncode == 0:
         print("Make up completed successfully")
         print(f"Stored Last Push")
