@@ -11,14 +11,26 @@ if not os.path.exists(Consts.DB_JASON):
     os.makedirs(Consts.DB_JASON)
 
 
-app = Flask(__name__)
 ALL_Plant = Consts.NET_B+Consts.NET_A
 
+#תאריך עדכון הבסיס נתונים יום לפני בהפעלה ראשונה
+try:
+    with open(f'./TDC_parse_eb/UPDATE_DATE.log', "r") as UPDATE_DATE_FILE:
+        updated_date=int(UPDATE_DATE_FILE.read())
+except Exception as e:
+        print(e,"<<<<<=================|||||||=====--------###")
+        with open(f'./TDC_parse_eb/UPDATE_DATE.log', "w+") as UPDATE_DATE_FILE:
+            updated_date = (datetime.now() - timedelta(days=1)).day
+            UPDATE_DATE_FILE.write(str(updated_date))
+        
+
+app = Flask(__name__)
 
 @app.route('/')
 def main_page():
     global updated_date
     # השגת המידע לדף הראשי
+    time.sleep(4)
     PMs_DB = TinyDB(f'{Consts.DB_JASON}/PMs.json')
     data_main = PMs_DB.all()
     PMs_DB.close()
@@ -204,15 +216,5 @@ def filter_dicts(list_of_dicts, criteria):
             result.append(item)
     return result
 
-if __name__ == '__main__':
-#תאריך עדכון הבסיס נתונים יום לפני בהפעלה ראשונה
-    try:
-        with open(f'./TDC_parse_eb/UPDATE_DATE.log', "r") as UPDATE_DATE_FILE:
-            updated_date=int(UPDATE_DATE_FILE.read())
-    except Exception as e:
-            print(e,"<<<<<=================|||||||=====--------###")
-            with open(f'./TDC_parse_eb/UPDATE_DATE.log', "w+") as UPDATE_DATE_FILE:
-                updated_date = (datetime.now() - timedelta(days=1)).day
-                UPDATE_DATE_FILE.write(str(updated_date))
-            
+# if __name__ == '__main__':
 
