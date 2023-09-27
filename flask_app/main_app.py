@@ -10,17 +10,6 @@ from datetime import datetime,timedelta
 if not os.path.exists(Consts.DB_JASON):
     os.makedirs(Consts.DB_JASON)
 
-#תאריך עדכון הבסיס נתונים יום לפני בהפעלה ראשונה
-try:
-    with open(f'./TDC_parse_eb/UPDATE_DATE.log', "r") as UPDATE_DATE_FILE:
-        updated_date=int(UPDATE_DATE_FILE.read())
-except Exception as e:
-        print(e,"<<<<<=================|||||||=====--------###")
-        with open(f'./TDC_parse_eb/UPDATE_DATE.log', "w+") as UPDATE_DATE_FILE:
-            updated_date = (datetime.now() - timedelta(days=1)).day
-            UPDATE_DATE_FILE.write(str(updated_date))
-            
-
 
 app = Flask(__name__)
 ALL_Plant = Consts.NET_B+Consts.NET_A
@@ -71,12 +60,7 @@ def duplication():
     return render_template('duplication.html')
 
 
-
-
-# The string to be hashed TODO:setup dotenv for token
-#app.secret_key =  SECRIT["HASH_KEY"]
 app.secret_key =  os.getenv("HASH_KEY")
-
 def hash_password(password):
     hash_object = hashlib.sha256()
     hash_object.update(password.encode('utf-8'))
@@ -220,7 +204,15 @@ def filter_dicts(list_of_dicts, criteria):
             result.append(item)
     return result
 
-# if __name__ == '__main__':
-    # app.run(debug=True)
-
+if __name__ == '__main__':
+#תאריך עדכון הבסיס נתונים יום לפני בהפעלה ראשונה
+    try:
+        with open(f'./TDC_parse_eb/UPDATE_DATE.log', "r") as UPDATE_DATE_FILE:
+            updated_date=int(UPDATE_DATE_FILE.read())
+    except Exception as e:
+            print(e,"<<<<<=================|||||||=====--------###")
+            with open(f'./TDC_parse_eb/UPDATE_DATE.log', "w+") as UPDATE_DATE_FILE:
+                updated_date = (datetime.now() - timedelta(days=1)).day
+                UPDATE_DATE_FILE.write(str(updated_date))
+            
 
