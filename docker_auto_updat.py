@@ -6,8 +6,8 @@ import subprocess
 sys.tracebacklimit = -1
 
 load_dotenv()
-username = os.getenv("DOCKERHUB_USERNAME")
-access_token = os.getenv("DOCKERHUB_ACCESS_TOKEN")
+username = "aboglion"
+access_token = "dckr_pat_mOPRQtdjZyT2y1tQArOaSaHDdrE"
 repository_name = "flask_tdc"
 api_url = f"https://hub.docker.com/v2/repositories/{username}/{repository_name}"
 
@@ -15,6 +15,7 @@ api_url = f"https://hub.docker.com/v2/repositories/{username}/{repository_name}"
 def updat_it(last_push):
 
     # Define the make up command as a list of strings
+    # make_up_command = ["make", "debugit"]
     make_up_command = ["make", "update"]
         # Use subprocess.run() to execute the make up command
     result = subprocess.run(make_up_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)

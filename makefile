@@ -1,4 +1,5 @@
 #from githube (delet all images before run)
+debugit: clear log up
 update: clear up_
 up_:
 	docker-compose up -d
