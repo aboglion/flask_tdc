@@ -15,7 +15,7 @@ try:
     with open(f'./TDC_parse_eb/UPDATE_DATE.log', "r") as UPDATE_DATE_FILE:
         updated_date=int(UPDATE_DATE_FILE.read())
 except Exception as e:
-        print(e)
+        print(e,"<<<<<=================|||||||=====--------###")
         with open(f'./TDC_parse_eb/UPDATE_DATE.log', "w+") as UPDATE_DATE_FILE:
             updated_date = (datetime.now() - timedelta(days=1)).day
             UPDATE_DATE_FILE.write(str(updated_date))
@@ -218,7 +218,7 @@ def filter_dicts(list_of_dicts, criteria):
             result.append(item)
     return result
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+    # app.run(debug=True)
 
 
