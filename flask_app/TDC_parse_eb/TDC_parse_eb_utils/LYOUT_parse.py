@@ -72,6 +72,6 @@ def LYOUT_parse(path, tags):
                 lyout[PLANT][str(tag_pm)][tag_card][tag_position]["CARD_ID"] = tag["CARD_ID"]
         except Exception:
             print("\n\n\n---------======\n", tag["NAME"], tag_position, len(lyout[PLANT][str(tag_pm)][tag_card]))
-
+            continue
     # החזרת המילון lyout והשגיאות
     return [lyout, {"errors": Invalid}]

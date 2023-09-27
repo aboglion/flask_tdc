@@ -39,7 +39,9 @@ def main_page():
                 # (פתיחת האתר הראשונה אחרי השעה 9 יתעדכן הבסיס נתונים)    
     if not data_main or ( updated_date!=datetime.now().day and  datetime.now().hour >= Consts.update_hour):
         with open(f'./TDC_parse_eb/UPDATE_DATE.log', "w+") as UPDATE_DATE_FILE:
+            print("+=====> now new day -updating ",updated_date,"->",updated_date,end=" " )
             updated_date = datetime.now().day
+            print(updated_date)
             UPDATE_DATE_FILE.write(str(updated_date))
         return render_template('update_page.html')
     return render_template('main.html', data=data_main[0])
