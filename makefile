@@ -23,5 +23,5 @@ log:
 
 #enter tnside the docker
 in:
-	docker exec -it flask_io sh
+	docker-compose exec flask_io sh
 	

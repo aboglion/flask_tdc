@@ -17,7 +17,13 @@ services:
                   #enter -> docker exec -it <container_name/ID> sh
                   #list of volumes -> df -h
 
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: ["-t", "1m"]
+    restart: always
+
 networks:
   mofet_network:
     driver: bridge
-
