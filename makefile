@@ -1,6 +1,4 @@
 #from githube (delet all images before run)
-debugit: clear log up
-update: clear up_
 up_:
 	docker-compose up -d
 
@@ -17,11 +15,15 @@ clear:
 	docker-compose down --rmi all -v 
 stop:
 	docker-compose down
-
 log:
 	docker-compose logs flask_io
+log_w:
+	docker-compose logs watchtower
 
 #enter tnside the docker
 in:
 	docker-compose exec flask_io sh
+git_push:
+	git add . && git commit -m "teat" &&git push
+
 	
