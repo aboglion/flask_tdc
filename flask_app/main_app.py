@@ -13,27 +13,29 @@ if not os.path.exists(Consts.DB_JASON):
 
 ALL_Plant = Consts.NET_B+Consts.NET_A
 
-#תאריך עדכון הבסיס נתונים יום לפני בהפעלה ראשונה
-try:
-    with open(f'./TDC_parse_eb/UPDATE_DATE.log', "r") as UPDATE_DATE_FILE:
-        updated_date=int(UPDATE_DATE_FILE.read())
-except Exception as e:
-        print(e,"<<<<<==|||")
-        with open(f'./TDC_parse_eb/UPDATE_DATE.log', "w+") as UPDATE_DATE_FILE:
-            updated_date = (datetime.now() - timedelta(days=1)).day
-            UPDATE_DATE_FILE.write(str(updated_date))
+
 data_main=None
 # השגת המידע לדף הראשי
 PMs_DB = TinyDB(f'{Consts.DB_JASON}/PMs.json')
 data_main = PMs_DB.all()
 PMs_DB.close()
-print("30",updated_date)
+print("30")
 
 app = Flask(__name__)
 
 @app.route('/')
 def main_page():
-    global updated_date,data_main
+    global data_main
+
+    #תאריך עדכון הבסיס נתונים יום לפני בהפעלה ראשונה
+    try:
+        with open(f'./TDC_parse_eb/UPDATE_DATE.log', "r") as UPDATE_DATE_FILE:
+            updated_date=int(UPDATE_DATE_FILE.read())
+    except Exception as e:
+            print(e,"<<<<<==|||")
+            with open(f'./TDC_parse_eb/UPDATE_DATE.log', "w+") as UPDATE_DATE_FILE:
+                updated_date = (datetime.now() - timedelta(days=1)).day
+            UPDATE_DATE_FILE.write(str(updated_date))
 
     # אם לא קיים מידע בבסיס נתונים אז תעשה עדכון לשליפה מהקבצים
     # or
