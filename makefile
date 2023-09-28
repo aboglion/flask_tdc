@@ -23,7 +23,7 @@ log_2:
 #enter tnside the docker
 in:
 	docker-compose exec flask_io sh
-git_push:
+push:
 	git add . && git commit -m "teat" &&git push
 
 	

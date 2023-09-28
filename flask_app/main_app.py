@@ -27,7 +27,7 @@ data_main=None
 PMs_DB = TinyDB(f'{Consts.DB_JASON}/PMs.json')
 data_main = PMs_DB.all()
 PMs_DB.close()
-        
+print("30",updated_date)
 
 app = Flask(__name__)
 
@@ -40,6 +40,7 @@ def main_page():
     # אם התאריך לא מעודכן והשעה אחרי תשע בבוקר אז לעדכן בסיס הנתונים ולעדכן תאריך עדכון
                 # (פתיחת האתר הראשונה אחרי השעה 9 יתעדכן הבסיס נתונים)    
     if not data_main or ( updated_date!=datetime.now().day and  datetime.now().hour >= Consts.update_hour):
+        print("43",updated_date,datetime.now().day,datetime.now().hour,Consts.update_hour)
         with open(f'./TDC_parse_eb/UPDATE_DATE.log', "w+") as UPDATE_DATE_FILE:
             print("+=====> now new day -updating ",updated_date,"->",updated_date,end=" " )
             updated_date = datetime.now().day
