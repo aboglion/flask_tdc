@@ -31,6 +31,7 @@ def main_page():
     try:
         with open(f'./TDC_parse_eb/UPDATE_DATE.log', "r") as UPDATE_DATE_FILE:
             updated_date=int(UPDATE_DATE_FILE.read())
+            print("have been red it",updated_date)
     except Exception as e:
             print(e,"<<<<<==|||")
             with open(f'./TDC_parse_eb/UPDATE_DATE.log', "w+") as UPDATE_DATE_FILE:
@@ -41,8 +42,8 @@ def main_page():
     # or
     # אם התאריך לא מעודכן והשעה אחרי תשע בבוקר אז לעדכן בסיס הנתונים ולעדכן תאריך עדכון
                 # (פתיחת האתר הראשונה אחרי השעה 9 יתעדכן הבסיס נתונים)    
+    print("45",updated_date,datetime.now().day,datetime.now().hour,Consts.update_hour)
     if not data_main or ( updated_date!=datetime.now().day and  datetime.now().hour >= Consts.update_hour):
-        print("43",updated_date,datetime.now().day,datetime.now().hour,Consts.update_hour)
         with open(f'./TDC_parse_eb/UPDATE_DATE.log', "w+") as UPDATE_DATE_FILE:
             print("+=====> now new day -updating ",updated_date,"->",updated_date,end=" " )
             updated_date = datetime.now().day
