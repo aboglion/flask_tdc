@@ -22,7 +22,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /root/.docker/config.json:/config.json
-    command: --interval 700
+    command: --interval 5
     restart: always
 
 networks:

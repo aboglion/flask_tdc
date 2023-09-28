@@ -22,18 +22,19 @@ except Exception as e:
         with open(f'./TDC_parse_eb/UPDATE_DATE.log', "w+") as UPDATE_DATE_FILE:
             updated_date = (datetime.now() - timedelta(days=1)).day
             UPDATE_DATE_FILE.write(str(updated_date))
+data_main=None
+# השגת המידע לדף הראשי
+PMs_DB = TinyDB(f'{Consts.DB_JASON}/PMs.json')
+data_main = PMs_DB.all()
+PMs_DB.close()
         
 
 app = Flask(__name__)
 
 @app.route('/')
 def main_page():
-    global updated_date
-    # השגת המידע לדף הראשי
-    time.sleep(4)
-    PMs_DB = TinyDB(f'{Consts.DB_JASON}/PMs.json')
-    data_main = PMs_DB.all()
-    PMs_DB.close()
+    global updated_date,data_main
+
     # אם לא קיים מידע בבסיס נתונים אז תעשה עדכון לשליפה מהקבצים
     # or
     # אם התאריך לא מעודכן והשעה אחרי תשע בבוקר אז לעדכן בסיס הנתונים ולעדכן תאריך עדכון
