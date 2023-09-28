@@ -1,8 +1,12 @@
 
 defult_STATUS ="existed"
 
+# compose  http://localhost
 EB_FILES_DIR="/TDC/DB" 
 DB_JASON="/TDC/DB_JASON" 
+# debug_run  http://localhost:5000/
+# EB_FILES_DIR="../../TDC_debug/DB" 
+# DB_JASON="../../TDC_debug/DB_JASON" 
 update_hour=9
 
 TAGS_TYBE=["*","RC","DI","DO","AI","AO","DC","RPV","SEQ","NM","FL","ARR","TM"]

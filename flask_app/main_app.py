@@ -14,11 +14,12 @@ if not os.path.exists(Consts.DB_JASON):
 ALL_Plant = Consts.NET_B+Consts.NET_A
 
 
-data_main=None
 # השגת המידע לדף הראשי
 PMs_DB = TinyDB(f'{Consts.DB_JASON}/PMs.json')
 data_main = PMs_DB.all()
 PMs_DB.close()
+print("new_page")
+
 
 app = Flask(__name__)
 
@@ -40,12 +41,21 @@ def main_page():
     # or
     # אם התאריך לא מעודכן והשעה אחרי תשע בבוקר אז לעדכן בסיס הנתונים ולעדכן תאריך עדכון
                 # (פתיחת האתר הראשונה אחרי השעה 9 יתעדכן הבסיס נתונים)    
+
+# קראית המידע ךדף המרכזי  
+    PMs_DB = TinyDB(f'{Consts.DB_JASON}/PMs.json')
+    data_main = PMs_DB.all()
+    PMs_DB.close()
     if not data_main or updated_date!=datetime.now().day:
         with open(f'./TDC_parse_eb/UPDATE_DATE.log', "w+") as UPDATE_DATE_FILE:
             print("+=====> now new day -updating ",updated_date,"->",updated_date,end=" " )
             updated_date = datetime.now().day
             print(updated_date)
+            print(bool(data_main))
             UPDATE_DATE_FILE.write(str(updated_date))
+            PMs_DB = TinyDB(f'{Consts.DB_JASON}/PMs.json')
+            data_main = PMs_DB.all()
+            PMs_DB.close()
         return render_template('update_page.html')
     return render_template('main.html', data=data_main[0])
 
@@ -218,5 +228,5 @@ def filter_dicts(list_of_dicts, criteria):
             result.append(item)
     return result
 
-# if __name__ == '__main__':
-
+if __name__ == '__main__':
+    app.run(debug=True)
