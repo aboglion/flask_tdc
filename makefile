@@ -16,9 +16,9 @@ clear:
 stop:
 	docker-compose down
 log:
-	docker-compose logs flask_io
+	docker-compose logs -f flask_io
 log_2:
-	docker-compose logs watchtower
+	docker-compose logs -f watchtower
 
 #enter tnside the docker
 in:
