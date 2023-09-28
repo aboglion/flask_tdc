@@ -1,5 +1,4 @@
 from .Consts import PLANT_LETTER,NET_B,DB_JASON
-from glob import glob
 from tinydb import TinyDB
 
 

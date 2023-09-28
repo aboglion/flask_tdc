@@ -1,11 +1,13 @@
 from flask import Flask, render_template,request, redirect, url_for, session,make_response
-from dotenv import dotenv_values 
 import os
+from glob import glob
 import TDC_parse_eb.TDC_parse_eb as TDC
+from TDC_parse_eb.pvsrc_parser import pvsrc_parse as PVSRC
 import TDC_parse_eb.TDC_parse_eb_utils.Consts as Consts
 from tinydb import TinyDB, Query
 import hashlib,time
 from datetime import datetime,timedelta
+from pvsrc import router_pvsrc
 
 if not os.path.exists(Consts.DB_JASON):
     os.makedirs(Consts.DB_JASON)
@@ -13,19 +15,22 @@ if not os.path.exists(Consts.DB_JASON):
 
 ALL_Plant = Consts.NET_B+Consts.NET_A
 
-
-# השגת המידע לדף הראשי
-PMs_DB = TinyDB(f'{Consts.DB_JASON}/PMs.json')
-data_main = PMs_DB.all()
-PMs_DB.close()
-print("new_page")
-
-
 app = Flask(__name__)
 
+
+referrer="/"
 @app.route('/')
 def main_page():
-    global data_main
+    #  בשביל להציג בדף ראשי מצב עדכון קבצים : שליפת הקבצים של הלוג תאריכי עדכוני השלבים מהתקייה 
+    # גזירת השם של הקובץ מהנתיב 
+    # מיון לכל רשת את הקבצים שלה
+    dates_reports_file_pathes = glob(f'{Consts.EB_FILES_DIR}/../Rep/*.ADATE')
+    dates_reports_files,dates_reports_files_A,dates_reports_files_B=[],[],[]
+    for path in dates_reports_file_pathes:
+        dates_reports_files.append(path.split("/")[-1].split(".")[0])
+        if(dates_reports_files[-1][0]=="A"):dates_reports_files_A.append(dates_reports_files[-1])
+        if(dates_reports_files[-1][0]=="B"):dates_reports_files_B.append(dates_reports_files[-1])
+
 
     #תאריך עדכון הבסיס נתונים יום לפני בהפעלה ראשונה
     try:
@@ -43,9 +48,11 @@ def main_page():
                 # (פתיחת האתר הראשונה אחרי השעה 9 יתעדכן הבסיס נתונים)    
 
 # קראית המידע ךדף המרכזי  
-    PMs_DB = TinyDB(f'{Consts.DB_JASON}/PMs.json')
-    data_main = PMs_DB.all()
-    PMs_DB.close()
+    try:
+        PMs_DB = TinyDB(f'{Consts.DB_JASON}/PMs.json')
+        data_main = PMs_DB.all()
+        PMs_DB.close()
+    except Exception:print("ther is no main page data file",f'{Consts.DB_JASON}/PMs.json')
     if not data_main or updated_date!=datetime.now().day:
         with open(f'./TDC_parse_eb/UPDATE_DATE.log', "w+") as UPDATE_DATE_FILE:
             print("+=====> now new day -updating ",updated_date,"->",updated_date,end=" " )
@@ -57,7 +64,8 @@ def main_page():
             data_main = PMs_DB.all()
             PMs_DB.close()
         return render_template('update_page.html')
-    return render_template('main.html', data=data_main[0])
+    
+    return render_template('main.html', data=data_main[0],dates_A=dates_reports_files_A ,dates_B=dates_reports_files_B)
 
 #דף להצגת הודעה ואנימאשין להמתנה 
 @app.route('/update_page/')
@@ -65,6 +73,7 @@ def update_page():
     return render_template('update_page.html')
 @app.route('/update/') # הפעלת הפונקציה של העדכון
 def update_LYOUT():
+    PVSRC()
         # פתיחת הקובץ של תגים וכפליות לכתיבה (אם הוא קיים הקובץ יימחק ואם לא, הוא ייווצר)
     with open('templates/duplication.html', 'w', encoding="utf-8") as file:
         file.write("<html>\n<head>\n<title> תגים - כפליות </title>\n</head>\n<body>\n")
@@ -83,6 +92,7 @@ def update_LYOUT():
 def duplication():
     return render_template('duplication.html')
 
+router_pvsrc(app)
 
 app.secret_key =  os.getenv("HASH_KEY")
 def hash_password(password):
@@ -93,15 +103,17 @@ def hash_password(password):
 @app.route('/login/', methods=['POST', 'GET'])
 def log_in():
     error = None
+    global referrer
     if request.method == 'POST':
         password = request.form['password']
         if (hash_password(password) == app.secret_key):
             session['logged_in'] = True
-            return redirect(url_for('main_page'))
+            return redirect(referrer )
         else:
             error = 'Invalid password. Please try again.'
+    else : #אם זה לא פוסט תשמור לי את הדף שבאת ממנו
+        referrer = request.referrer
     return render_template('login.html', error=error)
-
 
 @app.route('/logout/', methods=['POST', 'GET'])
 def log_out():
