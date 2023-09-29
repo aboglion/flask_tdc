@@ -1,10 +1,13 @@
 
 defult_STATUS ="existed"
 
-compose  http://localhost
+# compose  http://localhost
+
 EB_FILES_DIR="/TDC/DB" 
 DB_JASON="/TDC/DB_JASON" 
-debug_run  http://localhost:5000/
+
+
+# debug_run  http://localhost:5000/
 
 # import os
 # script_path = ("/").join(os.path.abspath(__file__).split("/")[:-5])

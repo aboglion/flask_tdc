@@ -240,5 +240,5 @@ def filter_dicts(list_of_dicts, criteria):
             result.append(item)
     return result
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+#     app.run(debug=True)
