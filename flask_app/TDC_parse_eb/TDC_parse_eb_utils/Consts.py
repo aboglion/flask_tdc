@@ -1,26 +1,34 @@
 
-defult_STATUS ="existed"
+import os
+defult_STATUS = "existed"
 
-# compose  http://localhost
+#### ---------runmode togals--------
 
-EB_FILES_DIR="/TDC/DB" 
-DB_JASON="/TDC/DB_JASON" 
+### compose  http://localhost
+EB_FILES_DIR="/TDC/DB"
+DB_JASON="/TDC/DB_JASON"
+def runmode(app):
+    print("SERVER RUNING")
 
-
-# debug_run  http://localhost:5000/
-
-# import os
+# ### debug_run  http://localhost:5000/
 # script_path = ("/").join(os.path.abspath(__file__).split("/")[:-5])
-# EB_FILES_DIR=f"{script_path}/TDC_debug/DB" 
-# DB_JASON=f"{script_path}/TDC_debug/DB_JASON" 
-update_hour=9
+# EB_FILES_DIR = f"{script_path}/TDC_debug/DB"
+# DB_JASON = f"{script_path}/TDC_debug/DB_JASON"
+# def runmode(app):
+#     app.run(debug=True)
 
-TAGS_TYBE=["*","RC","DI","DO","AI","AO","DC","RPV","SEQ","NM","FL","ARR","TM"]
+# -------------------------------
+
+
+update_hour = 9
+
+TAGS_TYBE = ["*", "RC", "DI", "DO", "AI", "AO",
+             "DC", "RPV", "SEQ", "NM", "FL", "ARR", "TM"]
 NET = "A"
 NET_B = ["930", "800", "690", "650", "651"]
-NET_A=["640","630","730","720","640","610","710","740","600"]
+NET_A = ["640", "630", "730", "720", "640", "610", "710", "740", "600"]
 PLANT_file_start = {
-    "ALL":"??",
+    "ALL": "??",
     "930": "93",
     "800": "80",
     "690": "69",
@@ -75,7 +83,7 @@ plant_map = {
     "J": 800,
     "M": 930
 }
-# כל סוג כמו מערך שיש לו גודל קבוע 
+# כל סוג כמו מערך שיש לו גודל קבוע
 lyout_sizes = {
     "NONE": 0,
     "AO": 8,
@@ -87,5 +95,5 @@ lyout_sizes = {
     "LLMUX": 30,
     "SI": 0
 }
-#FOR EXPRIAN PVSORC FILES
-epks= "//ilnhv-fs01/Shares/WF-OUT/Rep/Experion/*.*"
+# FOR EXPRIAN PVSORC FILES
+epks = "//ilnhv-fs01/Shares/WF-OUT/Rep/Experion/*.*"

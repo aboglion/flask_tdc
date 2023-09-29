@@ -1,147 +1,181 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <style>
+  <style>
     html {
-        scroll-behavior: smooth;
+      scroll-behavior: smooth;
+    }
+
+
+
+    .body_B {
+      font-family: Times New Roman;
+      background: #121212;
+      /* fallback for old browsers */
+      overflow-x: hidden;
+      background-image: url('/static/ICL.png');
+      background-size: cover;
+      height: 100%;
+
+      /* code to make all text unselectable */
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      -o-user-select: none;
+      user-select: none;
+    }
+
+    /* Disables selector ring */
+    body:not(.user-is-tabbing) button:focus,
+    body:not(.user-is-tabbing) input:focus,
+    body:not(.user-is-tabbing) select:focus,
+    body:not(.user-is-tabbing) textarea:focus {
+      outline: none;
+    }
+
+    /* ########################################################## */
+
+    .h_1 {
+      color: rgb(93, 201, 192);
+      text-align: center;
+      font-size: 35px;
+      font-weight: 800;
+    }
+
+    .flex-container {
+      width: 100vw;
+
+      margin-top: 60px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .content-container {
+      width: 500px;
+      height: 350px;
+    }
+
+    .form-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      width: 500px;
+      height: 350px;
+
+      margin-top: 5px;
+      padding-top: 20px;
+
+      border-radius: 12px;
+
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+
+      background: #1f1f1fc8;
+      box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.199);
+    }
+
+    .subtitle {
+      font-size: 11px;
+
+      color: rgba(177, 177, 177, 0.3);
+    }
+
+    input {
+      border: none;
+      border-bottom: solid rgb(143, 143, 143) 1px;
+
+      margin-bottom: 30px;
+
+      background: none;
+      color: rgba(255, 255, 255, 0.555);
+
+      height: 35px;
+      width: 300px;
+    }
+
+    .submit-btn {
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 2px 2px 7px #38d39f70;
+      width: 100%;
+      background: #2b6b8a;
+      color: rgba(255, 255, 255, 0.8);
+      width: 80px;
+      cursor: pointer;
+      transition: all 1s;
+    }
+
+    .submit-btn:hover {
+      animation: neonBlink 2s infinite alternate, shadowGlow 2s infinite alternate;
+    }
+
+    .submit-btn:hover {
+      color: rgb(255, 255, 255);
+
+      box-shadow: none;
+    }
+
+    .error-message {
+      /* color: #f7ff00; Yellow color */
+      font-weight: bold;
+      margin-top: 10px;
+      text-align: center;
+      text-transform: uppercase;
+      color: red;
+      animation: neonBlink 2s infinite alternate, shadowGlow 2s infinite alternate;
+    }
+
+    @keyframes neonBlink {
+      0% {
+        opacity: 0.2;
       }
-      
-   
-      
-      .body_B {
-        /* font-family: -apple-system, BlinkMacSystemFont, sans-serif; */
-        background: #121212; /* fallback for old browsers */
-        overflow-x: hidden;
-        background-image: url('/static/ICL.png');
-        background-size: cover;
-        height: 100%;
-      
-        /* code to make all text unselectable */
-        -webkit-user-select: none;
-        -khtml-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        -o-user-select: none;
-        user-select: none;
+
+      100% {
+        opacity: 1;
       }
-      
-      /* Disables selector ring */
-      body:not(.user-is-tabbing) button:focus,
-      body:not(.user-is-tabbing) input:focus,
-      body:not(.user-is-tabbing) select:focus,
-      body:not(.user-is-tabbing) textarea:focus {
-        outline: none;
+    }
+
+    @keyframes shadowGlow {
+      0% {
+        text-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
       }
-      
-      /* ########################################################## */
-      
-      .h_1 {
-        color: white;
-      
-        font-size: 35px;
-        font-weight: 800;
+
+      100% {
+        text-shadow: 0 0 20px rgba(255, 255, 0, 1);
       }
-      
-      .flex-container {
-        width: 100vw;
-      
-        margin-top: 60px;
-      
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      
-      .content-container {
-        width: 500px;
-        height: 350px;
-      }
-      
-      .form-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      
-        width: 500px;
-        height: 350px;
-      
-        margin-top: 5px;
-        padding-top: 20px;
-      
-        border-radius: 12px;
-      
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-      
-        background: #1f1f1fc8;
-        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.199);
-      }
-      
-      .subtitle {
-        font-size: 11px;
-      
-        color: rgba(177, 177, 177, 0.3);
-      }
-      
-      input {
-        border: none;
-        border-bottom: solid rgb(143, 143, 143) 1px;
-      
-        margin-bottom: 30px;
-      
-        background: none;
-        color: rgba(255, 255, 255, 0.555);
-      
-        height: 35px;
-        width: 300px;
-      }
-      
-      .submit-btn {
-        cursor: pointer;
-      
-        border: none;
-        border-radius: 8px;
-      
-        box-shadow: 2px 2px 7px #38d39f70;
-      
-        background: #2b6b8a;
-        color: rgba(255, 255, 255, 0.8);
-      
-        width: 80px;
-      
-        transition: all 1s;
-      }
-      
-      .submit-btn:hover {
-        color: rgb(255, 255, 255);
-      
-        box-shadow: none;
-      }
-    </style>
+    }
+  </style>
 </head>
+
 <body class="body_B">
 
 
 
 
-<div class="flex-container">
+  <div class="flex-container">
     <div class="content-container">
       <div class="form-container">
         <form method="post">
           <h1 class="h_1">
-            Login
+            כניסת מנהל
           </h1>
           <br>
           <span class="subtitle">PASSWORD:</span>
           <br>
-          <input type="password" name="password" value=""  autofocus>
+          <input type="password" name="password" value="" autofocus>
           <br><br>
           <input type="submit" value="SUBMIT" class="submit-btn">
         </form>
 
         {% if error %}
-            <p class="error">{{ error }}</p>
+        <p class="error-message">{{ error }}</p>
         {% endif %}
       </div>
     </div>
@@ -149,4 +183,5 @@
 
 
 </body>
+
 </html>

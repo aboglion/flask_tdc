@@ -1,41 +1,47 @@
 <html lang="he">
+
 <head>
     <meta charset="utf-8">
 
     <title>Flask Table Example</title>
     <style>
-
-.container thead {
+        .container thead {
             position: sticky;
             top: 0;
             background-color: #3766d3;
             z-index: 1;
         }
-    body {
-            margin: 0; /* Removes default margin */
-            padding: 0; /* Removes default padding */
+
+        body {
+            margin: 0;
+            /* Removes default margin */
+            padding: 0;
+            /* Removes default padding */
             line-height: 1.42em;
-            color:#A7A1AE;
-            background-color:#1F2739;
+            color: #A7A1AE;
+            background-color: #1F2739;
             width: 100vw !important;
             max-width: 100vw !important;
             overflow-x: auto;
+            font-family: Times New Roman;
 
 
-       
+
         }
-    .container{
-        width: 98vw;
-        max-width: 98vw;
-        min-width: 98vw;
 
-    }
+        .container {
+            width: 98vw;
+            max-width: 98vw;
+            min-width: 98vw;
+
+        }
+
         /* Styling for the popup */
         .popup {
             transition-duration: 0.4s;
             text-align: center;
-            display: none; 
-            position : fixed;      
+            display: none;
+            position: fixed;
             width: 90vw;
             max-height: 100vh;
             margin-top: 4vh;
@@ -50,262 +56,288 @@
             text-transform: uppercase;
             z-index: 9999;
             white-space: pre-wrap;
-            overflow-y:scroll;
+            overflow-y: scroll;
             font-weight: bolder;
 
-    border: 2px solid rgba(255, 255, 255, 0.18);
-    border-radius: 20px;
-}
-
-.btn2:hover {
-  box-shadow: 0 12px 16px 0 rgba(67, 90, 67, 0.24), 0 7px 30px 0 rgba(211, 224, 37, 0.676);
-}
-
-.btn2 {
-    background:#ebee5832;
-    backdrop-filter: blur( 10px );
-    -webkit-backdrop-filter: blur( 10px );
-    border: 1px solid rgba( 0, 0, 0, 0.18 );
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  /* font-size: 2em; */
-  -webkit-transition-duration: 0.4s; /* Safari */
-  transition-duration: 0.4s;
-  width: 20vw;
-  margin-bottom: 3vw;
-  margin-top: 3vw;
-  text-shadow: 1px 1px 2px rgb(0, 0, 0) !important; 
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 20px;
-    box-shadow: 0px 10px 30px -10px rgba(0, 0, 0, 0.75); 
-}
-
-        
-        .d_1{
-            color: #0b14c3;
-            display:inline;
-             justify-content: space-between
+            border: 2px solid rgba(255, 255, 255, 0.18);
+            border-radius: 20px;
         }
-        .d_2{
+
+        .btn2:hover {
+            box-shadow: 0 12px 16px 0 rgba(67, 90, 67, 0.24), 0 7px 30px 0 rgba(211, 224, 37, 0.676);
+        }
+
+        .btn2 {
+            background: #ebee5832;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.18);
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            /* font-size: 2em; */
+            -webkit-transition-duration: 0.4s;
+            /* Safari */
+            transition-duration: 0.4s;
+            width: 20vw;
+            margin-bottom: 3vw;
+            margin-top: 3vw;
+            text-shadow: 1px 1px 2px rgb(0, 0, 0) !important;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 20px;
+            box-shadow: 0px 10px 30px -10px rgba(0, 0, 0, 0.75);
+        }
+
+
+        .d_1 {
+            color: #0b14c3;
+            display: inline;
+            justify-content: space-between
+        }
+
+        .d_2 {
             color: rgb(0, 0, 0);
             display: inline;
-             justify-content: space-between;
-             background-color: #b1fc00;
-            
-            }
-             
+            justify-content: space-between;
+            background-color: #b1fc00;
 
-        th, td {
+        }
+
+
+        th,
+        td {
             border-bottom: 1px solid #ddd;
             transition: all 0.2s ease;
         }
+
         th {
             background-color: #e3cd95;
             color: white;
         }
+
         th:hover {
             background-color: #a4ac95;
         }
-        tr:hover {background-color: #f5f5f5;}
 
-h1 {
-  /* font-size:3em;  */
-  font-weight: 300;
-  line-height:1em;
-  text-align: center;
-  color: #4DC3FA;
-}
+        tr:hover {
+            background-color: #f5f5f5;
+        }
 
-h2 {
-  /* font-size:1em;  */
-  font-weight: 300;
-  text-align: center;
-  display: block;
-  line-height:1em;
-  color: #FB667A;
-}
+        h1 {
+            /* font-size:3em;  */
+            font-weight: 300;
+            line-height: 1em;
+            text-align: center;
+            color: #4DC3FA;
+        }
 
-h2 a {
-  font-weight: 700;
-  text-transform: uppercase;
-  color: #FB667A;
-  text-decoration: none;
-}
+        h2 {
+            /* font-size:1em;  */
+            font-weight: 300;
+            text-align: center;
+            display: block;
+            line-height: 1em;
+            color: #FB667A;
+        }
 
-.blue { color: #185875; }
-.yellow { color: #6d6c60; }
+        h2 a {
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #FB667A;
+            text-decoration: none;
+        }
 
-.container th h1 {
-	  font-weight: bold;
-	  /* font-size: 1em; */
-  text-align: left;
-  color: #185875;
-}
+        .blue {
+            color: #185875;
+        }
 
-.container td {
-    text-align: center;
-    overflow: hidden; text-overflow: ellipsis;
-	  font-weight: normal;
-	  font-size:95%;
-  -webkit-box-shadow: 0 2px 2px -2px #0E1119;
-	   -moz-box-shadow: 0 2px 2px -2px #0E1119;
-	        box-shadow: 0 2px 2px -2px #0E1119;
-}
+        .yellow {
+            color: #6d6c60;
+        }
+
+        .container th h1 {
+            font-weight: bold;
+            /* font-size: 1em; */
+            text-align: left;
+            color: #185875;
+        }
+
+        .container td {
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: normal;
+            font-size: 95%;
+            -webkit-box-shadow: 0 2px 2px -2px #0E1119;
+            -moz-box-shadow: 0 2px 2px -2px #0E1119;
+            box-shadow: 0 2px 2px -2px #0E1119;
+        }
 
 
-.exit_btn{
-    position: absolute;
-            right: 2px;  
+        .exit_btn {
+            position: absolute;
+            right: 2px;
             top: 5px;
             margin-top: 2vh;
-            height:5vh;
+            height: 5vh;
             width: 8vw;
             color: white;
             background-color: red;
-}
+        }
 
 
-/* Background-color of the odd rows */
-.container tr:nth-child(odd) {
-	  background-color: #323C50;
-}
+        /* Background-color of the odd rows */
+        .container tr:nth-child(odd) {
+            background-color: #323C50;
+        }
 
-/* Background-color of the even rows */
-.container tr:nth-child(even) {
-	  background-color: #2C3446;
-}
+        /* Background-color of the even rows */
+        .container tr:nth-child(even) {
+            background-color: #2C3446;
+        }
 
-.container th {
-	  background-color: #1F2739;
-}
+        .container th {
+            background-color: #1F2739;
+        }
 
-.container td:first-child { color: #FB667A; }
+        .container td:first-child {
+            color: #FB667A;
+        }
 
-.container tr:hover {
-   background-color: #110a22;
-   color: #cf9e00;
--webkit-box-shadow: 0 6px 6px -6px #0E1119;
-	   -moz-box-shadow: 0 6px 6px -6px #0E1119;
-	        box-shadow: 0 6px 6px -6px #0E1119;
-}
+        .container tr:hover {
+            background-color: #110a22;
+            color: #cf9e00;
+            -webkit-box-shadow: 0 6px 6px -6px #0E1119;
+            -moz-box-shadow: 0 6px 6px -6px #0E1119;
+            box-shadow: 0 6px 6px -6px #0E1119;
+        }
 
-.container td:hover {
-  background-color: #150535;
-  color: #fff200;
-  font-weight: bold;
-    box-shadow: 0 0 11px rgba(33,33,33,.2); 
-    font-size:100%;
-    cursor: pointer;
+        .container td:hover {
+            background-color: #150535;
+            color: #fff200;
+            font-weight: bold;
+            box-shadow: 0 0 11px rgba(33, 33, 33, .2);
+            font-size: 100%;
+            cursor: pointer;
 
-}
+        }
 
-@media (max-width: 768px) {
-.container td:nth-child(4),
-.container th:nth-child(4) { display: none; }
-}
+        @media (max-width: 768px) {
 
-.search{
-    /* display: none; */
-    width: 80px;
-    height: 20px;
+            .container td:nth-child(4),
+            .container th:nth-child(4) {
+                display: none;
+            }
+        }
 
-}
+        .search {
+            /* display: none; */
+            width: 80px;
+            height: 20px;
 
-.M-button {
-  position: fixed;
+        }
 
-  z-index: 4;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  margin-bottom: 4px;
-  margin-top: 4px;
-  -webkit-transition-duration: 0.4s; /* Safari */
-  transition-duration: 0.4s;
-  width: 7vh;
-  height: 7vh;
-  background-color: rgb(51, 51, 95,0.5);
-  border-radius: 50%;
-  text-align: center;
-  line-height: 7vh;
-  border: 3px solid rgb(239, 202, 157,0.5);
-  transition: all 0.3s ease-in-out;
-  box-shadow: 0 0 10px rgba(255, 255, 0, 0);
-  color: white;
-  text-decoration: none;
-  padding: 0;
-  font-size: 5vh;
-  left:-1.5vw;
-}
+        .M-button {
+            position: fixed;
 
-
-.M-button:hover {
-  border-color: orange;
-  box-shadow: 0 0 10px rgba(255, 255, 0, 1);
-  font-size: 5vh;
-  z-index: 10;
-  left:1vw;
-
-}
+            z-index: 4;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 4px;
+            margin-top: 4px;
+            -webkit-transition-duration: 0.4s;
+            /* Safari */
+            transition-duration: 0.4s;
+            width: 7vh;
+            height: 7vh;
+            background-color: rgb(51, 51, 95, 0.5);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 7vh;
+            border: 3px solid rgb(239, 202, 157, 0.5);
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 0 10px rgba(255, 255, 0, 0);
+            color: white;
+            text-decoration: none;
+            padding: 0;
+            font-size: 5vh;
+            left: -1.5vw;
+        }
 
 
+        .M-button:hover {
+            border-color: orange;
+            box-shadow: 0 0 10px rgba(255, 255, 0, 1);
+            font-size: 5vh;
+            z-index: 10;
+            left: 1vw;
 
-
+        }
     </style>
 </head>
+
 <body onload="updatein()" class="body" dir="rtl">
 
-    
+
     <a style="top:2vh" href="{{url_for("main_page")}}" class="M-button">
         <i>🏠</i>
-      </a>
-      {% if session['logged_in'] %}
-      <a style="top:calc(4vh*2);color:red;font-size: medium;" href="{{url_for("log_in")}}" class="M-button">
+    </a>
+    {% if session['logged_in'] %}
+    <a style="top:calc(4vh*2);color:red;font-size: medium;" href="{{url_for("log_in")}}" class="M-button">
         <i>OUT</i>
-      </a>
-      {% else %}
-      <a style="top:calc(4vh*2)" href="{{url_for("log_in")}}" class="M-button">
+    </a>
+    {% else %}
+    <a style="top:calc(4vh*2)" href="{{url_for("log_in")}}" class="M-button">
         <i>🔑</i>
-      </a>
-      {% endif %}
+    </a>
+    {% endif %}
 
 
 
     <table class="container" id="myTable">
         <thead>
             <tr>
-                {% set tip=("NAME","DESCRIPTION","SLOTNUM","ADRESS","STATUS","TYPE","NODENUM","PLANT","DB_FILE","DI-1","DI-2","DO-1","DO-2","RC-OUT","RC-IN1","RC-IN2") %}
-                {% set titals = ["NAME","DESCRIPTION","SLOTNUM","ADRESS","STATUS","TYPE","NODENUM","PLANT","DB_FILE","DI-1","DI-2","DO-1","DO-2","RC-OUT","RC-IN1","RC-IN2"] %}
-                {% set real_keys =["NAME","PTDESC","SLOTNUM","ID","STATUS","TYPE","NODENUM","PLANT","DB_FILE","DISRC(1)","DISRC(2)","DODSTN(1)","DODSTN(2)","CODSTN(1)","CISRC(1)","CISRC(2)"]%}
-                {% for key in titals%}               
-                    <th   onclick="sortTable({{ loop.index0 }})">
-                        <div  onmouseover="resizein('in{{loop.index0}}')" >{{ key }}</div>
-                        <div ><input id="in{{loop.index0}}" class="search" placeholder=""   type="text"  onkeyup="searchTable(event,{{ loop.index0 }})" ></div>
-                    </th>
+                {% set
+                tip=("NAME","DESCRIPTION","SLOTNUM","ADRESS","STATUS","TYPE","NODENUM","PLANT","DB_FILE","DI-1","DI-2","DO-1","DO-2","RC-OUT","RC-IN1","RC-IN2")
+                %}
+                {% set titals =
+                ["NAME","DESCRIPTION","SLOTNUM","ADRESS","STATUS","TYPE","NODENUM","PLANT","DB_FILE","DI-1","DI-2","DO-1","DO-2","RC-OUT","RC-IN1","RC-IN2"]
+                %}
+                {% set real_keys
+                =["NAME","PTDESC","SLOTNUM","ID","STATUS","TYPE","NODENUM","PLANT","DB_FILE","DISRC(1)","DISRC(2)","DODSTN(1)","DODSTN(2)","CODSTN(1)","CISRC(1)","CISRC(2)"]%}
+                {% for key in titals%}
+                <th onclick="sortTable({{ loop.index0 }})">
+                    <div onmouseover="resizein('in{{loop.index0}}')">{{ key }}</div>
+                    <div><input id="in{{loop.index0}}" class="search" placeholder="" type="text"
+                            onkeyup="searchTable(event,{{ loop.index0 }})"></div>
+                </th>
                 {% endfor %}
             </tr>
         </thead>
 
         <tbody>
-     
-{% for tag in data %}
-    <tr onclick="openPopup({{tag}});">
-        {% for v in real_keys %}
-        <td title={{loop.cycle("NAME","DESCRIPTION","SLOTNUM","ADRESS","STATUS","TYPE","NODENUM","PLANT","DB_FILE","DI-1","DI-2","DO-1","DO-2","RC-OUT","RC-IN1","RC-IN2")}}>{{ tag.get(v) }} </td>
-        {% endfor %}
-    </tr>
-    {% endfor %}
+
+            {% for tag in data %}
+            <tr onclick="openPopup({{tag}});">
+                {% for v in real_keys %}
+                <td
+                    title={{loop.cycle("NAME","DESCRIPTION","SLOTNUM","ADRESS","STATUS","TYPE","NODENUM","PLANT","DB_FILE","DI-1","DI-2","DO-1","DO-2","RC-OUT","RC-IN1","RC-IN2")}}>
+                    {{ tag.get(v) }} </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
         </tbody>
     </table>
- 
 
-    <button style="margin-right: 4vw;margin-left:50vw;" class="btn2" margen onclick="next100()">NEXT [{{l*100}} - {{(l-1)*100}}]  </button>
-    <button style="margin-left: 4vw;"  class="btn2" onclick="last100()">LAST [{{(l-1)*100}} - {{l*100}}]  </button>
+
+    <button style="margin-right: 4vw;margin-left:50vw;" class="btn2" margen onclick="next100()">NEXT [{{l*100}} -
+        {{(l-1)*100}}] </button>
+    <button style="margin-left: 4vw;" class="btn2" onclick="last100()">LAST [{{(l-1)*100}} - {{l*100}}] </button>
 
     <div id="popup" class="popup"></div>
-   
+
     <script>
         function sortTable(n) {
             var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
@@ -344,94 +376,92 @@ h2 a {
             }
         }
 
-        function next100(){
+        function next100() {
             let url_parts = window.location.href.split('/');
-            url_parts[url_parts.length - 2]='{{l+1}}'
-            url_parts[url_parts.length - 1]='{{foucs_id}}'
+            url_parts[url_parts.length - 2] = '{{l+1}}'
+            url_parts[url_parts.length - 1] = '{{foucs_id}}'
             window.location.href = url_parts.join('/')
         }
 
-        function last100(){
+        function last100() {
             let url_parts = window.location.href.split('/');
-            url_parts[url_parts.length - 2]='{{l-1}}'
-            url_parts[url_parts.length - 1]='{{foucs_id}}'
+            url_parts[url_parts.length - 2] = '{{l-1}}'
+            url_parts[url_parts.length - 1] = '{{foucs_id}}'
             window.location.href = url_parts.join('/')
         }
 
         function resizein(id) {
-    var element = document.getElementById(id);
-    if (element) {
-        if (element.value=="~")element.value=""
+            var element = document.getElementById(id);
+            if (element) {
+                if (element.value == "~") element.value = ""
 
-        element.style.display ="initial"
-    } else {
-        // console.log('No element found with id: ' + id);
-    }
-}
+                element.style.display = "initial"
+            } else {
+                // console.log('No element found with id: ' + id);
+            }
+        }
 
-        function searchTable(e,e_id) {
+        function searchTable(e, e_id) {
 
             // Add the 'cursor: wait;' CSS property to the body
-            document.body.style.cursor = 'wait'; 
+            document.body.style.cursor = 'wait';
             // Add the 'cursor: wait;' CSS property to name input
             document.getElementById('in0').style.cursor = 'wait';
-            
+
             let ligal_chr = [
-    "-", ".",",", "_", "[", "]", "!","~", "$", "'", "(", ")", 
-     "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e",
-    "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x",
-    "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
-    "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
-    "א", "ב", "ג", "ד", "ה", "ו", "ז", "ח", "ט", "י", "כ", "ל", "מ", "נ", "ס", "ע", "פ", "צ", "ק", "ר",
-    "ש", "ת", "ף", "ץ"]
+                "-", ".", ",", "_", "[", "]", "!", "~", "$", "'", "(", ")",
+                "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e",
+                "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x",
+                "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
+                "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+                "א", "ב", "ג", "ד", "ה", "ו", "ז", "ח", "ט", "י", "כ", "ל", "מ", "נ", "ס", "ע", "פ", "צ", "ק", "ר",
+                "ש", "ת", "ף", "ץ"]
             // console.log(e,e_id)
-            let input =Array(16).fill("~")
-            for (let i=0;i<input.length;i++){
-            e=document.getElementById("in"+i)
-            v=e.value
-            //  console.log(v);
-            let the_inp_char=v.slice(-1)
-            // del last char
-            if (!(ligal_chr.includes(the_inp_char) || e.keyCode==8))
-            {
-                if (v.length<2)
-                {e.value='~';e.style.display="none"}
-                else e.value=v.slice(0, -1)
+            let input = Array(16).fill("~")
+            for (let i = 0; i < input.length; i++) {
+                e = document.getElementById("in" + i)
+                v = e.value
+                //  console.log(v);
+                let the_inp_char = v.slice(-1)
+                // del last char
+                if (!(ligal_chr.includes(the_inp_char) || e.keyCode == 8)) {
+                    if (v.length < 2) { e.value = '~'; e.style.display = "none" }
+                    else e.value = v.slice(0, -1)
+                }
+                if (v == "") { e.value = '~'; e.style.display = "none" }
+
+                v = e.value
+                input[i] = v
             }
-            if (v=="") {e.value='~';e.style.display="none"}
-            
-            v=e.value
-            input[i]=v
-            }
-        
-            url=input.join("/");
+
+            url = input.join("/");
             console.log(url)
-            url="{{url_for('tags_table')}}"+url+"/{{l}}/"+e_id
+            url = "{{url_for('tags_table')}}" + url + "/{{l}}/" + e_id
 
 
-            window.location.href = url 
-             
+            window.location.href = url
+
         }
 
 
-        function openPopup(row) {   
-           let keys = Object.keys(row);
-           let  _name=row[keys[0]]
-           let popupContent =">".repeat(20)+"=>[_  "+_name+" _]<="+"<".repeat(20)+"<br/>"   
-            let i=0;
+        function openPopup(row) {
+            let keys = Object.keys(row);
+            let _name = row[keys[0]]
+            let popupContent = ">".repeat(20) + "=>[_  " + _name + " _]<=" + "<".repeat(20) + "<br/>"
+            let i = 0;
             keys.forEach(e => {
-                if (i==4 || i==0) 
-                        {popupContent+="<hr/>"
-                        i=0
-                        }
+                if (i == 4 || i == 0) {
+                    popupContent += "<hr/>"
+                    i = 0
+                }
                 i++
-                    popupContent+=" [<p class='d_1'>"+ e.replaceAll('"', '').trim()+"</p>:  <p class='d_2'>"+row[e].replaceAll('"', '').trim()+"</p>]"
-                    for (ii=0;ii<20-(row[e].replaceAll('"', '').trim().length+e.replaceAll('"', '').trim().length);ii++){
-                        popupContent+="  "
-                    }
+                popupContent += " [<p class='d_1'>" + e.replaceAll('"', '').trim() + "</p>:  <p class='d_2'>" + row[e].replaceAll('"', '').trim() + "</p>]"
+                for (ii = 0; ii < 20 - (row[e].replaceAll('"', '').trim().length + e.replaceAll('"', '').trim().length); ii++) {
+                    popupContent += "  "
+                }
             });
-           
-            popupContent+='<button  class="exit_btn"  onclick="closePopup();" onmouseover="closePopup();" >close X</button> '
+
+            popupContent += '<button  class="exit_btn"  onclick="closePopup();" onmouseover="closePopup();" >close X</button> '
             // console.log(popupContent)
             // Display the popup
             var popup = document.getElementById("popup");
@@ -439,20 +469,20 @@ h2 a {
             popup.style.display = "block";
         }
 
-               // Function to close the popup
-               function closePopup() {
+        // Function to close the popup
+        function closePopup() {
             var popup = document.getElementById("popup");
             popup.style.display = "none";
         }
 
-        function updatein(){
-         
+        function updatein() {
+
             {% for variable in variables %}
-            e= document.getElementById("in{{ loop.index0 }}")
-            e.value='{{variable}}'
-            if ('{{variable}}'=="~") e.style.display ="none"
-        {% endfor %}
-        if (Number.isInteger({{foucs_id}}))
+            e = document.getElementById("in{{ loop.index0 }}")
+            e.value = '{{variable}}'
+            if ('{{variable}}' == "~") e.style.display = "none"
+            {% endfor %}
+            if (Number.isInteger({{ foucs_id }}))
         document.getElementById("in{{foucs_id}}").focus()
 
          
@@ -460,7 +490,5 @@ h2 a {
 
     </script>
 </body>
+
 </html>
-
-
-   

@@ -1,8 +1,224 @@
+<!DOCTYPE html>
 <html>
+
 <head>
-<title> תגים - כפליות </title>
+    <title>דוח כפוליות</title>
+
+    <style>
+        body {
+            max-width: 100vw;
+            font-family: Times New Roman;
+            font-weight: 300;
+            line-height: 1.42em;
+            color: #A7A1AE;
+            background-color: #1F2739;
+        }
+
+
+        th,
+        td {
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            transition: all 0.2s ease;
+        }
+
+        th {
+            background-color: #e3cd95;
+            color: white;
+            cursor: pointer;
+        }
+
+        th:hover {
+            background-color: #a4ac95;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            font-size: 3em;
+            font-weight: 300;
+            line-height: 1em;
+            text-align: center;
+            color: #4DC3FA;
+        }
+
+        h2 {
+            font-size: 1em;
+            font-weight: 300;
+            text-align: center;
+            display: block;
+            line-height: 1em;
+            padding-bottom: 2em;
+            color: #FB667A;
+        }
+
+        h2 a {
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #FB667A;
+            text-decoration: none;
+        }
+
+        .blue {
+            color: #185875;
+        }
+
+        .yellow {
+            color: #6d6c60;
+        }
+
+        .container th h1 {
+            font-weight: bold;
+            font-size: 1em;
+            text-align: left;
+            color: #185875;
+        }
+
+        td {
+            font-weight: normal;
+            font-size: 1em;
+            -webkit-box-shadow: 0 2px 2px -2px #0E1119;
+            -moz-box-shadow: 0 2px 2px -2px #0E1119;
+            box-shadow: 0 2px 2px -2px #0E1119;
+        }
+
+
+        td,
+        th {
+
+            padding-bottom: 1%;
+        }
+
+        /* Background-color of the odd rows */
+        tr:nth-child(odd) {
+            background-color: #323C50;
+        }
+
+        /* Background-color of the even rows */
+        tr:nth-child(even) {
+            background-color: #2C3446;
+        }
+
+        th {
+            background-color: #1F2739;
+        }
+
+        td:first-child {
+            color: #FB667A;
+        }
+
+        tr:hover {
+            background-color: #110a22;
+            color: #cf9e00;
+            -webkit-box-shadow: 0 6px 6px -6px #0E1119;
+            -moz-box-shadow: 0 6px 6px -6px #0E1119;
+            box-shadow: 0 6px 6px -6px #0E1119;
+        }
+
+        td:hover {
+            background-color: #150535;
+            color: #fff200;
+            font-weight: bold;
+            box-shadow: 0 0 11px rgba(33, 33, 33, .2);
+        }
+
+        @media (max-width: 800px) {
+
+            td:nth-child(4),
+            th:nth-child(4) {
+                display: none;
+            }
+        }
+    </style>
+    <style>
+        /* Add CSS styles here to style your table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .M_L-button {
+            position: fixed;
+            z-index: 4;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            -webkit-transition-duration: 2s;
+            transition-duration: 2s;
+            width: 10vh;
+            height: 10vh;
+            background-color: rgba(51, 51, 95, 0.5);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 10vh;
+            border: 3px solid rgba(239, 202, 157, 0.5);
+            box-shadow: 0 0 10px rgba(255, 255, 0, 0);
+            color: white;
+            text-decoration: none;
+            padding: 0;
+            font-size: 5vh;
+            top: -3.7vh;
+        }
+
+        .M_L-button:hover {
+            transition-duration: 0.5s !important;
+            font-size: 5vh;
+            top: 1vh;
+            box-shadow: 0 0 10px rgba(255, 255, 0, 1);
+            border-color: orange;
+        }
+    </style>
 </head>
+
 <body>
+    <h1>תגים עם כתובת זהה</h1>
+
+    <a style="left: 5vw" href="{{url_for('main_page')}}" class="M_L-button">
+        <i>🏠</i>
+    </a>
+    {% if session['logged_in'] %}
+    <a style="left: 10vw; color: red; font-size: medium;" href="{{url_for('log_out')}}" class="M_L-button">
+        <i>OUT</i>
+    </a>
+    {% else %}
+    <a style="left: 10vw" href="{{url_for('log_in')}}" class="M_L-button">
+        <i>🔑</i>
+    </a>
+    {% endif %}
+
+    <table>
+        <tr>
+            <th>PLANT</th>
+            <th>ADDRESS</th>
+            <th>NAME1</th>
+            <th>DB_FILE1</th>
+            <th>TYPE1</th>
+            <th>NAME2</th>
+            <th>DB_FILE2</th>
+            <th>TYPE2</th>
+        </tr>
+        {% for item in data %}
+        <tr>
+            <td>{{ item.PLANT }}</td>
+            <td>{{ item.ADDRESS }}</td>
+            <td>{{ item.NAME1 }}</td>
+            <td>{{ item.DB_FILE1 }}</td>
+            <td>{{ item.TYPE1 }}</td>
+            <td>{{ item.NAME2 }}</td>
+            <td>{{ item.DB_FILE2 }}</td>
+            <td>{{ item.TYPE2 }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 </body>
-</html><h3> ⚠️ 651 </h3> <h4>       🔌 ADDRESS: B-10-9-08-02</h4>  <p>[💣➊: UPIC2139      📂DB_FILE:PM09RC    🔩TYPE:RC ]</p><p>[💣➋: UPX2139      📂DB_FILE:PM09RC    🔩TYPE:RC ]</p><hr><h3> ⚠️ 651 </h3> <h4>       🔌 ADDRESS: B-10-5-07-06</h4>  <p>[💣➊: UPIC9152      📂DB_FILE:PM05RC    🔩TYPE:RC ]</p><p>[💣➋: UTIC3527      📂DB_FILE:PM05RC    🔩TYPE:RC ]</p><hr><h3> ⚠️ 640 </h3> <h4>       🔌 ADDRESS: A-01-9-37-02</h4>  <p>[💣➊: DTIC10781      📂DB_FILE:PM09RC    🔩TYPE:RC ]</p><p>[💣➋: DTIC10789      📂DB_FILE:PM09RC    🔩TYPE:RC ]</p><hr><h3> ⚠️ 640 </h3> <h4>       🔌 ADDRESS: A-01-5-10-02</h4>  <p>[💣➊: DFIC500      📂DB_FILE:PM05RC    🔩TYPE:RC ]</p><p>[💣➋: DFIC11394      📂DB_FILE:PM05RC    🔩TYPE:RC ]</p><hr><h3> ⚠️ 730 </h3> <h4>       🔌 ADDRESS: A-03-7-37-09</h4>  <p>[💣➊: GPIC2362      📂DB_FILE:PM07RC    🔩TYPE:RC ]</p><p>[💣➋: GSIC11551      📂DB_FILE:PM07RC    🔩TYPE:RC ]</p><hr><h3> ⚠️ 730 </h3> <h4>       🔌 ADDRESS: A-03-7-38-03</h4>  <p>[💣➊: GPIC1204      📂DB_FILE:PM07RC    🔩TYPE:RC ]</p><p>[💣➋: GPIC1697      📂DB_FILE:PM07RC    🔩TYPE:RC ]</p><hr><h3> ⚠️ 730 </h3> <h4>       🔌 ADDRESS: A-03-7-37-16</h4>  <p>[💣➊: GPIC1209      📂DB_FILE:PM07RC    🔩TYPE:RC ]</p><p>[💣➋: GTOLSWITCH      📂DB_FILE:PM07RC    🔩TYPE:RC ]</p><hr><h3> ⚠️ 640 </h3> <h4>       🔌 ADDRESS: A-01-9-37-02</h4>  <p>[💣➊: DTIC10781      📂DB_FILE:PM09RC    🔩TYPE:RC ]</p><p>[💣➋: DTIC10789      📂DB_FILE:PM09RC    🔩TYPE:RC ]</p><hr><h3> ⚠️ 640 </h3> <h4>       🔌 ADDRESS: A-01-5-10-02</h4>  <p>[💣➊: DFIC500      📂DB_FILE:PM05RC    🔩TYPE:RC ]</p><p>[💣➋: DFIC11394      📂DB_FILE:PM05RC    🔩TYPE:RC ]</p><hr><h3> ⚠️ 610 </h3> <h4>       🔌 ADDRESS: A-10-13-24-12</h4>  <p>[💣➊: HSIC6568      📂DB_FILE:PM13RC    🔩TYPE:RC ]</p><p>[💣➋: HPIC6548      📂DB_FILE:PM13RC    🔩TYPE:RC ]</p><hr><h3> ⚠️ 710 </h3> <h4>       🔌 ADDRESS: A-10-15-9-6</h4>  <p>[💣➊: SLI7791      📂DB_FILE:PM15AI_2    🔩TYPE:AI ]</p><p>[💣➋: SFI7793      📂DB_FILE:PM15AI_2    🔩TYPE:AI ]</p><hr><h3> ⚠️ 710 </h3> <h4>       🔌 ADDRESS: A-10-15-9-6</h4>  <p>[💣➊: SLI7752      📂DB_FILE:PM15AI    🔩TYPE:AI ]</p><p>[💣➋: SFI7793      📂DB_FILE:PM15AI    🔩TYPE:AI ]</p><hr><h3> ⚠️ 740 </h3> <h4>       🔌 ADDRESS: A-13-15-10-06</h4>  <p>[💣➊: RFIC5151      📂DB_FILE:PM15RC    🔩TYPE:RC ]</p><p>[💣➋: RXAO70236      📂DB_FILE:PM15RC    🔩TYPE:RC ]</p><hr><h3> ⚠️ 600 </h3> <h4>       🔌 ADDRESS: A-13-11-0-26</h4>  <p>[💣➊: 60_02MSG      📂DB_FILE:PM11SEQ    🔩TYPE:SEQ ]</p><p>[💣➋: 60_02INT      📂DB_FILE:PM11SEQ    🔩TYPE:SEQ ]</p><hr></body>
+
 </html>

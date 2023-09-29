@@ -5,12 +5,28 @@
     <title>Card Points</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #436d95c2;
+            font-family: Times New Roman;
+            background-color: gray;
             zoom: 90%;
         }
 
-        .card-table {
+        #rotateBTN:hover {
+            font-size: 120%;
+            box-shadow: 0 0 10px rgba(255, 255, 0, 1);
+
+        }
+
+        .und {
+            color: gray;
+            background-color: gray;
+        }
+
+        .reversed_card-table {
+            overflow-x: visible;
+            overflow-y: visible;
+        }
+
+        .card-table .reversed_card-table {
             border-collapse: collapse;
             background: rgba(255, 255, 255, 0.1);
             -webkit-backdrop-filter: blur(20px);
@@ -20,61 +36,76 @@
             box-shadow: 0px 5px 20px -10px rgba(0, 0, 0, 0.345);
         }
 
+        .reversed_card-table tr:nth-child(odd),
         .card-table tr:nth-child(odd) {
             background-color: #f0eedeaf;
         }
 
+        .reversed_card-table tr:nth-child(even),
         .card-table tr:nth-child(even) {
             background-color: #d4dac66c;
         }
-        
 
-.card-table th,
-.card-table td {
-    font-weight:bold;
-    border: 2px solid #ddd;
-    padding: 14px;
-    text-align: center;
-}
+
+        .reversed_card-table td,
+        .reversed_card-table th,
+        .card-table th,
+        .card-table td {
+            font-weight: bold;
+            border: 2px solid #ddd;
+            padding: 14px;
+            text-align: center;
+        }
 
         .card-table th:first-child,
-        .card-type{
-            position:sticky !important;
-            position: -webkit-sticky !important; /* לתמיכה בדפדפנים שלא ב-WebKit */
+        .card-type {
+            position: sticky !important;
+            position: -webkit-sticky !important;
+            /* לתמיכה בדפדפנים שלא ב-WebKit */
             left: 0;
-            font-weight: bold; 
+            font-weight: bold;
             z-index: 3 !important;
             background-color: #041234d2;
 
             border-radius: 5px;
-            
-        
         }
 
-                  .card-table th {
-            background-color: #0059fdd6;
+        .sticky-row {
+            position: sticky;
+            top: 0;
+            background-color: #041234d2 !important;
+            font-weight: bold;
+            z-index: 3 !important;
+            color: rgb(165, 49, 49);
+        }
+
+        .card-table th {
+            background-color: #2a374dd6;
             color: white;
             position: sticky;
             top: 0;
             z-index: 1;
         }
+
         .card-table tr:hover td:first-child {
             transition-duration: 2s;
             background-color: rgba(9, 21, 255, 0.61);
             text-shadow: 4px 2px 2px rgb(0, 0, 0);
         }
+
         /* שורה המסומנת */
-        .card-table tr:hover {  
+        .card-table tr:hover {
             transition-duration: 0.5s;
             transition-property: background-color;
             background-color: #a099f2ec;
         }
- 
+
         /* התא המסומן */
+        .reversed_card-table td:hover,
         .card-table td:hover {
             color: #0b032cd2;
             /* text-decoration:underline; */
-            cursor: pointer; 
+            cursor: pointer;
             padding: 1px;
             background: rgba(248, 233, 18, 0.729);
             /* border-radius: 10%; */
@@ -124,28 +155,37 @@
             box-shadow: 0 0 10px rgba(255, 255, 0, 1);
             border-color: orange;
         }
+
+        #rotateBTN {
+            background-color: rgb(190, 94, 94);
+            color: black;
+            font-weight: bold;
+            text-align: center;
+            transition-duration: 1s;
+            cursor: pointer;
+        }
     </style>
 </head>
 
 <body>
 
-    <a style="left: 7vw" href="{{url_for('main_page')}}" class="M_L-button">
+    <a style="left: 15vw" href="{{url_for('main_page')}}" class="M_L-button">
         <i>🏠</i>
     </a>
     {% if session['logged_in'] %}
-    <a style="left: calc(6.3vw*2); color: red; font-size: medium;" href="{{url_for('log_out')}}" class="M_L-button">
+    <a style="left: 20vw; color: red; font-size: medium;" href="{{url_for('log_out')}}" class="M_L-button">
         <i>OUT</i>
     </a>
     {% else %}
-    <a style="left: calc(6.3vw*2)" href="{{url_for('log_in')}}" class="M_L-button">
+    <a style="left: 20vw" href="{{url_for('log_in')}}" class="M_L-button">
         <i>🔑</i>
     </a>
     {% endif %}
-
     <div class="container" id="myTable">
         <table class="card-table">
             <thead>
                 <tr>
+                    <th> <button id="rotateBTN">סובב טבלה</button></th>
                     <th>PM {{pm}} - plant {{plant}}</th>
                 </tr>
             </thead>
@@ -175,8 +215,10 @@
                     </td>
                     {% endif %}
                     <!-- אם מנה ל + תא שהוא ידני או מחוק או תא לא קיים -->
-                    {% if session['logged_in'] and ((Point["STATUS"] is defined and not (Point["STATUS"]=="existed")) or Point["STATUS"] is not defined) %}
-                    {% set click_func = "addInput({cell:this,CARD_NUM:parseInt(" ~ Point['CARD_NUM'] ~ "),POINT_NUM:parseInt(" ~ loop.index ~ "),TYPE:'" ~ Point['TYPE'] ~ "'})" %}
+                    {% if session['logged_in'] and ((Point["STATUS"] is defined and not (Point["STATUS"]=="existed")) or
+                    Point["STATUS"] is not defined) %}
+                    {% set click_func = "addInput({cell:this,CARD_NUM:parseInt(" ~ Point['CARD_NUM'] ~
+                    "),POINT_NUM:parseInt(" ~ loop.index ~ "),TYPE:'" ~ Point['TYPE'] ~ "'})" %}
                     {% elif Point["STATUS"] is not defined %}
                     {% set click_func="" %}
                     {% else %}
@@ -184,21 +226,28 @@
                     {% endif %}
 
                     {% if Point["STATUS"] is not defined %}
-                    <td onclick="{{click_func}}" title="TYPE:{{Point['TYPE']}}  PM:{{Point['PM']}} CARD:{{Point['CARD_NUM']}} SLOT:{{loop.index}}" style="background-color:#9aa1b0;">-[{{loop.index}}]-</td>
+                    <td onclick="{{click_func}}"
+                        title="TYPE:{{Point['TYPE']}}  PM:{{Point['PM']}} CARD:{{Point['CARD_NUM']}} SLOT:{{loop.index}}"
+                        style="background-color:#9aa1b0;">-[{{loop.index}}]-</td>
                     {% elif Point["STATUS"]=="existed" %}
-                    <td onclick="{{click_func}}" title="TYPE:{{Point['TYPE']}}  PM:{{Point['PM']}} CARD:{{Point['CARD_NUM']}} SLOT:{{Point['POINT_NUM']}}" class="card-name">[{{Point["POINT_NUM"]}}] {{ Point["NAME"]}}</td>
+                    <td onclick="{{click_func}}"
+                        title="TYPE:{{Point['TYPE']}}  PM:{{Point['PM']}} CARD:{{Point['CARD_NUM']}} SLOT:{{Point['POINT_NUM']}}"
+                        class="card-name">[{{Point["POINT_NUM"]}}] {{ Point["NAME"]}}</td>
                     {% elif Point["STATUS"]=="manual" %}
-                    <td onclick="{{click_func}}" style="background-color:#9aa1b0;color:rgb(25, 0, 255);">[{{Point["POINT_NUM"]}}] {{ Point["NAME"]}}</td>
+                    <td onclick="{{click_func}}" style="background-color:#9aa1b0;color:rgb(25, 0, 255);">
+                        [{{Point["POINT_NUM"]}}] {{ Point["NAME"]}}</td>
                     {% else %}
-                    <td onclick="{{click_func}}" style="background-color:#9aa1b0;color:red;text-decoration:line-through">[{{Point["POINT_NUM"]}}] {{ Point["NAME"]}}</td>
+                    <td onclick="{{click_func}}"
+                        style="background-color:#9aa1b0;color:red;text-decoration:line-through">[{{Point["POINT_NUM"]}}]
+                        {{ Point["NAME"]}}</td>
                     {% endif %}
 
                     {% if net_ucn.value==0 and Point["CARD_ID"] is defined %}
                     {% set net_ucn.value=Point["CARD_ID"][:4] %}
                     {% endif %}
-                {% endfor %}
-                {% endfor %}
-                {% if cardnums %}
+                    {% endfor %}
+                    {% endfor %}
+                    {% if cardnums %}
                 </tr>
                 {% endif %}
             </tbody>
@@ -223,15 +272,15 @@
 
         tableDiv.addEventListener('mousemove', (e) => {
             let dx = startX - e.clientX;
-           // let dy = startY - e.clientY;
-                    // גלילה למעלה
-                   // tableDiv.scrollTop -= dy * (startY * 0.02)
-                    // גלילה לשמאלה+ גלילה לימין
-                    tableDiv.scrollLeft -= dx * (startX * 0.01)
-                    
-    
-                startX = e.clientX;
-               // startY = e.clientY;
+            // let dy = startY - e.clientY;
+            // גלילה למעלה
+            // tableDiv.scrollTop -= dy * (startY * 0.02)
+            // גלילה לשמאלה+ גלילה לימין
+            tableDiv.scrollLeft -= dx * (startX * 0.01)
+
+
+            startX = e.clientX;
+            // startY = e.clientY;
 
         });
 
@@ -277,12 +326,12 @@
                 console.log(data)
 
                 fetch('/updateit', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(data),
-                    })
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                })
                     .then(
                         setTimeout(function () {
                             window.location.reload(1);
@@ -294,6 +343,64 @@
             cell.appendChild(buttonElement);
             inputElement.focus(); // focus the input field
         }
+
+
+
+        const button = document.getElementById("rotateBTN");
+        button.onclick = function () {
+            // ציינו את הטבלה המקורית
+            var originalTable = document.getElementsByTagName("table")[0];
+
+            // יצרנו מערך ריק שיכיל את העמודות
+            var tableData = [];
+
+            // איפוס משתנה לאורך השורות של הטבלה
+            for (var i = 1; i < originalTable.rows.length; i++) {
+                var rowData = [];
+                for (var j = 0; j < originalTable.rows[i].cells.length; j++) {
+                    // הוספת התוכן של התא למערך
+                    rowData.push(originalTable.rows[i].cells[j].innerHTML);
+                }
+                // הוספת השורה למערך הגדול
+                tableData.push(rowData);
+            }
+
+            // הסרת הטבלה המקורית מהדף
+            originalTable.remove();
+
+            button.remove()
+
+            // יצירת טבלה חדשה עם העמודות כשורות
+            var newTable = document.createElement("table");
+            newTable.classList.add("reversed_card-table"); // הוספת הסגנון שנמצא ב-CSS
+
+            for (var i = 0; i < 32; i++) {
+                var newRow = newTable.insertRow();
+
+                // הוספת סגנון sticky לשורה הראשונה
+                if (i === 0) {
+                    newRow.classList.add("sticky-row");
+                }
+
+                for (var j = 0; j < tableData.length; j++) {
+                    var cell = newRow.insertCell();
+                    cell.innerHTML = tableData[j][i];
+                    if (tableData[j][i] == undefined) {
+                        cell.classList.add("und");
+                    }
+
+                }
+            }
+
+            // הוספת הטבלה החדשה הדף
+            document.body.appendChild(newTable);
+            newTable.id = "REV"; // שנו חזרה ל-ID המקורי
+
+
+
+        }
+
+
     </script>
 </body>
 

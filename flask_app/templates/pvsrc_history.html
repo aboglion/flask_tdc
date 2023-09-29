@@ -1,39 +1,39 @@
 <!DOCTYPE html>
 <html lang="he">
-	
-<body  dir="rtl">
+
+<body dir="rtl">
 
 
-    <a  class="button-back" id="floating-button" href="{{ url_for('back') }}">Go Back</a>
-	
-		
-	
+    <a class="button-back" id="floating-button" href="{{ url_for('back') }}">Go Back</a>
 
-	<meta charset="utf-8" />
-	<style>
-        
 
-.button-back {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 5px;
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  z-index: 9999;
-}
 
-.button-back:hover {
-  background-color: #0056b3;
-}
+
+    <meta charset="utf-8" />
+    <style>
+        .button-back {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 9999;
+        }
+
+        .button-back:hover {
+            background-color: #0056b3;
+        }
+
         body {
+
             background-color: #1f1f1f;
             color: #ffffff;
             padding: 20px;
-            font-family: 'Lato', sans-serif;
+            font-family: Times New Roman;
             font-size: 1.6rem;
             line-height: 1.6;
         }
@@ -50,7 +50,8 @@
             border-collapse: collapse;
         }
 
-        th, td {
+        th,
+        td {
             padding: 10px;
             text-align: center;
             border-bottom: 1px solid #ffffff;
@@ -83,57 +84,60 @@
         .new-row {
             color: #e53935;
         }
+
         form {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
         @media (min-width: 720px) {
             td {
                 text-align: left;
+
                 &:before {
                     display: inline-block;
                     text-align: right;
                     width: 140px;
                 }
             }
+
             .select {
                 padding-left: 160px;
             }
         }
 
         .button {
-    display: inline-block;
-    border: none;
-    padding: 1rem 1rem;
-    margin: 0;
-    text-decoration: none;
-    background: #006bed2f;
-    color: #ffffff;
-    font-family: sans-serif;
-    line-height: 0.2;
-    cursor: pointer;
-    margin-right:20px;
-    text-align: center;
-    transition: background 250ms ease-in-out, transform 150ms ease;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-}
+            display: inline-block;
+            border: none;
+            padding: 1rem 1rem;
+            margin: 0;
+            text-decoration: none;
+            background: #006bed2f;
+            color: #ffffff;
+            font-family: sans-serif;
+            line-height: 0.2;
+            cursor: pointer;
+            margin-right: 20px;
+            text-align: center;
+            transition: background 250ms ease-in-out, transform 150ms ease;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
 
-.button:hover,
-.button:focus {
-    background: #d9e3f0;
-}
+        .button:hover,
+        .button:focus {
+            background: #d9e3f0;
+        }
 
-.button:focus {
-    outline: 1px solid #fbd4d4;
-    outline-offset: -4px;
-}
+        .button:focus {
+            outline: 1px solid #fbd4d4;
+            outline-offset: -4px;
+        }
 
-.button:active {
-    transform: scale(0.99);
-}
+        .button:active {
+            transform: scale(0.99);
+        }
     </style>
     <h1>History for {{ data[0].ENTITY }}</h1>
     <table>
@@ -142,16 +146,17 @@
         </thead>
         <tbody>
             {% for row in data %}
-                <tr{% if row.NEW %} class="new-row"{% endif %}>
-                    <td>{{ row.ENTITY }}</td>
-                    <td>{{ row.PVSOURCE }}</td>
-                    <td>{{ row.PTDESC }}</td>
-                    <td>{{ row.REASON }}</td>
-                    <td>[start on {{ row.START_AT }}]</td>
-                    <td>[end on {{ row.END_AT }}] </td>
+            <tr{% if row.NEW %} class="new-row" {% endif %}>
+                <td>{{ row.ENTITY }}</td>
+                <td>{{ row.PVSOURCE }}</td>
+                <td>{{ row.PTDESC }}</td>
+                <td>{{ row.REASON }}</td>
+                <td>[start on {{ row.START_AT }}]</td>
+                <td>[end on {{ row.END_AT }}] </td>
                 </tr>
-            {% endfor %}
+                {% endfor %}
         </tbody>
     </table>
 </body>
+
 </html>

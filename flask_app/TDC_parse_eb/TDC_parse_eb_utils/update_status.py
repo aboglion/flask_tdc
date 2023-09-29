@@ -2,6 +2,8 @@ from tinydb import TinyDB
 from .Consts import DB_JASON
 
 # פונקציה לעדכון מצב (סטטוס) של נתונים מסוימים בעץ המידע
+
+
 def update_status(parse_EB_DATA, which_plant):
     TAGS_DB = TinyDB(f'{DB_JASON}/TAGS_DB_{which_plant}.json')
     UPDATED = []

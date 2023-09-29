@@ -1,49 +1,55 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
-   
+
 
 
     <title>PV SOURCE Viewer</title>
-    
-  <style>
+
+    <style>
         body {
+
             background-color: #1f1f1f;
             color: #ffffff;
-            font-family: 'Lato', sans-serif;
+            font-family: Times New Roman;
             font-size: 20px;
             line-height: 1.6;
             position: relative;
             margin: 0;
-  padding: 0;
+            padding: 0;
         }
 
 
-        tr:hover{
+        tr:hover {
             transition-duration: 1s !important;
 
-             text-shadow: 4px 4px 3px #77f; background-color: yellow !important;
-             color: black !important;
-            }
+            text-shadow: 4px 4px 3px #77f;
+            background-color: yellow !important;
+            color: black !important;
+        }
 
-body::before {
-    content: '';
-    background-image: url('/static/ICL.png');
-    background-size: cover;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0.5; /* ערך השקיפות של תמונת הרקע */
-    z-index: -1; /* הכנסת השכבה הנוספת מאחורי התוכן הרגיל */
-}
+        body::before {
+            content: '';
+            background-image: url('/static/ICL.png');
+            background-size: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.5;
+            /* ערך השקיפות של תמונת הרקע */
+            z-index: -1;
+            /* הכנסת השכבה הנוספת מאחורי התוכן הרגיל */
+        }
 
 
         #transparent-image {
-    opacity: 0.5; /* הגדרת ערך השקיפות של התמונה */
-}
+            opacity: 0.5;
+            /* הגדרת ערך השקיפות של התמונה */
+        }
 
         h1 {
             color: #2196f3;
@@ -56,10 +62,11 @@ body::before {
             border-collapse: collapse;
         }
 
-        th, td {
+        th,
+        td {
             text-align: center;
             border-bottom: 1px solid #ffffff;
-            
+
         }
 
 
@@ -74,7 +81,7 @@ body::before {
             border-radius: 10%;
             height: 30px;
             font-size: 20px;
-        
+
 
         }
 
@@ -82,108 +89,112 @@ body::before {
             background-color: #45a548;
             border: 2px solid #ff0000;
             transition-duration: 2s;
-           
+
         }
 
         .new-row {
             color: #e53935;
         }
+
         form {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
 
         .button {
-    display: inline-block;
-    border: none;
-    margin: 0;
-    text-decoration: none;
-    background: #006bed2f;
-    color: #ffffff;
-    font-family: sans-serif;
-    line-height: 0.2;
-    cursor: pointer;
-    text-align: center;
-    transition: background 250ms ease-in-out, transform 150ms ease;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-}
+            display: inline-block;
+            border: none;
+            margin: 0;
+            text-decoration: none;
+            background: #006bed2f;
+            color: #ffffff;
+            font-family: sans-serif;
+            line-height: 0.2;
+            cursor: pointer;
+            text-align: center;
+            transition: background 250ms ease-in-out, transform 150ms ease;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
 
-.button:hover,
-.button:focus {
-    background: #d9e3f0;
-}
+        .button:hover,
+        .button:focus {
+            background: #d9e3f0;
+        }
 
-.button:focus {
-    outline: 1px solid #fbd4d4;
-    outline-offset: -4px;
-}
+        .button:focus {
+            outline: 1px solid #fbd4d4;
+            outline-offset: -4px;
+        }
 
-.button:active {
-    transform: scale(0.99);
-}
-.M_L-button {
-        position: fixed;
-        z-index: 4;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        -webkit-transition-duration: 2s;
-        transition-duration: 2s;
-        width: 10vh;
-        height: 10vh;
-        background-color: rgba(51, 51, 95, 0.5);
-        border-radius: 50%;
-        text-align: center;
-        line-height: 10vh;
-        border: 3px solid rgba(239, 202, 157, 0.5);
-        box-shadow: 0 0 10px rgba(255, 255, 0, 0);
-        color: white;    <p>Refrashing in <span id="timer">5</span> minuts...</p>
-        text-decoration: none;
-        padding: 0;
-        font-size: 5vh;
-        top: -3.7vh;
-    }
+        .button:active {
+            transform: scale(0.99);
+        }
 
-    .M_L-button:hover {
-        transition-duration: 0.5s !important;
-        font-size: 5vh;
-        top: 1vh;
-        box-shadow: 0 0 10px rgba(255, 255, 0, 1);
-        border-color: orange;
-    }
-    a{
-color:#00abb8;
-    }
-    a:hover{
-color:#6200ff !important;
-    }
+        .M_L-button {
+            position: fixed;
+            z-index: 4;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            -webkit-transition-duration: 2s;
+            transition-duration: 2s;
+            width: 10vh;
+            height: 10vh;
+            background-color: rgba(51, 51, 95, 0.5);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 10vh;
+            border: 3px solid rgba(239, 202, 157, 0.5);
+            box-shadow: 0 0 10px rgba(255, 255, 0, 0);
+            color: white;
+            text-decoration: none;
+            padding: 0;
+            font-size: 5vh;
+            top: -3.7vh;
+        }
 
-    .custom-textarea {
-        color: #60f000;
-        direction: rtl;
-        text-align: right;
-        font-size: 20px;
-        background-color: rgba(52, 60, 102, 0.534);
-        width: 200px; /* Adjust the width as needed */
-        height: 60px; /* Adjust the height as needed */
-        border: 1px solid #ccc;
-        padding: 5px;
-        width: 100%;
-    }
-    .custom-textarea:hover {
-        background-color: black;
-        color: #d9e3f0;
+        .M_L-button:hover {
+            transition-duration: 0.5s !important;
+            font-size: 5vh;
+            top: 1vh;
+            box-shadow: 0 0 10px rgba(255, 255, 0, 1);
+            border-color: orange;
+        }
 
-    }
+        a {
+            color: #00abb8;
+        }
 
+        a:hover {
+            color: #6200ff !important;
+        }
 
+        .custom-textarea {
+            color: #60f000;
+            direction: rtl;
+            text-align: right;
+            font-size: 20px;
+            background-color: rgba(52, 60, 102, 0.534);
+            width: 200px;
+            /* Adjust the width as needed */
+            height: 60px;
+            /* Adjust the height as needed */
+            border: 1px solid #ccc;
+            padding: 5px;
+            width: 100%;
+        }
 
-    
+        .custom-textarea:hover {
+            background-color: black;
+            color: #d9e3f0;
+
+        }
     </style>
 </head>
+
 <body>
     <img>
 
@@ -196,7 +207,7 @@ color:#6200ff !important;
         <i>OUT</i>
     </a>
     {% else %}
-    <a style="left: 15vw" href="{{url_for('log_in')}}" class="M_L-button">
+    <a style="left: 10vw" href="{{url_for('log_in')}}" class="M_L-button">
         <i>🔑</i>
     </a>
     {% endif %}
@@ -208,29 +219,36 @@ color:#6200ff !important;
         <tbody>
             {% for row in data %}
             {% set mitkan0_name1 = row.ENTITY.split(" => ") %}
-            <tr{% if row.NEW %} style="color: #ff3800;"{% else %} style="color: #a4f4f9;"{% endif %}>
+            <tr{% if row.NEW %} style="color: #ff3800;" {% else %} style="color: #a4f4f9;" {% endif %}>
 
-                    <td><a class="button" href="{{ url_for('history', entity=row.ENTITY) }}">History</a></td>
-                    <td style="font-size: 25px;"><a href="/tags_table/{{ mitkan0_name1[1]}}/~/~/~/~/~/~/{% if mitkan0_name1[0] == "660" %}~{% else %}{{mitkan0_name1[0]}}{% endif %}/~/~/~/~/~/~/~/~/0/0"> <p>{{mitkan0_name1[0]}}</p> <p>{{mitkan0_name1[1]}}</p></a></td>
-                    <td>{{ row.PVSOURCE }}</td>
-                    <td>{{ row.PTDESC }}</td>
-                    <td >
-                        {% if session['logged_in'] %}
-                            <form action="/save" method="POST">
-                                <input type="hidden" name="witch" value="{{ row.ENTITY }}">
-                                <textarea id="{{ row.ENTITY }}" class="custom-textarea" rows="2" name="value">{{ row.REASON }}</textarea>
-                                <input type="submit" value="Save">
-                            </form>
-                            {% else %}
-                            {{ row.REASON }}
-                            {% endif %}
+                <td><a class="button" href="{{ url_for('history', entity=row.ENTITY) }}">History</a></td>
+                <td style="font-size: 25px;"><a
+                        href="/tags_table/{{ mitkan0_name1[1]}}/~/~/~/~/~/~/{% if mitkan0_name1[0] == " 660" %}~{% else
+                        %}{{mitkan0_name1[0]}}{% endif %}/~/~/~/~/~/~/~/~/0/0">
+                        <p>{{mitkan0_name1[0]}}</p>
+                        <p>{{mitkan0_name1[1]}}</p>
+                    </a></td>
+                <td>{{ row.PVSOURCE }}</td>
+                <td>{{ row.PTDESC }}</td>
+                <td>
+                    {% if session['logged_in'] %}
+                    <form action="/save" method="POST">
+                        <input type="hidden" name="witch" value="{{ row.ENTITY }}">
+                        <textarea id="{{ row.ENTITY }}" class="custom-textarea" rows="2"
+                            name="value">{{ row.REASON }}</textarea>
+                        <input type="submit" value="Save">
+                    </form>
+                    {% else %}
+                    {{ row.REASON }}
+                    {% endif %}
 
-                        </td>
-                    <td>{{ row.START_AT }}</td>
-                    <td style="display: none;">{{ row.NEW }}</td>
+                </td>
+                <td>{{ row.START_AT }}</td>
+                <td style="display: none;">{{ row.NEW }}</td>
                 </tr>
-            {% endfor %}
+                {% endfor %}
         </tbody>
     </table>
 </body>
+
 </html>
