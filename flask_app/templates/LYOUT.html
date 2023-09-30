@@ -10,10 +10,13 @@
             zoom: 90%;
         }
 
+        #print {
+            visibility:hidden;
+        }
+
         #rotateBTN:hover {
             font-size: 120%;
             box-shadow: 0 0 10px rgba(255, 255, 0, 1);
-
         }
 
         .und {
@@ -32,7 +35,6 @@
             -webkit-backdrop-filter: blur(20px);
             margin: 0 auto;
             border-radius: 30px;
-            /* overflow: hidden; */
             box-shadow: 0px 5px 20px -10px rgba(0, 0, 0, 0.345);
         }
 
@@ -45,7 +47,6 @@
         .card-table tr:nth-child(even) {
             background-color: #d4dac66c;
         }
-
 
         .reversed_card-table td,
         .reversed_card-table th,
@@ -61,12 +62,10 @@
         .card-type {
             position: sticky !important;
             position: -webkit-sticky !important;
-            /* לתמיכה בדפדפנים שלא ב-WebKit */
             left: 0;
             font-weight: bold;
             z-index: 3 !important;
             background-color: #041234d2;
-
             border-radius: 5px;
         }
 
@@ -93,33 +92,25 @@
             text-shadow: 4px 2px 2px rgb(0, 0, 0);
         }
 
-        /* שורה המסומנת */
         .card-table tr:hover {
             transition-duration: 0.5s;
             transition-property: background-color;
             background-color: #a099f2ec;
         }
 
-        /* התא המסומן */
         .reversed_card-table td:hover,
         .card-table td:hover {
             color: #0b032cd2;
-            /* text-decoration:underline; */
             cursor: pointer;
             padding: 1px;
             background: rgba(248, 233, 18, 0.729);
-            /* border-radius: 10%; */
             border: 2px solid #226aa5;
-
-
         }
-
 
         .card-name {
             font-style: italic;
         }
 
-        /* Responsive layout */
         .container {
             width: 100%;
             overflow: auto;
@@ -164,6 +155,52 @@
             transition-duration: 1s;
             cursor: pointer;
         }
+
+        @media print {
+            @page {
+                size: landscape;
+                /* Set page size to landscape */
+                margin: 0;
+                /* Remove default margins */
+            }
+
+            a {
+                visibility: hidden !important;
+            }
+
+            body {
+                zoom: 35%;
+                margin: 5px;
+                /* Remove body margins */
+                font-size: 10px;
+                /* Adjust font size for better fit */
+                height: 100% !important;
+                /* Force table to be 100% width */
+                width: 100% !important;
+                /* Force table to be 100% width */
+            }
+
+            table {
+                height: 80% !important;
+                /* Force table to be 100% width */
+                width: 80% !important;
+                /* Force table to be 100% width */
+                page-break-inside: avoid;
+                /* Avoid page breaks within the table */
+                padding: 0px;
+                margin: 30px;
+            }
+
+            td,
+            tr {
+                margin: 0;
+                padding: 0;
+                width: fit-content;
+                height: fit-content;
+            }
+
+
+        }
     </style>
 </head>
 
@@ -181,6 +218,11 @@
         <i>🔑</i>
     </a>
     {% endif %}
+    <a style="left: 25vw" id="print" class="M_L-button">
+        <i>🖨️</i>
+    </a>
+
+
     <div class="container" id="myTable">
         <table class="card-table">
             <thead>
@@ -345,9 +387,8 @@
         }
 
 
-
-        const button = document.getElementById("rotateBTN");
-        button.onclick = function () {
+        const rotateBTN = document.getElementById("rotateBTN");
+        rotateBTN.onclick = function () {
             // ציינו את הטבלה המקורית
             var originalTable = document.getElementsByTagName("table")[0];
 
@@ -365,16 +406,12 @@
                 tableData.push(rowData);
             }
 
-            // הסרת הטבלה המקורית מהדף
-            originalTable.remove();
-
-            button.remove()
 
             // יצירת טבלה חדשה עם העמודות כשורות
             var newTable = document.createElement("table");
             newTable.classList.add("reversed_card-table"); // הוספת הסגנון שנמצא ב-CSS
 
-            for (var i = 0; i < 32; i++) {
+            for (var i = 0; i <= 32; i++) {
                 var newRow = newTable.insertRow();
 
                 // הוספת סגנון sticky לשורה הראשונה
@@ -384,21 +421,31 @@
 
                 for (var j = 0; j < tableData.length; j++) {
                     var cell = newRow.insertCell();
-                    cell.innerHTML = tableData[j][i];
-                    if (tableData[j][i] == undefined) {
+                    cell.innerHTML = tableData[j][i] || ''; // Use an empty string if the value is undefined
+                    if (typeof tableData[j][i] === 'undefined') {
                         cell.classList.add("und");
                     }
 
                 }
             }
 
+            // הסרת הטבלה המקורית מהדף
+            originalTable.remove();
+            let btnprint = document.getElementById("print")
+            btnprint.style.visibility = "visible"
+            rotateBTN.remove()
             // הוספת הטבלה החדשה הדף
             document.body.appendChild(newTable);
-            newTable.id = "REV"; // שנו חזרה ל-ID המקורי
-
-
-
         }
+
+
+        document.getElementById("print").onclick = function () {
+            var originalTable = document.getElementsByTagName("table")[0];
+            window.print();
+        }
+
+
+
 
 
     </script>
