@@ -9,8 +9,8 @@ from TDC_parse_eb.TDC_parse_eb_utils.hebrew import fix_if_reversed
 if not os.path.exists(DB_JASON):
     os.makedirs(DB_JASON)
 
-db = TinyDB(DB_JASON+'/PVSRC_TODAY_DB.json')
-table = db.table("ENTITY")
+# db = TinyDB(DB_JASON+'/PVSRC_TODAY_DB.json')
+# table = db.table("ENTITY")
 
 
 def router_pvsrc(app):
@@ -18,11 +18,14 @@ def router_pvsrc(app):
 
     @app.route("/pvsrc")
     def pvsrc():
+        db = TinyDB(DB_JASON+'/PVSRC_TODAY_DB.json')
         data = db.all()
+        db.close()
         return render_template("pvsrc_main.html", data=data)
 
     @app.route("/save", methods=["POST"])
     def save_reason():
+        db = TinyDB(DB_JASON+'/PVSRC_TODAY_DB.json')
         witch = request.form.get("witch")
         value = request.form.get("value")
         db.update({"REASON": value}, Query()["ENTITY"] == witch)
@@ -32,6 +35,7 @@ def router_pvsrc(app):
         e[0].pop("NEW", None)
         a = PVSRC_HISTORY_DB.insert(dict(e[0]))
         print(a)
+        db.close()
         return redirect(f"/pvsrc#{witch}")
 
     @app.route("/history/<entity>")
@@ -39,6 +43,7 @@ def router_pvsrc(app):
         Entity = Query()
         hi = TinyDB(DB_JASON + "/PVSRC_HISTORY_DB.json")
         data = hi.search(Entity["ENTITY"] == entity)
+        hi.close()
         if len(data) == 0:
             return render_template("pvsrc_hist_404.html", data=entity)
         return render_template("pvsrc_history.html", data=data)
