@@ -1,26 +1,18 @@
 from flask import Flask, render_template, request, redirect
 from tinydb import TinyDB, Query
-import time
-import os
-
-from TDC_parse_eb.TDC_parse_eb_utils.Consts import DB_JASON, plant_map, EB_FILES_DIR, epks
+import time,os,Plugins
+from TDC_parse_eb.TDC_parse_eb_utils.Consts import DB_JASON
 from TDC_parse_eb.TDC_parse_eb_utils.hebrew import fix_if_reversed
 
 if not os.path.exists(DB_JASON):
     os.makedirs(DB_JASON)
-
-# db = TinyDB(DB_JASON+'/PVSRC_TODAY_DB.json')
-# table = db.table("ENTITY")
-
 
 def router_pvsrc(app):
     today_ = time.strftime("%d-%b-%Y", time.gmtime())
 
     @app.route("/pvsrc")
     def pvsrc():
-        db = TinyDB(DB_JASON+'/PVSRC_TODAY_DB.json')
-        data = db.all()
-        db.close()
+        data=Plugins.Get_DBJson_Data('PVSRC_TODAY_DB.json')
         return render_template("pvsrc_main.html", data=data)
 
     @app.route("/save", methods=["POST"])
@@ -34,7 +26,6 @@ def router_pvsrc(app):
         e[0].update({"END_AT": "updated:"+today_})
         e[0].pop("NEW", None)
         a = PVSRC_HISTORY_DB.insert(dict(e[0]))
-        print(a)
         db.close()
         return redirect(f"/pvsrc#{witch}")
 

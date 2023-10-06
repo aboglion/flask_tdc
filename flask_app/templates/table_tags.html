@@ -299,14 +299,9 @@
     <table class="container" id="myTable">
         <thead>
             <tr>
-                {% set
-                tip=("NAME","DESCRIPTION","SLOTNUM","ADRESS","STATUS","TYPE","NODENUM","PLANT","DB_FILE","DI-1","DI-2","DO-1","DO-2","RC-OUT","RC-IN1","RC-IN2")
-                %}
-                {% set titals =
-                ["NAME","DESCRIPTION","SLOTNUM","ADRESS","STATUS","TYPE","NODENUM","PLANT","DB_FILE","DI-1","DI-2","DO-1","DO-2","RC-OUT","RC-IN1","RC-IN2"]
-                %}
-                {% set real_keys
-                =["NAME","PTDESC","SLOTNUM","ID","STATUS","TYPE","NODENUM","PLANT","DB_FILE","DISRC(1)","DISRC(2)","DODSTN(1)","DODSTN(2)","CODSTN(1)","CISRC(1)","CISRC(2)"]%}
+                {% set tip=("NAME","DESCRIPTION","SLOTNUM","ADRESS","STATUS","TYPE","NODENUM","PLANT","DB_FILE","DI-1","DI-2","DO-1","DO-2","RC-OUT","RC-IN1","RC-IN2")%}
+                {% set titals =["NAME","DESCRIPTION","SLOTNUM","ADRESS","STATUS","TYPE","NODENUM","PLANT","DB_FILE","DI-1","DI-2","DO-1","DO-2","RC-OUT","RC-IN1","RC-IN2"]%}
+                {% set real_keys=["NAME","PTDESC","SLOTNUM","ID","STATUS","TYPE","NODENUM","PLANT","DB_FILE","DISRC(1)","DISRC(2)","DODSTN(1)","DODSTN(2)","CODSTN(1)","CISRC(1)","CISRC(2)"]%}
                 {% for key in titals%}
                 <th onclick="sortTable({{ loop.index0 }})">
                     <div onmouseover="resizein('in{{loop.index0}}')">{{ key }}</div>
@@ -394,17 +389,21 @@
             var element = document.getElementById(id);
             if (element) {
                 if (element.value == "~") element.value = ""
-
-                element.style.display = "initial"
+               
+                element.style.visibility ="visible";
             } else {
                 // console.log('No element found with id: ' + id);
             }
         }
 
-        function searchTable(e, e_id) {
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms))
+        }
 
+        async function searchTable(e, e_id) {
             // Add the 'cursor: wait;' CSS property to the body
             document.body.style.cursor = 'wait';
+            await sleep(1000);
             // Add the 'cursor: wait;' CSS property to name input
             document.getElementById('in0').style.cursor = 'wait';
 
@@ -425,11 +424,10 @@
                 let the_inp_char = v.slice(-1)
                 // del last char
                 if (!(ligal_chr.includes(the_inp_char) || e.keyCode == 8)) {
-                    if (v.length < 2) { e.value = '~'; e.style.display = "none" }
+                    if (v.length < 2) { e.value = '~'; e.style.visibility = "hidden"; }
                     else e.value = v.slice(0, -1)
                 }
-                if (v == "") { e.value = '~'; e.style.display = "none" }
-
+                if (v == "") { e.value = '~'; e.style.visibility = "hidden"; }
                 v = e.value
                 input[i] = v
             }
@@ -476,17 +474,22 @@
         }
 
         function updatein() {
-
             {% for variable in variables %}
-            e = document.getElementById("in{{ loop.index0 }}")
-            e.value = '{{variable}}'
-            if ('{{variable}}' == "~") e.style.display = "none"
+                e = document.getElementById("in{{ loop.index0 }}")
+                e.value = '{{variable}}'
+                if ('{{variable}}' == "~") e.style.visibility = "hidden";
             {% endfor %}
-            if (Number.isInteger({{ foucs_id }}))
-        document.getElementById("in{{foucs_id}}").focus()
+            console.log({{foucs_id}});
+    if ('{{foucs_id}}' !== "") {
+        let foucs_id_int = parseInt('{{foucs_id}}', 10); // Parses the string into an integer with base 10
+        if (!isNaN(foucs_id_int)) {
+            let foucsed = document.getElementById("in{{foucs_id}}");
+            foucsed.focus();
+            foucsed.style.backgroundColor = "yellow";
+      
+      
+        }}}
 
-         
-        }
 
     </script>
 </body>

@@ -318,9 +318,7 @@
             // גלילה למעלה
             // tableDiv.scrollTop -= dy * (startY * 0.02)
             // גלילה לשמאלה+ גלילה לימין
-            tableDiv.scrollLeft -= dx * (startX * 0.01)
-
-
+            tableDiv.scrollLeft -= dx * (startX * 0.005)
             startX = e.clientX;
             // startY = e.clientY;
 
@@ -386,57 +384,56 @@
             inputElement.focus(); // focus the input field
         }
 
-
         const rotateBTN = document.getElementById("rotateBTN");
         rotateBTN.onclick = function () {
-            // ציינו את הטבלה המקורית
-            var originalTable = document.getElementsByTagName("table")[0];
+                        // ציינו את הטבלה המקורית
+                        var originalTable = document.getElementsByTagName("table")[0];
 
-            // יצרנו מערך ריק שיכיל את העמודות
-            var tableData = [];
+                        // יצרנו מערך ריק שיכיל את העמודות
+                        var tableData = [];
 
-            // איפוס משתנה לאורך השורות של הטבלה
-            for (var i = 1; i < originalTable.rows.length; i++) {
-                var rowData = [];
-                for (var j = 0; j < originalTable.rows[i].cells.length; j++) {
-                    // הוספת התוכן של התא למערך
-                    rowData.push(originalTable.rows[i].cells[j].innerHTML);
-                }
-                // הוספת השורה למערך הגדול
-                tableData.push(rowData);
-            }
+                        // איפוס משתנה לאורך השורות של הטבלה
+                        for (var i = 1; i < originalTable.rows.length; i++) {
+                            var rowData = [];
+                            for (var j = 0; j < originalTable.rows[i].cells.length; j++) {
+                                // הוספת התוכן של התא למערך
+                                let cell = originalTable.rows[i].cells[j];
+                                rowData.push(cell.innerHTML);
+                            }
+                            // הוספת השורה למערך הגדול
+                            tableData.push(rowData);
+                        }
 
+                        // יצירת טבלה חדשה עם העמודות כשורות
+                        var newTable = document.createElement("table");
+                        newTable.classList.add("reversed_card-table"); // הוספת הסגנון שנמצא ב-CSS
 
-            // יצירת טבלה חדשה עם העמודות כשורות
-            var newTable = document.createElement("table");
-            newTable.classList.add("reversed_card-table"); // הוספת הסגנון שנמצא ב-CSS
+                        for (var i = 0; i <= 32; i++) {
+                            var newRow = newTable.insertRow();
 
-            for (var i = 0; i <= 32; i++) {
-                var newRow = newTable.insertRow();
+                            // הוספת סגנון sticky לשורה הראשונה
+                            if (i === 0) {
+                                newRow.classList.add("sticky-row");
+                            }
 
-                // הוספת סגנון sticky לשורה הראשונה
-                if (i === 0) {
-                    newRow.classList.add("sticky-row");
-                }
+                            for (var j = 0; j < tableData.length; j++) {
+                                var cell = newRow.insertCell();
+                                cell.innerHTML = tableData[j][i] || ''; // Use an empty string if the value is undefined
 
-                for (var j = 0; j < tableData.length; j++) {
-                    var cell = newRow.insertCell();
-                    cell.innerHTML = tableData[j][i] || ''; // Use an empty string if the value is undefined
-                    if (typeof tableData[j][i] === 'undefined') {
-                        cell.classList.add("und");
+                                if (typeof tableData[j][i] === 'undefined') {
+                                    cell.classList.add("und");
+                                }
+                            }
+                        }
+
+                        // הסרת הטבלה המקורית מהדף
+                        originalTable.remove();
+                        let btnprint = document.getElementById("print");
+                        btnprint.style.visibility = "visible";
+                        rotateBTN.remove();
+                        // הוספת הטבלה החדשה לדף
+                        document.body.appendChild(newTable);
                     }
-
-                }
-            }
-
-            // הסרת הטבלה המקורית מהדף
-            originalTable.remove();
-            let btnprint = document.getElementById("print")
-            btnprint.style.visibility = "visible"
-            rotateBTN.remove()
-            // הוספת הטבלה החדשה הדף
-            document.body.appendChild(newTable);
-        }
 
 
         document.getElementById("print").onclick = function () {
