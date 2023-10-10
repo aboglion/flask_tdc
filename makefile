@@ -13,6 +13,7 @@ b:
 # delet all images 
 clear:
 	docker-compose down --rmi all -v 
+	docker rmi -f $(docker images -q)
 stop:
 	docker-compose down
 log:

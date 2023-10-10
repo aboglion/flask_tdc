@@ -18,7 +18,6 @@ app = Flask(__name__)
 app.secret_key = os.getenv("HASH_KEY")
 referrer = None
 
-Plugins.log_user_entry()
 
 
 
@@ -141,10 +140,10 @@ def updateit():
         return response
 
 
-@app.route('/log_entries/', methods=['POST', 'GET'])
-def log_entries():
-    data= Plugins.load_all_log_entries('log_entries.json')
-    return render_template('log_entries.html', data=data)
+# @app.route('/log_entries/', methods=['POST', 'GET'])
+# def log_entries():
+#     data= Plugins.load_all_log_entries('log_entries.json')
+#     return render_template('log_entries.html', data=data)
 
 
 

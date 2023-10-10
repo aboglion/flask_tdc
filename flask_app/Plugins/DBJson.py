@@ -123,7 +123,7 @@ def load_log_entry(filename):
 
 
 
-def append_log_entry(entry, filename):
+def JSON_AddData(filename,entry):
     filename = os.path.join(Consts.DB_JASON, filename)  # Assuming Consts.DB_JASON is the correct path
     try:
         if os.path.exists(filename):
@@ -133,20 +133,38 @@ def append_log_entry(entry, filename):
             log_entries = []
     except json.decoder.JSONDecodeError:
         log_entries = []
-
     log_entries.append(entry)
-
     with open(filename, 'w') as file:
         json.dump(log_entries, file)
 
 
-def load_all_log_entries(filename):
-    filename = os.path.join(Consts.DB_JASON, filename)  # Assuming Consts.DB_JASON is the correct path
-
+def JSON_GetData(filename):
+    filename = os.path.join(Consts.DB_JASON, filename)  
     try:
         with open(filename, 'r') as file:
             log_entries = json.load(file)
     except (FileNotFoundError, json.decoder.JSONDecodeError):
         log_entries = []
-
     return log_entries
+
+def JSON_UpdateData(filename,entry,id_index=0):
+    filename = os.path.join(Consts.DB_JSON, filename)  # Assuming Consts.DB_JSON is the correct path
+    log_entries = []
+    found_it=False
+    try:
+        if os.path.exists(filename):
+            with open(filename, 'r') as file:
+                log_entries = json.load(file)
+                for i, existing_entry in enumerate(log_entries):
+                    if existing_entry[id_index] == entry[id_index]:
+                        # Replace the existing entry with the new one
+                        log_entries[i] = entry
+                        found_it=True
+                        break  # Exit the loop since we found and updated the entry
+        else:
+            log_entries = []
+    except json.decoder.JSONDecodeError:
+        log_entries = []
+    if not found_it:log_entries.append(entry)
+    with open(filename, 'w') as file:
+        json.dump(log_entries, file)
