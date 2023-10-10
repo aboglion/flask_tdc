@@ -76,8 +76,8 @@ def log_in():
 def log_out():
     global referrer
     session['logged_in'] = False
-    referrer = request.referrer if ('logout' not in request.referrer) else referrer
-    if referrer:return redirect(referrer)
+    referrer = request.referrer if ('log' not in request.referrer) else referrer
+    if referrer :return redirect(referrer)
     else:redirect(url_for('main_page'))
 
 # http://localhost:5000/tags_table/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/0/0
