@@ -3,7 +3,7 @@ up_:
 	docker-compose up -d
 
 #localy (build before run)
-local:clear b log up
+local:clear b up_ log
 up:
 	docker-compose up
 b:

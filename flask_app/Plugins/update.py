@@ -31,7 +31,6 @@ def Is_Update_Needit(data_main,updated_date):
                   updated_date, "->", updated_date, end=" ")
             updated_date = datetime.now().day
             print(updated_date)
-            print(bool(data_main))
             UPDATE_DATE_FILE.write(str(updated_date))
             PMs_DB = TinyDB(f'{Consts.DB_JASON}/PMs.json')
             data_main = PMs_DB.all()

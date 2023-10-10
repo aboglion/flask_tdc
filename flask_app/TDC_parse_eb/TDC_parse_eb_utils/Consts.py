@@ -10,14 +10,14 @@ DB_JASON="/TDC/DB_JASON"
 def runmode(app):
     print("SERVER RUNING")
 
-# ### debug_run  http://localhost:5000/
+### debug_run  http://localhost:5000/
 # script_path = ("/").join(os.path.abspath(__file__).split("/")[:-5])
 # EB_FILES_DIR = f"{script_path}/TDC_debug/DB"
 # DB_JASON = f"{script_path}/TDC_debug/DB_JASON"
 # def runmode(app):
 #     app.run(debug=True)
 
-# -------------------------------
+# -------------------------------y
 
 
 update_hour = 9
@@ -25,11 +25,11 @@ update_hour = 9
 TAGS_TYBE = ["*", "RC", "DI", "DO", "AI", "AO",
              "DC", "RPV", "SEQ", "NM", "FL", "ARR", "TM"]
 NET = "A"
-NET_B = ["930", "800", "690", "650", "651"]
+NET_B = ["320", "800", "690", "650", "651"]
 NET_A = ["640", "630", "730", "720", "640", "610", "710", "740", "600"]
 PLANT_file_start = {
     "ALL": "??",
-    "930": "93",
+    "320": "32",
     "800": "80",
     "690": "69",
     "650": "65",
@@ -46,7 +46,7 @@ PLANT_file_start = {
     "600": "60",
 }
 PLANT_LETTER = {
-    "930": "M",
+    "320": "M",
     "800": "j",
     "690": "v",
     "650": "B",
@@ -81,7 +81,7 @@ plant_map = {
     "G": 730,
     "R": 740,
     "J": 800,
-    "M": 930
+    "M": 320
 }
 # כל סוג כמו מערך שיש לו גודל קבוע
 lyout_sizes = {

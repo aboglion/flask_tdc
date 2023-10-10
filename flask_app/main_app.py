@@ -57,19 +57,19 @@ router_pvsrc(app)
 
 @app.route('/login/', methods=['POST', 'GET'])
 def log_in():
-    
+    print("log_in_page >>><<<<<<")
     global referrer #הדף האחרון שהינו בו כדי לחזור אליו במידה והצלחנו לכנס
-    if request.method == 'POST':  # זה פוסט בא מהפורם לאחר הכנסת הסיסמה
+    if request.method == 'POST':  # זה פוסט בא מהפורם לאחר הכנסת הסיסמה    
         hash_object = hashlib.sha256()
         password=request.form['password']
         hash_object.update(password.encode('utf-8'))
         if hash_object.hexdigest() == app.secret_key: #בדיקת סיסמה אם נכונה
-             session['logged_in'] = True            
-             redirect(referrer if referrer else url_for('main_page'))
+            session['logged_in'] = True
+            return redirect(referrer if referrer else url_for('main_page'))
         else: return render_template('login.html', error='Invalid password. Please try again.') #סיסמה לא נכונה
     else:  # אם זה לא פוסט (כניסה ראשונה לדף) תשמור לי את הדף שבאת ממנו
-        if ('login' not in request.referrer):referrer = request.referrer
-        return render_template('login.html', error=None)
+            if (request.referrer and 'login' not in request.referrer):referrer = request.referrer
+            return render_template('login.html', error=None)
 
 
 @app.route('/logout/', methods=['POST', 'GET'])
@@ -77,8 +77,8 @@ def log_out():
     global referrer
     session['logged_in'] = False
     referrer = request.referrer if ('logout' not in request.referrer) else referrer
-    return redirect(referrer)
-
+    if referrer:return redirect(referrer)
+    else:redirect(url_for('main_page'))
 
 # http://localhost:5000/tags_table/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/0/0
 @app.route('/tags_table/<NAME>/<PTDESC>/<SLOTNUM>/<ID>/<STATUS>/<TYPE>/<NODENUM>/<PLANT>/<DB_FILE>/<DISRC_1>/<DISRC_2>/<DODSTN_1>/<DODSTN_2>/<CODSTN_1>/<CISRC_1>/<CISRC_2>/<num>/<foucs_id>')
