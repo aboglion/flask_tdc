@@ -18,7 +18,13 @@ app = Flask(__name__)
 app.secret_key = os.getenv("HASH_KEY")
 referrer = None
 
+Plugins.log_user_entry()
 
+
+
+
+
+# print(a)
 
 @app.route('/')
 def main_page():
@@ -133,6 +139,18 @@ def updateit():
         Plugins.Update_DBJson_Data(it)
         response = make_response('Success', 200)
         return response
+
+
+@app.route('/log_entries/', methods=['POST', 'GET'])
+def log_entries():
+    data= Plugins.load_all_log_entries('log_entries.json')
+    return render_template('log_entries.html', data=data)
+
+
+
+
+# Loading all log entries in another function
+
 
 
 if __name__ == '__main__':

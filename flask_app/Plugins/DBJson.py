@@ -1,6 +1,7 @@
 # DBJson
 
-from tinydb import TinyDB, Query
+from tinydb import TinyDB
+import json,os
 import TDC_parse_eb.TDC_parse_eb_utils.Consts as Consts
 
 
@@ -106,3 +107,46 @@ def Update_DBJson_Data(it):
     s_t.append(it) # add the new tag
     
     Replace_DBJson_Data(TA_DB_FILE,{it["PLANT"]: s_t})
+
+
+def save_log_entry(entry, filename):
+    with open(f'{Consts.DB_JASON}/{filename}', 'w') as file:
+        json.dump(entry, file)
+
+def load_log_entry(filename):
+    try:
+        with open(f'{Consts.DB_JASON}/{filename}', 'r') as file:
+            entry = json.load(file)
+        return entry
+    except FileNotFoundError:
+        return None
+
+
+
+def append_log_entry(entry, filename):
+    filename = os.path.join(Consts.DB_JASON, filename)  # Assuming Consts.DB_JASON is the correct path
+    try:
+        if os.path.exists(filename):
+            with open(filename, 'r') as file:
+                log_entries = json.load(file)
+        else:
+            log_entries = []
+    except json.decoder.JSONDecodeError:
+        log_entries = []
+
+    log_entries.append(entry)
+
+    with open(filename, 'w') as file:
+        json.dump(log_entries, file)
+
+
+def load_all_log_entries(filename):
+    filename = os.path.join(Consts.DB_JASON, filename)  # Assuming Consts.DB_JASON is the correct path
+
+    try:
+        with open(filename, 'r') as file:
+            log_entries = json.load(file)
+    except (FileNotFoundError, json.decoder.JSONDecodeError):
+        log_entries = []
+
+    return log_entries

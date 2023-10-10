@@ -1,6 +1,7 @@
 from glob import glob
 import TDC_parse_eb.TDC_parse_eb_utils.Consts as Consts
-
+import os,datetime
+from .DBJson import load_all_log_entries,append_log_entry
 
 # LOGS
 
@@ -17,4 +18,15 @@ def Get_DbLogs_Dates():
         if (dates_reports_files[-1][0] == "B"):
             dates_reports_files_B.append(dates_reports_files[-1])
     return {"A":dates_reports_files_A,"B":dates_reports_files_B}
+
+
+
+
+def log_user_entry():
+    username = os.getlogin()
+    now = str(datetime.datetime.now().replace(second=0, microsecond=0))
+    new_log_entry = {"name": username, "time": now}
+    all_entries = load_all_log_entries('log_entries.json')
+    if not(len(all_entries)>0 and all_entries[-1]==new_log_entry):
+        append_log_entry(new_log_entry, 'log_entries.json')
 
