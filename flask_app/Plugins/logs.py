@@ -1,6 +1,5 @@
 from glob import glob
 import TDC_parse_eb.TDC_parse_eb_utils.Consts as Consts
-import os,datetime
 
 # LOGS
 

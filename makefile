@@ -12,12 +12,18 @@ b:
 
 # delet all images 
 clear:
+	docker-compose stop flask_io 
+	docker-compose down flask_io
+	docker-compose kill flask_io 
+	docker-compose rm flask_io 
 	docker-compose down --rmi all -v 
-	docker rmi -f $(docker images -q)
+
 stop:
 	docker-compose down
+
 log:
 	docker-compose logs -f flask_io
+
 log_2:
 	docker-compose logs -f watchtower
 

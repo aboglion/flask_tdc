@@ -27,7 +27,7 @@ referrer = None
 
 @app.route('/')
 def main_page():
-
+    
     updated_date=Plugins.Get_Last_UpdateDate()
     MainPage_Data=Plugins.Get_DBJson_Data("PMs.json")
 

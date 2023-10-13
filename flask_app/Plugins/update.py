@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 from tinydb import TinyDB, Query
 import TDC_parse_eb.TDC_parse_eb as TDC
-import TDC_parse_eb.TDC_parse_eb_utils.Consts as Consts
 
 
 # UPDATE
@@ -32,9 +31,6 @@ def Is_Update_Needit(data_main,updated_date):
             updated_date = datetime.now().day
             print(updated_date)
             UPDATE_DATE_FILE.write(str(updated_date))
-            PMs_DB = TinyDB(f'{Consts.DB_JASON}/PMs.json')
-            data_main = PMs_DB.all()
-            PMs_DB.close()
             return True
     return False
 
