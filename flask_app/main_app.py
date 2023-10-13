@@ -27,9 +27,12 @@ referrer = None
 
 @app.route('/')
 def main_page():
-    
+    print("in main page now ---=-=-=-------------->>>")
     updated_date=Plugins.Get_Last_UpdateDate()
+    print("having Update date is ",updated_date, "---=-=-=-------------->>>")
+
     MainPage_Data=Plugins.Get_DBJson_Data("PMs.json")
+    print("having MainPage_Data date is \n",MainPage_Data, "\n---=-=-=-------------->>>")
 
     if Plugins.Is_Update_Needit(MainPage_Data,updated_date):  
         return render_template('update_page.html')
