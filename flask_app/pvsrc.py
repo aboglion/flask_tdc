@@ -13,6 +13,7 @@ def router_pvsrc(app):
     @app.route("/pvsrc")
     def pvsrc():
         data=Plugins.Get_DBJson_Data('PVSRC_TODAY_DB.json')
+        print(data)
         return render_template("pvsrc_main.html", data=data)
 
     @app.route("/save", methods=["POST"])

@@ -3,7 +3,7 @@ from .Consts import DB_JASON
 import os
 
 # פונקציה לשמירת מידע במסדי נתונים
-def save_to_db(which_plant, tags_data, lyout, invalid_lyout):
+def save_to_db(which_plant,tags_data, lyout, invalid_lyout):
     # Create the directory
     if not os.path.exists(DB_JASON):
         os.mkdir(DB_JASON)

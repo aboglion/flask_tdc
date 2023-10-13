@@ -7,7 +7,7 @@ import TDC_parse_eb.TDC_parse_eb_utils.Consts as Consts
 
 
 # פונקציה ראשית לעיבוד המידע
-def main_parser(which_plant, which_pm='*', which_type='*'):
+def main_parser(which_plant,which_pm='*', which_type='*'):
     which_pm = "PM" + which_pm
 
     # בדיקת סוג הנתונים אם קיים
@@ -79,7 +79,7 @@ def main_parser(which_plant, which_pm='*', which_type='*'):
                 print(f"err in db file of {current_plant}")
 
             # שמירה במסדי נתונים (DB)
-            Parse_Utils.save_to_db(current_plant, tags_, LYOUT, Invalid_LYOUT)
+            Parse_Utils.save_to_db(current_plant,tags_, LYOUT, Invalid_LYOUT)
         except UnboundLocalError as e:
             print(e)
             print(f"LYOUT ERROR IN {current_plant}")

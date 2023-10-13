@@ -285,9 +285,16 @@
     </div>
 
     <div class="logs">
-        <p><i class="logs_tit">A תאריכי עדכון רשת =></i> : | {% for log in dates_A %}<i>{{log}}</i>] _ |{% endfor %}
-        <p><i class="logs_tit">B תאריכי עדכון רשת =></i> : | {% for log in dates_B %}<i>{{log}}</i>] _ |{% endfor %}
-    </div>
+        <p> <i class="logs_tit">A תאריכי עדכון רשת =></i> : | {% for log in dates_A %}<i>{{log}}</i>] _ |{% endfor %}</p>
+        <p> <i class="logs_tit">B תאריכי עדכון רשת =></i> : | {% for log in dates_B %}<i>{{log}}</i>] _ |{% endfor %}</p>
+            {% if EB_FILES_DIR_exist %}
+            <p style="color: rgba(0, 128, 0, 0.664);padding: 0;margin-top: 0;font-size: smaller;">EB DIR STATUS: exist
+            {% else %}
+            <p style="color: rgb(255, 51, 19);padding: 0;margin-top: 0;font-size: smaller;">EB DIR STATUS: NOT exist
+            {% endif %}
+        </p>
+
+        </div>
 
     <a style="top:25vh" href="{{url_for("pvsrc")}}" class="lM-button">
         <i>תגים בידני</i>

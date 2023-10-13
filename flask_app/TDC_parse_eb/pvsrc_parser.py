@@ -13,7 +13,6 @@ def find_data(tag, data):
             return i
     return False
 
-
 # Define the paths for different entities
 paths = {
     "A": f'{EB_FILES_DIR}/../Rep/PVSRC_A.XX',
@@ -24,40 +23,36 @@ today_ = time.strftime("%d-%b-%Y", time.gmtime())
 date_files = {"A": " ", "B": " "}
 
 
+
 def pvsrc_parse():
     # Initialize the TinyDB database and table
     PVSRC_HISTORY_DB = TinyDB(DB_JASON+'/PVSRC_HISTORY_DB.json')
     PVSRC_TODAY_DB = TinyDB(DB_JASON+'/PVSRC_TODAY_DB.json')
     PVSRC_LAST_DB = TinyDB(DB_JASON+'/PVSRC_LAST_DB.json')
-
     # Get the existing data from the TinyDB database
     HISTORY_DATA = PVSRC_HISTORY_DB.all()
     LAST_DATA = PVSRC_LAST_DB.all()
     TODAY_DATA = PVSRC_TODAY_DB.all()
     TAG = Query()
-
     # Read data from the files and update the database and TreeView
-    data = []
-    for NET in ["A", "B"]:
-        startline = 3 if data else 2
-        datastring = open(
-            paths[NET], "r", encoding='windows-1255').read().splitlines()[startline:]
-        print(datastring)
-        for l in datastring:
-            l = l.split()
-            if len(l) > 3:
-                if "ERRORS" in l[0] or "Request" in l[0]:
-                    continue
-                ENTITY = f"{plant_map[l[0][0]]} => {l[0]}"
-                PVSOURCE = l[1]
-                PTDESC = " ".join(l[2:])
-                PTDESC = fix_if_reversed(PTDESC)
-
-                data.append({"ENTITY": ENTITY, "PVSOURCE": PVSOURCE,
-                            "PTDESC": PTDESC, "REASON": ""})
-
     try:
-        # exprian files
+        data = []
+        for NET in ["A", "B"]:
+            startline = 3 if data else 2
+            datastring = open(paths[NET], "r", encoding='windows-1255').read().splitlines()[startline:]
+            for l in datastring:
+                l = l.split()
+                if len(l) > 3:
+                    if "ERRORS" in l[0] or "Request" in l[0]:
+                        continue
+                    ENTITY = f"{plant_map[l[0][0]]} => {l[0]}"
+                    PVSOURCE = l[1]
+                    PTDESC = " ".join(l[2:])
+                    PTDESC = fix_if_reversed(PTDESC)
+
+                    data.append({"ENTITY": ENTITY, "PVSOURCE": PVSOURCE,
+                                "PTDESC": PTDESC, "REASON": ""})
+        # exprian files =-=-=============================================
         epks_file_list = glob.glob(epks)
         if len(epks_file_list) > 0:
             epks_file_list = sorted(
@@ -73,7 +68,6 @@ def pvsrc_parse():
 
                 l = l.split(",")
                 if len(l) > 3:
-                    print(l)
                     if "ERRORS" in l[0] or "Request" in l[0]:
                         continue
                     ENTITY = f"{mitkan_epks} => {l[0]}"
@@ -85,7 +79,7 @@ def pvsrc_parse():
         for t in LAST_DATA:
             if (t["ENTITY"] in data):
                 print(t["ENTITY"])
-    except Exception:
+    except Exception as e:
         print(e, "EXPRINA ERR")
         pass
 
@@ -97,20 +91,18 @@ def pvsrc_parse():
     entities_LAST_DATA = [item['ENTITY'] for item in LAST_DATA]
 
     # Find entities in dect1 that are not in dect2
-    not_in_LAST_DATA = [
-        entity for entity in entities_data if entity not in entities_LAST_DATA]
+    not_in_LAST_DATA = [entity for entity in entities_data if entity not in entities_LAST_DATA]
 
     # Find entities in dect2 that are not in dect1
-    not_in_data = [
-        entity for entity in entities_LAST_DATA if entity not in entities_data]
+    not_in_data = [entity for entity in entities_LAST_DATA if entity not in entities_data]
 
-    in_last_day = [
-        entity for entity in entities_data if entity in entities_LAST_DATA]
+    in_last_day = [entity for entity in entities_data if entity in entities_LAST_DATA]
     print("not_in_LAST_DATA", not_in_LAST_DATA)
-    print("--------------------------")
+    print("--------------------------\n"*2)
     print("not_in_data", not_in_data)
-    print("--------------------------")
+    print("--------------------------\n"*2)
     print("in_last_day", in_last_day)
+    print("--------------------------\n"*2)
 
     if not_in_LAST_DATA:
         for entity in not_in_LAST_DATA:
@@ -118,8 +110,7 @@ def pvsrc_parse():
             if len(tag_new) == 0:
                 tag = (find_data(entity, data))
                 PVSRC_TODAY_DB.insert(tag)
-            PVSRC_TODAY_DB.update(
-                {"START_AT": today_, "NEW": True}, TAG["ENTITY"] == entity)
+            PVSRC_TODAY_DB.update({"START_AT": today_, "NEW": True}, TAG["ENTITY"] == entity)
 
     if not_in_data:
         for entity in not_in_data:
@@ -135,13 +126,10 @@ def pvsrc_parse():
     if in_last_day:
         for entity in in_last_day:
             tag_t = PVSRC_TODAY_DB.search(TAG["ENTITY"] == entity)
-            tag_old_date = PVSRC_LAST_DB.search(
-                TAG["ENTITY"] == entity)[-1]["START_AT"]
-            print(tag_old_date)
+            tag_old_date = PVSRC_LAST_DB.search(TAG["ENTITY"] == entity)[-1]["START_AT"]
             if len(tag_t) > 0:
-                PVSRC_TODAY_DB.update(
-                    {"START_AT": tag_old_date, "NEW": None}, TAG["ENTITY"] == entity)
-
+                PVSRC_TODAY_DB.update({"START_AT": tag_old_date, "NEW": None}, TAG["ENTITY"] == entity)
+    
     TODAY_DATA = PVSRC_TODAY_DB.all()
     PVSRC_LAST_DB.truncate()
     PVSRC_LAST_DB.insert_multiple(TODAY_DATA)

@@ -1,11 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, session, make_response
-import os,hashlib,time
+import os,hashlib
 from glob import glob
-from TDC_parse_eb.pvsrc_parser import pvsrc_parse as PVSRC
+from TDC_parse_eb.pvsrc_parser import pvsrc_parse
 import TDC_parse_eb.TDC_parse_eb_utils.Consts as Consts
 from pvsrc import router_pvsrc
 import Plugins
-
 
 if not os.path.exists(Consts.DB_JASON):
     os.makedirs(Consts.DB_JASON)
@@ -27,6 +26,14 @@ referrer = None
 
 @app.route('/')
 def main_page():
+
+    if not os.path.exists(Consts.DB_JASON):
+        try:os.makedirs(Consts.DB_JASON)
+        except Exception:return(f'\n\n THERE IS NO FOLDER {Consts.DB_JASON}\n CAN NOT MAKE NEW FOLDER')
+
+    if not os.path.exists(Consts.EB_FILES_DIR):EB_FILES_DIR_exist=False
+    else:EB_FILES_DIR_exist=True
+
     print("main now")
     updated_date=Plugins.Get_Last_UpdateDate()
 
@@ -38,7 +45,7 @@ def main_page():
     
     DbLogs_Dates=Plugins.Get_DbLogs_Dates()
 
-    return render_template('main.html', data=MainPage_Data[0], dates_A=DbLogs_Dates["A"], dates_B=DbLogs_Dates["B"])
+    return render_template('main.html', data=MainPage_Data[0], dates_A=DbLogs_Dates["A"], dates_B=DbLogs_Dates["B"],EB_FILES_DIR_exist=EB_FILES_DIR_exist)
 
 # דף להצגת הודעה ואנימאשין להמתנה
 
@@ -48,20 +55,27 @@ def update_page():
 
 @app.route('/update/')  # הפעלת הפונקציה של העדכון
 def update_LYOUT():
-    PVSRC()
+    print("run pvsrc")
+    pvsrc_parse()
+    print("\n out pvsrc_parse")
     Plugins.RUN_Update(ALL_Plant)
     print("updated")
     return redirect(url_for('main_page'))
 
 
+
+####-------------duplication
 @app.route('/duplication/', methods=['POST', 'GET'])
 def duplication():
     duplication_data = Plugins.Get_DBJson_Data("duplication_db.json")
     return render_template('duplication.html', data=duplication_data)
+##--------------------------   
 
 
-router_pvsrc(app)
 
+####-------------PVSRC router
+router_pvsrc(app)  
+##--------------------------   
 
 @app.route('/login/', methods=['POST', 'GET'])
 def log_in():
@@ -141,17 +155,6 @@ def updateit():
         Plugins.Update_DBJson_Data(it)
         response = make_response('Success', 200)
         return response
-
-
-# @app.route('/log_entries/', methods=['POST', 'GET'])
-# def log_entries():
-#     data= Plugins.load_all_log_entries('log_entries.json')
-#     return render_template('log_entries.html', data=data)
-
-
-
-
-# Loading all log entries in another function
 
 
 

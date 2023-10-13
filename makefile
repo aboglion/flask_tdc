@@ -13,7 +13,7 @@ b:
 # delet all images 
 clear:
 	docker-compose stop flask_io 
-	docker-compose down flask_io
+	docker-compose down flask_io -v 
 	docker-compose kill flask_io 
 	docker-compose rm flask_io 
 	docker-compose down --rmi all -v 
