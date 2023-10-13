@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, make_response
-import os,hashlib
+import os,hashlib,time
 from glob import glob
 from TDC_parse_eb.pvsrc_parser import pvsrc_parse as PVSRC
 import TDC_parse_eb.TDC_parse_eb_utils.Consts as Consts
@@ -27,17 +27,17 @@ referrer = None
 
 @app.route('/')
 def main_page():
-    print("in main page now ---=-=-=-------------->>>")
+    print("main now")
     updated_date=Plugins.Get_Last_UpdateDate()
-    print("having Update date is ",updated_date, "---=-=-=-------------->>>")
 
     MainPage_Data=Plugins.Get_DBJson_Data("PMs.json")
-    print("having MainPage_Data date is \n",MainPage_Data, "\n---=-=-=-------------->>>")
 
     if Plugins.Is_Update_Needit(MainPage_Data,updated_date):  
         return render_template('update_page.html')
+
     
     DbLogs_Dates=Plugins.Get_DbLogs_Dates()
+
     return render_template('main.html', data=MainPage_Data[0], dates_A=DbLogs_Dates["A"], dates_B=DbLogs_Dates["B"])
 
 # דף להצגת הודעה ואנימאשין להמתנה
