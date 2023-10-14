@@ -34,15 +34,18 @@ def main_page():
     if not os.path.exists(Consts.EB_FILES_DIR):EB_FILES_DIR_exist=False
     else:EB_FILES_DIR_exist=True
 
-    print("main now")
+# if update is runing alrady    
+    updating_runing=False
+    try:
+        updating_runing = Plugins.DBJson.Get_DBJson_Data("updating_runing.json")[0]["updating_runing"]
+    except Exception as e :pass
+    if updating_runing:return render_template('wait_update_finsh.html')
+#check is need to update
     updated_date=Plugins.Get_Last_UpdateDate()
-
     MainPage_Data=Plugins.Get_DBJson_Data("PMs.json")
-
     if Plugins.Is_Update_Needit(MainPage_Data,updated_date):  
         return render_template('update_page.html')
-
-    
+#get the logs of copy files
     DbLogs_Dates=Plugins.Get_DbLogs_Dates()
 
     return render_template('main.html', data=MainPage_Data[0], dates_A=DbLogs_Dates["A"], dates_B=DbLogs_Dates["B"],EB_FILES_DIR_exist=EB_FILES_DIR_exist)

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Waiting Page</title>
+    <title>wait_update_finsh</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -78,7 +78,11 @@
                     break;
             }
         }, 1000);
-            window.location.href = "{{url_for('update_LYOUT')}}"; 
+
+        setTimeout(() => {
+    window.location.href = "{{url_for('main_page')}}";
+}, 5000);
+
     </script>
 </body>
 </html>
