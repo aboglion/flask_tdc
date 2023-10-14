@@ -21,6 +21,7 @@ def runmode(app):
 
 
 update_hour = 9
+lastDate_update_path='./Plugins/UPDATE_DATE.log'
 
 TAGS_TYBE = ["*", "RC", "DI", "DO", "AI", "AO",
              "DC", "RPV", "SEQ", "NM", "FL", "ARR", "TM"]

@@ -20,42 +20,37 @@ referrer = None
 
 
 
-
-
-# print(a)
-
 @app.route('/')
 def main_page():
 
+    #CHECK Update_Data
+    MainPage_Data=Plugins.Get_DBJson_Data("PMs.json")
+    updated_date=Plugins.Get_Last_UpdateDate()
+    actionUpdateData=Plugins.Update_Data()
+    if actionUpdateData:return redirect(actionUpdateData)
+
+    # global MainPage_Data,updated_date
     if not os.path.exists(Consts.DB_JASON):
         try:os.makedirs(Consts.DB_JASON)
         except Exception:return(f'\n\n THERE IS NO FOLDER {Consts.DB_JASON}\n CAN NOT MAKE NEW FOLDER')
 
-    if not os.path.exists(Consts.EB_FILES_DIR):EB_FILES_DIR_exist=False
-    else:EB_FILES_DIR_exist=True
-
-# if update is runing alrady    
-    updating_runing=False
-    try:
-        updating_runing = Plugins.DBJson.Get_DBJson_Data("updating_runing.json")[0]["updating_runing"]
-    except Exception as e :pass
-    if updating_runing:return render_template('wait_update_finsh.html')
-#check is need to update
-    updated_date=Plugins.Get_Last_UpdateDate()
-    MainPage_Data=Plugins.Get_DBJson_Data("PMs.json")
-    if Plugins.Is_Update_Needit(MainPage_Data,updated_date):  
-        return render_template('update_page.html')
+    EB_FILES_DIR_exist=False if not os.path.exists(Consts.EB_FILES_DIR) else True
 #get the logs of copy files
     DbLogs_Dates=Plugins.Get_DbLogs_Dates()
+    if len(MainPage_Data)<1:
+        MainPage_Data=Plugins.Get_DBJson_Data("PMs.json")
+        return redirect(url_for('wait_update_finsh'))
+    return render_template('main.html', data=MainPage_Data[0], dates_A=DbLogs_Dates["A"], dates_B=DbLogs_Dates["B"],EB_FILES_DIR_exist=EB_FILES_DIR_exist,updated_date=updated_date)
 
-    return render_template('main.html', data=MainPage_Data[0], dates_A=DbLogs_Dates["A"], dates_B=DbLogs_Dates["B"],EB_FILES_DIR_exist=EB_FILES_DIR_exist)
 
+#-====== updateing data base parsing .. =====
 # דף להצגת הודעה ואנימאשין להמתנה
-
+@app.route('/wait_update_finsh/')
+def wait_update_finsh():
+    return render_template('wait_update_finsh.html')
 @app.route('/update_page/')
 def update_page():
-    return render_template('update_page.html')
-
+    return render_template('update_page.html', update_lyout_url=url_for('update_LYOUT'))
 @app.route('/update/')  # הפעלת הפונקציה של העדכון
 def update_LYOUT():
     print("run pvsrc")
@@ -64,7 +59,7 @@ def update_LYOUT():
     Plugins.RUN_Update(ALL_Plant)
     print("updated")
     return redirect(url_for('main_page'))
-
+#--------------------------------------------------
 
 
 ####-------------duplication
@@ -77,7 +72,7 @@ def duplication():
 
 
 ####-------------PVSRC router
-router_pvsrc(app)  
+router_pvsrc(app)
 ##--------------------------   
 
 @app.route('/login/', methods=['POST', 'GET'])
@@ -109,6 +104,11 @@ def log_out():
 @app.route('/tags_table/<NAME>/<PTDESC>/<SLOTNUM>/<ID>/<STATUS>/<TYPE>/<NODENUM>/<PLANT>/<DB_FILE>/<DISRC_1>/<DISRC_2>/<DODSTN_1>/<DODSTN_2>/<CODSTN_1>/<CISRC_1>/<CISRC_2>/<num>/<foucs_id>')
 @app.route('/tags_table/')
 def tags_table(num=0, filter=None, NAME="~", PTDESC="~", SLOTNUM="~", ID="~", STATUS="~", TYPE='~', NODENUM="~", PLANT="~", DB_FILE="~", DISRC_1="~", DISRC_2="~", DODSTN_1="~", DODSTN_2="~", CODSTN_1="~", CISRC_1="~", CISRC_2="~", foucs_id=""):
+    
+    #CHECK Update_Data
+    actionUpdateData=Plugins.Update_Data()
+    if actionUpdateData:return redirect(actionUpdateData)
+    
     # var_dict קבלת המשתנים מהלינק
     var_dict = dict(list(locals().items())[2:-1])
     points = []
@@ -141,8 +141,13 @@ def tags_table(num=0, filter=None, NAME="~", PTDESC="~", SLOTNUM="~", ID="~", ST
 # http://localhost:5000/LYOUT/800/7/ : דוגמה 
 @app.route('/LYOUT/<int:plant>/<int:pm>/')
 def LYOUT(plant=800, pm=5):
+
+    #CHECK Update_Data
+    actionUpdateData=Plugins.Update_Data()
+    if actionUpdateData:return redirect(actionUpdateData)
+
     plant = str(plant) # לשנות לסטרינג 
-    pm = str(pm) if pm>9 else "0"+str(pm) #לעשות שיהיה שתי ספרות 
+    pm = str(pm) if pm > 9 else "0"+str(pm) #לעשות שיהיה שתי ספרות 
     try:LYOUT_DATA = Plugins.Get_DBJson_Data(f'LYOUT_DB_{plant}.json')[0][plant][pm]
     except:return "404 NO DATA FOR THIS PM / PLANT"
     return render_template('LYOUT.html', lyout=LYOUT_DATA, plant=plant, pm=pm)

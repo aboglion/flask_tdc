@@ -10,11 +10,19 @@ if not os.path.exists(DB_JASON):
 def router_pvsrc(app):
     today_ = time.strftime("%d-%b-%Y", time.gmtime())
 
+
+
     @app.route("/pvsrc")
     def pvsrc():
+
+        updated_date=Plugins.Get_Last_UpdateDate()
+        actionUpdateData=Plugins.Update_Data()
+        if actionUpdateData:return redirect(actionUpdateData)
+
+        #CHECK AND UPDATE OR WAIT UNTIL UPDATE FINSH
         data=Plugins.Get_DBJson_Data('PVSRC_TODAY_DB.json')
-        print(data)
-        return render_template("pvsrc_main.html", data=data)
+
+        return render_template("pvsrc_main.html", data=data,date=updated_date)
 
     @app.route("/save", methods=["POST"])
     def save_reason():
