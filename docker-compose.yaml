@@ -17,13 +17,13 @@ services:
                   #enter -> docker exec -it <container_name/ID> sh
                   #list of volumes -> df -h
 
-  # watchtower:
-  #   image: containrrr/watchtower
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock
-  #     - /root/.docker/config.json:/config.json
-  #   command: --interval 1800
-  #   restart: always
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/.docker/config.json:/config.json
+    command: --interval 1800
+    restart: always
 
 networks:
   mofet_network:
