@@ -27,7 +27,8 @@ def main_page():
     MainPage_Data=Plugins.Get_DBJson_Data("PMs.json")
     updated_date=Plugins.Get_Last_UpdateDate()
     actionUpdateData=Plugins.Update_Data()
-    if actionUpdateData:return redirect(actionUpdateData)
+    if actionUpdateData:
+        return redirect(actionUpdateData)
 
     # global MainPage_Data,updated_date
     if not os.path.exists(Consts.DB_JASON):

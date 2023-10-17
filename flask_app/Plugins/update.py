@@ -58,7 +58,7 @@ def Update_Data():
     updating_runing=False
     try:
         updating_runing = Get_DBJson_Data("updating_runing.json")[0]["updating_runing"]
-    except Exception as e :pass
+    except Exception as e :return '/update_page'
     if updating_runing:
          return '/wait_update_finsh'
         #check is need to update
