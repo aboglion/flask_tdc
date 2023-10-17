@@ -40,10 +40,11 @@ def main_page():
     DbLogs_Dates=Plugins.Get_DbLogs_Dates()
     if len(MainPage_Data)<1:
         MainPage_Data=Plugins.Get_DBJson_Data("PMs.json")
-        return redirect(url_for('wait_update_finsh'))
+        return redirect("עובדים על האתר יחזור לאחר השדרוג בקרוב")
+        # return redirect(url_for('wait_update_finsh'))
     return render_template('main.html', data=MainPage_Data[0], dates_A=DbLogs_Dates["A"], dates_B=DbLogs_Dates["B"],EB_FILES_DIR_exist=EB_FILES_DIR_exist,updated_date=updated_date)
 
-
+ 
 #-====== updateing data base parsing .. =====
 # דף להצגת הודעה ואנימאשין להמתנה
 @app.route('/wait_update_finsh/')
@@ -105,16 +106,15 @@ def log_out():
 # http://localhost:5000/tags_table/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/0/0
 @app.route('/tags_table/<NAME>/<PTDESC>/<SLOTNUM>/<ID>/<STATUS>/<TYPE>/<NODENUM>/<PLANT>/<DB_FILE>/<DISRC_1>/<DISRC_2>/<DODSTN_1>/<DODSTN_2>/<CODSTN_1>/<CISRC_1>/<CISRC_2>/<num>/<foucs_id>')
 @app.route('/tags_table/')
-def tags_table(num=0, filter=None, NAME="~", PTDESC="~", SLOTNUM="~", ID="~", STATUS="~", TYPE='~', NODENUM="~", PLANT="~", DB_FILE="~", DISRC_1="~", DISRC_2="~", DODSTN_1="~", DODSTN_2="~", CODSTN_1="~", CISRC_1="~", CISRC_2="~", foucs_id=""):
+def tags_table( NAME="~", PTDESC="~", SLOTNUM="~", ID="~", STATUS="~", TYPE='~', NODENUM="~", PLANT="~", DB_FILE="~", DISRC_1="~", DISRC_2="~", DODSTN_1="~", DODSTN_2="~", CODSTN_1="~", CISRC_1="~", CISRC_2="~", num='0',foucs_id=""):
     
     #CHECK Update_Data
     actionUpdateData=Plugins.Update_Data()
     if actionUpdateData:return redirect(actionUpdateData)
     
     # var_dict קבלת המשתנים מהלינק
-    var_dict = dict(list(locals().items())[2:-2])
+    var_dict = dict(list(locals().items())[:-3])
     points = []
-
     variables_all = []  # כל המשתנים
     varibles_for_search = {}  # יכיל את כל המתשנים שלא ריקים
     # ייצירת מילון לחפוש מהלינק
@@ -125,7 +125,7 @@ def tags_table(num=0, filter=None, NAME="~", PTDESC="~", SLOTNUM="~", ID="~", ST
         if not (var_dict[K] == '~' or var_dict[K].strip() == ''):
             varibles_for_search[f'{K}'] = upper_var
 
-
+    
     points = Plugins.Filtered_Sarch(ALL_Plant, varibles_for_search)
 
     try:  # num זה מספר העמוד

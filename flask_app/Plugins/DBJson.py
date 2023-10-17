@@ -27,6 +27,7 @@ def Filtered_Sarch(ALL_Plant, varibles_for_search):
     #PLANT FILTER------[1]-----
         # בדיקת אם המתקן נמצא במילון החיפוש
     # יבוא מידע רק של המתקן הספיציי
+    
     if "PLANT" in varibles_for_search:  # אם הוגדר מתקן ספציפי
         which_plant = varibles_for_search['PLANT']
         if not which_plant in ALL_Plant:  # לבדוק אם לא הכניסו סתם שם של מתקן הכתובת
@@ -61,6 +62,7 @@ def Filtered_Sarch(ALL_Plant, varibles_for_search):
             # במדויק -אם הערכים לחיפוש נמצאים אז לפלטר רק את הנתונים שיש להן אותם
 
             # אם נשאר עוד אלמנטים לפלטר אז לכנס למתקנים\מתקן ולפלטר את הכל ולהחזיר מתקן מפולטר
+            result = TAGS_DATA
             if (varibles_for_search):
                 result = []
                 

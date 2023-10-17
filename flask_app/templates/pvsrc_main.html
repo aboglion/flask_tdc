@@ -9,68 +9,23 @@
     <title>PV SOURCE Viewer</title>
 
     <style>
+
+
+
         body {
-
-            background-color: #1f1f1f;
-            color: #ffffff;
+            max-width: 100vw;
             font-family: Times New Roman;
-            font-size: 20px;
-            line-height: 1.6;
-            position: relative;
-            margin: 0;
-            padding: 0;
-        }
-
-
-        tr:hover {
-            transition-duration: 1s !important;
-
-            text-shadow: 4px 4px 3px #77f;
-            background-color: yellow !important;
-            color: black !important;
-        }
-
-        body::before {
-            content: '';
-            background-image: url('/static/ICL.png');
-            background-size: cover;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.5;
-            /* ערך השקיפות של תמונת הרקע */
-            z-index: -1;
-            /* הכנסת השכבה הנוספת מאחורי התוכן הרגיל */
-        }
-
-
-        #transparent-image {
-            opacity: 0.5;
-            /* הגדרת ערך השקיפות של התמונה */
-        }
-
-        h1 {
-            color: #2196f3;
-            text-align: center;
             font-weight: 300;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
+            /* line-height: 1.42em; */
+            color: #A7A1AE;
+            background-color: #1F2739;
             text-align: center;
-            border-bottom: 1px solid #ffffff;
-
+            /* font-size: medium; */
         }
 
-
-
+        p{
+            font-size: large;
+        }
         input[type="submit"] {
             background-color: #4caf50;
             color: #ffffff;
@@ -103,35 +58,7 @@
         }
 
 
-        .button {
-            display: inline-block;
-            border: none;
-            margin: 0;
-            text-decoration: none;
-            background: #006bed2f;
-            color: #ffffff;
-            font-family: sans-serif;
-            line-height: 0.2;
-            cursor: pointer;
-            text-align: center;
-            transition: background 250ms ease-in-out, transform 150ms ease;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-        }
-
-        .button:hover,
-        .button:focus {
-            background: #d9e3f0;
-        }
-
-        .button:focus {
-            outline: 1px solid #fbd4d4;
-            outline-offset: -4px;
-        }
-
-        .button:active {
-            transform: scale(0.99);
-        }
+          
 
         .M_L-button {
             position: fixed;
@@ -145,7 +72,6 @@
             height: 10vh;
             background-color: rgba(51, 51, 95, 0.5);
             border-radius: 50%;
-            text-align: center;
             line-height: 10vh;
             border: 3px solid rgba(239, 202, 157, 0.5);
             box-shadow: 0 0 10px rgba(255, 255, 0, 0);
@@ -163,13 +89,12 @@
             box-shadow: 0 0 10px rgba(255, 255, 0, 1);
             border-color: orange;
         }
-
-        a {
-            color: #00abb8;
+        .button,a {
+            color: #2effa8;
         }
 
         a:hover {
-            color: #6200ff !important;
+            color: #ff8000 !important;
         }
 
         .custom-textarea {
@@ -192,6 +117,85 @@
             color: #d9e3f0;
 
         }
+ 
+
+        th:hover {
+            background-color: #a4ac95;
+        }
+
+
+        h1 {
+            font-size: 3em;
+            font-weight: 300;
+            line-height: 1em;
+            text-align: center;
+            color: #4DC3FA;
+        }
+
+        h2 {
+            font-size: 1em;
+            font-weight: 300;
+            text-align: center;
+            display: block;
+            line-height: 1em;
+            padding-bottom: 2em;
+            color: #FB667A;
+        }
+
+        h2 a {
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #FB667A;
+            text-decoration: none;
+        }
+
+        table {
+            width: 100vw;
+            border-collapse: collapse;
+        }
+
+        td {
+            /* font-weight: normal; */
+            /* font-size: 1em; */
+            -webkit-box-shadow: 0 2px 2px -2px #0E1119;
+            -moz-box-shadow: 0 2px 2px -2px #0E1119;
+            box-shadow: 0 2px 2px -2px #0E1119;
+        }
+
+
+  
+
+        /* Background-color of the odd rows */
+        tr:nth-child(odd) {
+            background-color: #323C50;
+        }
+
+        /* Background-color of the even rows */
+        tr:nth-child(even) {
+            background-color: #2C3446;
+        }
+
+
+
+        td:first-child {
+            color: #FB667A;
+        }
+        tr{
+            height: min-content;
+            border-bottom: 1px solid #ddd;
+        }
+        tr:hover {
+            background-color:#3c8bb576;
+            color:yellow !important;
+  
+            border: #4DC3FA;
+
+        }
+
+
+
+     
+      
     </style>
 </head>
 
@@ -199,7 +203,7 @@
     <img>
 
     <h1>תגים מאולצים</h1>
-    <h5 style="color: #2196f3;text-align: center">מעודכן ליום {{date}} לחודש</h5>
+    <h4 style="color: #2196f3;text-align: center">מעודכן ליום {{date}} לחודש</h4>
     <a style="left: 5vw" href="{{url_for('main_page')}}" class="M_L-button">
         <i>🏠</i>
     </a>
@@ -220,14 +224,14 @@
         <tbody>
             {% for row in data %}
             {% set mitkan0_name1 = row.ENTITY.split(" => ") %}
-            <tr{% if row.NEW %} style="color: #ff3800;" {% else %} style="color: #a4f4f9;" {% endif %}>
+            <tr{% if row.NEW %} style="color: #ff3800;" {% else %} style="color: #c9e8eb;" {% endif %}>
 
                 <td><a class="button" href="{{ url_for('history', entity=row.ENTITY) }}">History</a></td>
                 <td style="font-size: 25px;"><a
                         href="/tags_table/{{ mitkan0_name1[1]}}/~/~/~/~/~/~/{% if mitkan0_name1[0] == " 660" %}~{% else
                         %}{{mitkan0_name1[0]}}{% endif %}/~/~/~/~/~/~/~/~/0/0">
-                        <p>{{mitkan0_name1[0]}}</p>
-                        <p>{{mitkan0_name1[1]}}</p>
+                        <i class="button">{{mitkan0_name1[0]}}</i>
+                        <p class="button">{{mitkan0_name1[1]}}</p>
                     </a></td>
                 <td>{{ row.PVSOURCE }}</td>
                 <td>{{ row.PTDESC }}</td>

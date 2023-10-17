@@ -61,8 +61,13 @@ def Update_Data():
     except Exception as e :return '/update_page'
     if updating_runing:
          return '/wait_update_finsh'
-        #check is need to update
+        #check is need to update BY DATE
     updated_date=Get_Last_UpdateDate()
     if updated_date and Is_Update_Needit(updated_date):
         return '/update_page'
+    # אם אין נתונים
+    MainPage_Data=Get_DBJson_Data("PMs.json")
+    if len(MainPage_Data)<1:
+         return '/update_page'
+
     return False
