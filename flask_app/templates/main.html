@@ -257,6 +257,39 @@
             text-shadow: 4px 4px 3px rgb(141, 0, 0) !important;
 
         }
+        .error-message {
+      /* color: #f7ff00; Yellow color */
+      font-weight: bold;
+      margin-top: 10px;
+      text-align: center;
+      text-transform: uppercase;
+      color: red;
+      animation: neonBlink 2s infinite alternate, shadowGlow 2s infinite alternate;
+      padding: 0;
+      margin-top: 0;
+    }
+
+    @keyframes neonBlink {
+      0% {
+        opacity: 0.2;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes shadowGlow {
+      0% {
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.962);
+        font-size: 110%;
+      }
+
+      100% {
+        text-shadow: 0 0 20px rgb(0, 13, 255);
+        font-size: 150%;
+      }
+    }
     </style>
 </head>
 
@@ -290,7 +323,7 @@
             {% if EB_FILES_DIR_exist %}
             <p style="color: rgba(0, 128, 0, 0.664);padding: 0;margin-top: 0;font-size: smaller;">EB DIR STATUS: exist
             {% else %}
-            <p style="color: rgb(255, 51, 19);padding: 0;margin-top: 0;font-size: smaller;">EB DIR STATUS: NOT exist
+            <p class="error-message">"EB" FILSE FOLDER OF DATABASE NOT FOUND
             {% endif %}
                 <i style="color: rgb(19, 74, 255)""> ___[_updated-date :  {{updated_date}}_]</i>
         </p>

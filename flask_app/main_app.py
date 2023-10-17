@@ -112,7 +112,7 @@ def tags_table(num=0, filter=None, NAME="~", PTDESC="~", SLOTNUM="~", ID="~", ST
     if actionUpdateData:return redirect(actionUpdateData)
     
     # var_dict קבלת המשתנים מהלינק
-    var_dict = dict(list(locals().items())[2:-1])
+    var_dict = dict(list(locals().items())[2:-2])
     points = []
 
     variables_all = []  # כל המשתנים

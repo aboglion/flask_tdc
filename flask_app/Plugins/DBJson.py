@@ -51,24 +51,28 @@ def Filtered_Sarch(ALL_Plant, varibles_for_search):
         desc = varibles_for_search["PTDESC"]
         del varibles_for_search["PTDESC"]
 
+
     ##SEARCHING in Plant [1]
     for which_plant in search_on_plant:
         DATA =Get_DBJson_Data(f'TAGS_DB_{which_plant}.json')
         if len(DATA) > 0:
             TAGS_DATA = DATA[0][which_plant]
-            # במדויק -אם הערכים לחיפוש נמצאים אז לפלטר רק את הנתונים שיש להן אותם
             
+            # במדויק -אם הערכים לחיפוש נמצאים אז לפלטר רק את הנתונים שיש להן אותם
+
             # אם נשאר עוד אלמנטים לפלטר אז לכנס למתקנים\מתקן ולפלטר את הכל ולהחזיר מתקן מפולטר
             if (varibles_for_search):
                 result = []
+                
                 for item in list(TAGS_DATA):
+                    # print(item,"\n\n\n\n")
                     if all(item.get(key) == value for key, value in varibles_for_search.items()):
                         result.append(item)
             re.extend(result)
+            
         else:
             print(f'\nTAGS_DB_{which_plant}.json error to read !!! \n')
             continue
-
     #   חיפוש בשם ותיאור 
     # re = חיפוש חלק מהמילה - ריגולר אקספרשן
     if name:

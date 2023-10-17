@@ -2,22 +2,25 @@
 import os
 defult_STATUS = "existed"
 
-### ---------runmode togals--------
-
-### compose  http://localhost
+###-====== RUN MODE TOGALS .. =====
+###[1]-- BYCcompose  http://localhost --
 EB_FILES_DIR="/TDC/DB"
 DB_JASON="/TDC/DB_JASON"
 def runmode(app):
     print("SERVER RUNING")
 
-# ## debug_run  http://localhost:5000/
+###[2]-- debug_run  http://localhost:5000/ --
 # script_path = ("/").join(os.path.abspath(__file__).split("/")[:-5])
-# EB_FILES_DIR = f"{script_path}/TDC_debug/DB"
-# DB_JASON = f"{script_path}/TDC_debug/DB_JASON"
+# EB_FILES_DIR = f"{script_path}/TDC_DE/DB"
+# DB_JASON = f"{script_path}/TDC_DE/DB_JASON"
+# print(EB_FILES_DIR)
+# print(DB_JASON)
 # def runmode(app):
 #     app.run(debug=True)
+    
+###------------------------------
 
-# -------------------------------y
+
 
 
 update_hour = 9
