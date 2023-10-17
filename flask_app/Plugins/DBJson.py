@@ -13,7 +13,7 @@ def Get_DBJson_Data(json_file):
         return DBJson_Data
     except Exception as e:
         print("there is no page data file", f'{e},{Consts.DB_JASON}/{json_file}')
-        return False
+        return []
 
 
 def Replace_DBJson_Data(jasonfile,newdata):

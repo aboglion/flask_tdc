@@ -35,7 +35,7 @@ def main_page():
         except Exception:return(f'\n\n THERE IS NO FOLDER {Consts.DB_JASON}\n CAN NOT MAKE NEW FOLDER')
 
     EB_FILES_DIR_exist=False if not os.path.exists(Consts.EB_FILES_DIR) else True
-#get the logs of copy files
+    #get the logs of copy files
     DbLogs_Dates=Plugins.Get_DbLogs_Dates()
     if len(MainPage_Data)<1:
         MainPage_Data=Plugins.Get_DBJson_Data("PMs.json")
@@ -62,7 +62,8 @@ def update_LYOUT():
 #--------------------------------------------------
 
 
-####-------------duplication
+#-====== duplication.. =====
+# duplication page
 @app.route('/duplication/', methods=['POST', 'GET'])
 def duplication():
     duplication_data = Plugins.Get_DBJson_Data("duplication_db.json")
