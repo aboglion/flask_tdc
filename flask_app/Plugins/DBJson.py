@@ -66,6 +66,7 @@ def Filtered_Sarch(ALL_Plant, varibles_for_search):
                         result.append(item)
             re.extend(result)
         else:
+            print(f'\nTAGS_DB_{which_plant}.json error to read !!! \n')
             continue
 
     #   חיפוש בשם ותיאור 
