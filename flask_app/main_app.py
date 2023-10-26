@@ -72,7 +72,24 @@ def duplication():
     return render_template('duplication.html', data=duplication_data)
 ##--------------------------   
 
-
+#-====== SMS USME.. =====
+# main_sms page
+@app.route('/SMS_UCME/', methods=['POST', 'GET'])
+def SMS_UCME():
+    try: 
+        with open(Consts.SMS_HTML_outmain, 'r') as file:
+            html = file.read()  # קורא את כל השורות לרשימה
+    except Exception as e :html=f"{e}\n{Consts.SMS_HTML_outmain} NOT FOUND"
+    return (html)
+# groups_sms page
+@app.route('/GROUPS.html/', methods=['POST', 'GET'])
+def GROUPS():
+    try: 
+        with open(Consts.SMS_out_groups, 'r', encoding='iso-8859-8') as file:
+            html = file.read()  # קורא את כל השורות לרשימה
+    except Exception as e :html=f"{e}\n{Consts.SMS_out_groups} NOT FOUND"
+    return (html)
+##--------------------------   
 
 ####-------------PVSRC router
 router_pvsrc(app)

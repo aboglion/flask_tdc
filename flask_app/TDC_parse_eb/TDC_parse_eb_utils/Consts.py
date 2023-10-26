@@ -2,14 +2,14 @@
 import os
 defult_STATUS = "existed"
 
-##-====== RUN MODE TOGALS .. =====
-##[1]-- BYCcompose  http://localhost --
+####-====== RUN MODE TOGALS .. =====
+####[1]-- BYCcompose  http://localhost --
 EB_FILES_DIR="/TDC/DB"
 DB_JASON="/TDC/DB_JASON"
 def runmode(app):
     print("SERVER RUNING")
 
-#[2]-- debug_run  http://localhost:5000/ --
+# ####[2]-- debug_run  http://localhost:5000/ --
 # script_path = ("/").join(os.path.abspath(__file__).split("/")[:-5])
 # EB_FILES_DIR = f"{script_path}/TDC_DE/DB"
 # DB_JASON = f"{script_path}/TDC_DE/DB_JASON"
@@ -17,11 +17,13 @@ def runmode(app):
 # print(DB_JASON)
 # def runmode(app):
 #     app.run(debug=True)
-    
-##------------------------------
+# ####------------------------------
 
-
-
+back_2_DB_JASON=("/").join(DB_JASON.split("/")[:-1])
+folderpath=back_2_DB_JASON+'/Rep/UCME_BACKUP'
+path_out=back_2_DB_JASON+'/Rep/UCME_BACKUP'
+SMS_HTML_outmain=path_out+'/USME_sms.html'
+SMS_out_groups=path_out+'/GROUPS.html'
 
 update_hour = 9
 lastDate_update_path='./Plugins/UPDATE_DATE.log'
