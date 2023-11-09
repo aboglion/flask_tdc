@@ -4,7 +4,6 @@ import TDC_parse_eb.TDC_parse_eb as TDC
 import os
 from .DBJson import Replace_DBJson_Data,Get_DBJson_Data
 import TDC_parse_eb.TDC_parse_eb_utils.Consts as Consts
-from .ucme_parser import parse_SMS
 
 # UPDATE
 
@@ -48,7 +47,6 @@ def Is_Update_Needit(updated_date):
 
 def RUN_Update(ALL_Plant):
     Replace_DBJson_Data("updating_runing.json",{"updating_runing":True})
-    parse_SMS()
     for which_plant in ALL_Plant:
         TDC.main_parser(which_plant)
     TDC.Parse_Utils.Update_Pms_Data(ALL_Plant)
