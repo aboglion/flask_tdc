@@ -76,7 +76,7 @@ def duplication():
 #-====== SMS USME.. =====
 # main_sms page
 @app.route('/SMS_UCME/', methods=['POST', 'GET'])
-def SMS_UCME():_
+def SMS_UCME():
     try: 
         with open(Consts.SMS_HTML_outmain, 'r') as file:
             html = file.read()  # קורא את כל השורות לרשימה
