@@ -28,7 +28,7 @@ SMS_out_groups=path_out+'/GROUPS.html'
 update_hour = 9
 lastDate_update_path='./Plugins/UPDATE_DATE.log'
 
-TAGS_TYBE = ["*", "RC", "DI", "DO", "AI", "AO",
+TAGS_TYPE = ["*", "RC", "DI", "DO", "AI", "AO",
              "DC", "RPV", "SEQ", "NM", "FL", "ARR", "TM"]
 NET = "A"
 NET_B = ["930", "800", "690", "650", "651"]

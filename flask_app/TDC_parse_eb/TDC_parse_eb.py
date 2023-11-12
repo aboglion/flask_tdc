@@ -11,8 +11,8 @@ def main_parser(which_plant,which_pm='*', which_type='*'):
     which_pm = "PM" + which_pm
 
     # בדיקת סוג הנתונים אם קיים
-    if which_type not in Consts.TAGS_TYBE:
-        print(f"the type must be in {Consts.TAGS_TYBE}")
+    if which_type not in Consts.TAGS_TYPE:
+        print(f"the type must be in {Consts.TAGS_TYPE}")
         return
     print(f'{which_plant} now started')
 
