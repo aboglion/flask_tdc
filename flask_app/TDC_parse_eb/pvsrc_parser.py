@@ -87,8 +87,8 @@ def pvsrc_parse():
         PVSRC_TODAY_DB.insert_multiple(data)
 
     # Extract 'ENTITY' values from both dictionaries
-    entities_data = [item['ENTITY'] for item in data]
-    entities_LAST_DATA = [item['ENTITY'] for item in LAST_DATA]
+    entities_data = [[item['ENTITY'],[item['PVSOURCE']]] for item in data]
+    entities_LAST_DATA = [[item['ENTITY'],[item['PVSOURCE']]] for item in LAST_DATA]
 
     # Find entities in dect1 that are not in dect2
     not_in_LAST_DATA = [entity for entity in entities_data if entity not in entities_LAST_DATA]
@@ -105,7 +105,8 @@ def pvsrc_parse():
     print("--------------------------\n"*2)
 
     if not_in_LAST_DATA:
-        for entity in not_in_LAST_DATA:
+        for entityarry in not_in_LAST_DATA:
+            entity=entityarry[0]
             tag_new = PVSRC_TODAY_DB.search(TAG["ENTITY"] == entity)
             if len(tag_new) == 0:
                 tag = (find_data(entity, data))
@@ -113,7 +114,8 @@ def pvsrc_parse():
             PVSRC_TODAY_DB.update({"START_AT": today_, "NEW": True}, TAG["ENTITY"] == entity)
 
     if not_in_data:
-        for entity in not_in_data:
+        for entityarry in not_in_data:
+            entity=entityarry[0]
             e = PVSRC_LAST_DB.search(TAG["ENTITY"] == entity)
             e[0].update({"END_AT": today_})
             e[0].pop("NEW", None)
@@ -124,7 +126,8 @@ def pvsrc_parse():
                 PVSRC_TODAY_DB.remove(TAG["ENTITY"] == entity)
 
     if in_last_day:
-        for entity in in_last_day:
+        for entityarry in in_last_day:
+            entity=entityarry[0]
             tag_t = PVSRC_TODAY_DB.search(TAG["ENTITY"] == entity)
             tag_old_date = PVSRC_LAST_DB.search(TAG["ENTITY"] == entity)[-1]["START_AT"]
             if len(tag_t) > 0:

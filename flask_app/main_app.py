@@ -39,7 +39,7 @@ def main_page():
     DbLogs_Dates=Plugins.Get_DbLogs_Dates()
     if len(MainPage_Data)<1:
         MainPage_Data=Plugins.Get_DBJson_Data("PMs.json")
-        return redirect("עובדים על האתר יחזור לאחר השדרוג בקרוב")
+        return redirect("תקלה בכונן G ,לבדוק עם יובל- יונס - לאוניד")
         # return redirect(url_for('wait_update_finsh'))
     return render_template('main.html', data=MainPage_Data[0], dates_A=DbLogs_Dates["A"], dates_B=DbLogs_Dates["B"],EB_FILES_DIR_exist=EB_FILES_DIR_exist,updated_date=updated_date)
 
@@ -54,13 +54,15 @@ def update_page():
     return render_template('update_page.html', update_lyout_url=url_for('update_LYOUT'))
 @app.route('/update/')  # הפעלת הפונקציה של העדכון
 def update_LYOUT():
+    Plugins.DBJson.Replace_DBJson_Data("updating_runing.json",{"updating_runing":True})
     print("run pvsrc")
     pvsrc_parse()
     print("\n out pvsrc_parse")
     print("run SMS_parse")
     Plugins.parse_SMS()
-    Plugins.RUN_Update(ALL_Plant)
-    print("updated")
+    stat_update=Plugins.RUN_Update(ALL_Plant)
+    print("updated --- ",stat_update)
+    Plugins.DBJson.Replace_DBJson_Data("updating_runing.json",{"updating_runing":stat_update})
     return redirect(url_for('main_page'))
 #--------------------------------------------------
 

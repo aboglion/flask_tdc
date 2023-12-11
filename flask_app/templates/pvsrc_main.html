@@ -197,12 +197,16 @@
      
       
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js"></script>
 </head>
 
 <body>
     <img>
 
     <h1>תגים מאולצים</h1>
+    <button onclick="sortit()">sortit</button>
+
+    <button onclick="exportTableToExcel('tableId', 'PVSOURCE.xls')">Export to Excel</button>
     <h4 style="color: #2196f3;text-align: center">מעודכן ליום {{date}} לחודש</h4>
     <a style="left: 5vw" href="{{url_for('main_page')}}" class="M_L-button">
         <i>🏠</i>
@@ -217,11 +221,8 @@
     </a>
     {% endif %}
 
-    <table>
-        <thead>
-            <!-- ... table headers ... -->
-        </thead>
-        <tbody>
+    <table id="tableId">
+
             {% for row in data %}
             {% set mitkan0_name1 = row.ENTITY.split(" => ") %}
             <tr{% if row.NEW %} style="color: #ff3800;" {% else %} style="color: #c9e8eb;" {% endif %}>
@@ -252,8 +253,45 @@
                 <td style="display: none;">{{ row.NEW }}</td>
                 </tr>
                 {% endfor %}
-        </tbody>
     </table>
 </body>
+
+
+<script>
+    function exportTableToExcel(tableId, filename = '') {
+    var downloadLink;
+    var dataType = 'application/vnd.ms-excel';
+    var tableSelect = document.getElementById(tableId);
+    var tableHTML = encodeURIComponent(tableSelect.outerHTML); // Encode the HTML
+
+    // Specify file name
+    filename = filename ? filename : 'excel_data.xls';
+
+    // Create download link element
+    downloadLink = document.createElement("a");
+
+    document.body.appendChild(downloadLink);
+
+    if (navigator.msSaveOrOpenBlob) {
+        var blob = new Blob(['\ufeff', tableHTML], {
+            type: dataType
+        });
+        navigator.msSaveOrOpenBlob(blob, filename);
+    } else {
+        // Create a link to the file
+        downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+
+        // Setting the file name
+        downloadLink.download = filename;
+
+        // Triggering the function
+        downloadLink.click();
+    }
+}
+
+
+
+</script>
+
 
 </html>
