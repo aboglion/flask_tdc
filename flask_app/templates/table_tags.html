@@ -251,6 +251,23 @@
             left: 1vw;
 
         }
+        .none_entered_input {
+            border-color: orange;
+background-color: red;
+color: #4DC3FA;
+  animation: blink-animation 0.4s ease infinite alternate;
+}
+
+
+@keyframes blink-animation {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
     </style>
 </head>
 
@@ -376,12 +393,13 @@
             return new Promise(resolve => setTimeout(resolve, ms))
         }
 
-        async function searchTable(e, e_id) {
-            // Add the 'cursor: wait;' CSS property to the body
-            document.body.style.cursor = 'wait';
-            await sleep(1000);
-            // Add the 'cursor: wait;' CSS property to name input
-            document.getElementById('in0').style.cursor = 'wait';
+        // async function searchTable(e, e_id) {
+             function searchTable(e, e_id) {
+            let enter=false;
+              
+            if (e.key === "Enter") enter=true;
+            const inputElement = document.getElementById("in"+e_id);
+            inputElement.classList.add("none_entered_input");
 
             let ligal_chr = [
                 "-", ".", ",", "_", "[", "]", "!", "~", "$", "'", "(", ")",
@@ -396,14 +414,14 @@
             for (let i = 0; i < input.length; i++) {
                 e = document.getElementById("in" + i)
                 v = e.value
-                //  console.log(v);
+                 console.log("valis",v);
                 let the_inp_char = v.slice(-1)
                 // del last char
                 if (!(ligal_chr.includes(the_inp_char) || e.keyCode == 8)) {
-                    if (v.length < 2) { e.value = '~'; e.style.visibility = "hidden"; }
+                    if (v.length < 2) { e.value = '~'; e.style.visibility = "hidden";enter=true}
                     else e.value = v.slice(0, -1)
                 }
-                if (v == "") { e.value = '~'; e.style.visibility = "hidden"; }
+                if (v == "") { e.value = '~'; e.style.visibility = "hidden";enter=true }
                 v = e.value
                 input[i] = v
             }
@@ -412,8 +430,8 @@
             console.log(url)
             url = "{{url_for('tags_table')}}" + url + "/{{l}}/" + e_id
 
+            if (enter) window.location.href = url
 
-            window.location.href = url
 
         }
 

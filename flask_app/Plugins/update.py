@@ -33,17 +33,7 @@ def Get_Last_UpdateDate():
     # אם התאריך לא מעודכן והשעה אחרי תשע בבוקר אז לעדכן בסיס הנתונים ולעדכן תאריך עדכון
         # (פתיחת האתר הראשונה אחרי השעה 9 יתעדכן הבסיס נתונים)
 # קראית המידע ךדף המרכזי
-def Is_Update_Needit(updated_date):
-    # if updated_date > 0 and datetime.now().hour>Consts.update_hour and (not Get_DBJson_Data("PMs.json") or updated_date != datetime.now().day) :
-    #     try:
-    #         with open(Consts.lastDate_update_path, "w+") as UPDATE_DATE_FILE:
-    #             print("+=====> now new day -updating ",updated_date, "->", end=" ")
-    #             updated_date = datetime.now().day
-    #             print(updated_date)
-    #             UPDATE_DATE_FILE.write(str(updated_date))
-    #             return True
-    #     except:pass
-    return False
+
 
 def RUN_Update(ALL_Plant):
     for which_plant in ALL_Plant:
@@ -65,13 +55,4 @@ def Update_Data():
     if updating_runing:
          print("wait_update_finsh")
          return '/wait_update_finsh'
-        #check is need to update BY DATE
-    # updated_date=Get_Last_UpdateDate()
-    # if updated_date and Is_Update_Needit(updated_date):
-    #     return '/update_page'
-    # אם אין נתונים
-    # MainPage_Data=Get_DBJson_Data("PMs.json")
-    # if len(MainPage_Data)<1:
-    #      return '/update_page'
-
     return False

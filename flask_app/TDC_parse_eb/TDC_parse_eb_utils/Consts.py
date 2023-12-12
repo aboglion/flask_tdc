@@ -9,7 +9,7 @@ DB_JASON="/TDC/DB_JASON"
 def runmode(app):
     print("SERVER RUNING")
 
-# ####[2]-- debug_run  http://localhost:5000/ --
+####[2]-- debug_run  http://localhost:5000/ --
 # script_path = ("/").join(os.path.abspath(__file__).split("/")[:-5])
 # EB_FILES_DIR = f"{script_path}/TDC_DE/DB"
 # DB_JASON = f"{script_path}/TDC_DE/DB_JASON"
@@ -17,7 +17,7 @@ def runmode(app):
 # print(DB_JASON)
 # def runmode(app):
 #     app.run(debug=True)
-# ####------------------------------
+####------------------------------
 
 back_2_DB_JASON=("/").join(DB_JASON.split("/")[:-1])
 folderpath=back_2_DB_JASON+'/Rep/UCME_BACKUP'

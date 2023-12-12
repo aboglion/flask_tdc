@@ -49,9 +49,9 @@ def main_page():
 @app.route('/wait_update_finsh/')
 def wait_update_finsh():
     return render_template('wait_update_finsh.html')
-@app.route('/update_page/')
-def update_page():
-    return render_template('update_page.html', update_lyout_url=url_for('update_LYOUT'))
+# @app.route('/update_page/')
+# def update_page():
+#     return render_template('update_page.html', update_lyout_url=url_for('update_LYOUT'))
 @app.route('/update/')  # הפעלת הפונקציה של העדכון
 def update_LYOUT():
     Plugins.DBJson.Replace_DBJson_Data("updating_runing.json",{"updating_runing":True})

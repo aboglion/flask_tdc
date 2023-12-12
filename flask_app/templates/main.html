@@ -306,8 +306,8 @@
         {% endfor %}
 
         {% if session['logged_in'] %}
-        <a style="font-size:50px ;color: #c00000;font-size: medium;" href="{{url_for("log_out")}}">
-            <i class="key">LOGOUT</i>
+        <i style="color: rgb(19, 74, 255)"> ___[_updated-date :  {{updated_date}}_]<a href="javascript:void(0);" onclick="fetch('/update')">עדכן עכשיו </a></i>
+        <i class="key">LOGOUT</i>
             {% else %}
         </a>
         <a style="font-size:50px ;" href="{{url_for("log_in")}}">
@@ -325,7 +325,7 @@
             {% else %}
             <p class="error-message">"EB" FILSE FOLDER OF DATABASE NOT FOUND
             {% endif %}
-                <i style="color: rgb(19, 74, 255)"> ___[_updated-date :  {{updated_date}}_]<a href="/update_page" >עדכן עכשיו </a></i>
+                <i style="color: rgb(19, 74, 255)"> ___[_updated-date :  {{updated_date}}_]<a href="/update" >עדכן עכשיו </a></i>
             </p>
     
 
@@ -386,7 +386,7 @@
     </div>
 
     <script>
-        // Your JavaScript code goes here if needed.
+
     </script>
 </body>
 

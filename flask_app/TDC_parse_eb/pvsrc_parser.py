@@ -50,7 +50,7 @@ def pvsrc_parse():
                     PTDESC = " ".join(l[2:])
                     PTDESC = fix_if_reversed(PTDESC)
 
-                    data.append({"ENTITY": ENTITY, "PVSOURCE": PVSOURCE,
+                    data.append({"ENTITY": ENTITY, "PVSOURCE":"SOURCE => ALL" if PVSOURCE=="AUTO" else PVSOURCE,
                                 "PTDESC": PTDESC, "REASON": ""})
         # exprian files =-=-=============================================
         epks_file_list = glob.glob(epks)

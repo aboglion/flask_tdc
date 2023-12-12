@@ -21,8 +21,11 @@ def router_pvsrc(app):
 
         #CHECK AND UPDATE OR WAIT UNTIL UPDATE FINSH
         data=Plugins.Get_DBJson_Data('PVSRC_TODAY_DB.json')
-
-        return render_template("pvsrc_main.html", data=data,date=updated_date)
+        for d in data :print(d['ENTITY'])
+        sorted_data = sorted(data, key=lambda item: item['ENTITY'][:3])
+        print("*"*20)
+        for d in sorted_data :print(d['ENTITY'])
+        return render_template("pvsrc_main.html", data=sorted_data,date=updated_date)
 
     @app.route("/save", methods=["POST"])
     def save_reason():

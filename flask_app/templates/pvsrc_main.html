@@ -192,21 +192,203 @@
 
         }
 
+/* ==================== */
 
+
+
+body {
+            max-width: 100vw;
+            font-family: Times New Roman;
+            font-weight: 300;
+            line-height: 1.42em;
+            color: #A7A1AE;
+            background-color: #1F2739;
+        }
+
+
+        th,
+        td {
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            transition: all 0.2s ease;
+        }
+
+        th {
+            background-color: #e3cd95;
+            color: white;
+            cursor: pointer;
+        }
+
+        th:hover {
+            background-color: #a4ac95;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            font-size: 3em;
+            font-weight: 300;
+            line-height: 1em;
+            text-align: center;
+            color: #4DC3FA;
+        }
+
+        h2 {
+            font-size: 1em;
+            font-weight: 300;
+            text-align: center;
+            display: block;
+            line-height: 1em;
+            padding-bottom: 2em;
+            color: #FB667A;
+        }
+
+        h2 a {
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #FB667A;
+            text-decoration: none;
+        }
+
+        .blue {
+            color: #185875;
+        }
+
+        .yellow {
+            color: #6d6c60;
+        }
+
+        .container th h1 {
+            font-weight: bold;
+            font-size: 1em;
+            text-align: left;
+            color: #185875;
+        }
+
+        td {
+            font-weight: normal;
+            font-size: 1em;
+            -webkit-box-shadow: 0 2px 2px -2px #0E1119;
+            -moz-box-shadow: 0 2px 2px -2px #0E1119;
+            box-shadow: 0 2px 2px -2px #0E1119;
+        }
+
+
+        td,
+        th {
+
+            padding-bottom: 1%;
+        }
+
+        /* Background-color of the odd rows */
+        tr:nth-child(odd) {
+            background-color: #323C50;
+        }
+
+        /* Background-color of the even rows */
+        tr:nth-child(even) {
+            background-color: #2C3446;
+        }
+
+        th {
+            background-color: #1F2739;
+        }
+
+        td:first-child {
+            color: #FB667A;
+        }
+
+        tr:hover {
+            background-color: #110a22;
+            color: #cf9e00;
+            -webkit-box-shadow: 0 6px 6px -6px #0E1119;
+            -moz-box-shadow: 0 6px 6px -6px #0E1119;
+            box-shadow: 0 6px 6px -6px #0E1119;
+        }
+
+        td:hover {
+            background-color: #150535;
+            color: #fff200;
+            font-weight: bold;
+            box-shadow: 0 0 11px rgba(33, 33, 33, .2);
+        }
+
+        @media (max-width: 800px) {
+
+            td:nth-child(4),
+            th:nth-child(4) {
+                display: none;
+            }
+        }
+ 
+        /* Add CSS styles here to style your table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+        td:nth-child(3),
+        td:nth-child(4),
+         td:nth-child(5),
+         td:nth-child(6){
+            border-left: 1px dashed #ddd;
+        }
+
+        .M_L-button {
+            position: fixed;
+            z-index: 4;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            -webkit-transition-duration: 2s;
+            transition-duration: 2s;
+            width: 10vh;
+            height: 10vh;
+            background-color: rgba(51, 51, 95, 0.5);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 10vh;
+            border: 3px solid rgba(239, 202, 157, 0.5);
+            box-shadow: 0 0 10px rgba(255, 255, 0, 0);
+            color: white;
+            text-decoration: none;
+            padding: 0;
+            font-size: 5vh;
+            top: -3.7vh;
+        }
+
+        .M_L-button:hover {
+            transition-duration: 0.5s !important;
+            font-size: 5vh;
+            top: 1vh;
+            box-shadow: 0 0 10px rgba(255, 255, 0, 1);
+            border-color: orange;
+        }
 
      
       
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js"></script>
+    <!-- Include xlsx.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<!-- Include FileSaver.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+
 </head>
 
 <body>
     <img>
 
     <h1>תגים מאולצים</h1>
-    <button onclick="sortit()">sortit</button>
-
-    <button onclick="exportTableToExcel('tableId', 'PVSOURCE.xls')">Export to Excel</button>
+    <button id="downloadExcel">Download Excel</button>
     <h4 style="color: #2196f3;text-align: center">מעודכן ליום {{date}} לחודש</h4>
     <a style="left: 5vw" href="{{url_for('main_page')}}" class="M_L-button">
         <i>🏠</i>
@@ -256,42 +438,91 @@
     </table>
 </body>
 
+    
 
-<script>
-    function exportTableToExcel(tableId, filename = '') {
-    var downloadLink;
-    var dataType = 'application/vnd.ms-excel';
-    var tableSelect = document.getElementById(tableId);
-    var tableHTML = encodeURIComponent(tableSelect.outerHTML); // Encode the HTML
+    <script>
+    // Function to parse table data
+    function parseTableData() {
+        var table = document.getElementById('tableId');
+        var rows = table.getElementsByTagName('tr');
+        var data = [];
 
-    // Specify file name
-    filename = filename ? filename : 'excel_data.xls';
+        for (var i = 0; i < rows.length; i++) {
+            var cells = rows[i].getElementsByTagName('td');
+            var rowData = {};
 
-    // Create download link element
-    downloadLink = document.createElement("a");
+            names=['מתקן',"תג","סטטוס",'תיאור',"סיבה","תאריך"]
 
-    document.body.appendChild(downloadLink);
+            for (var j = 0; j < cells.length; j++) {
+                if (j==6) continue
+                cont=cells[j].innerText || cells[j].textContent;
+                if (j==0) {
+                    cont=cells[j+1].innerText || cells[j+1].textContent;
+                    cont=extractNumberAndText(cont)[0];
+                }
+                if (j==1) cont=extractNumberAndText(cont)[1];
 
-    if (navigator.msSaveOrOpenBlob) {
-        var blob = new Blob(['\ufeff', tableHTML], {
-            type: dataType
-        });
-        navigator.msSaveOrOpenBlob(blob, filename);
-    } else {
-        // Create a link to the file
-        downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+                rowData[names[j]] = cont;
+            }
 
-        // Setting the file name
-        downloadLink.download = filename;
-
-        // Triggering the function
-        downloadLink.click();
+            data.push(rowData);
+        }
+        return data;
     }
+
+
+
+    function extractNumberAndText(singleLine) {
+    // console.log(singleLine);
+  // Remove quotes and trim whitespace
+  var cleanedLine = singleLine.replace(/"/g, '').trim();
+
+  // Split the line by newlines to separate the number and the tags
+  var parts = cleanedLine.split(/[\r\n]+/).map(part => part.trim());
+
+  // Return an array with number and tags
+  return [parts[0], parts[1]]; // [number, tag]
 }
 
 
+    // Function to apply styles to the worksheet
+    function styleWorksheet(worksheet) {
+        for (var cell in worksheet) {
+            if (worksheet.hasOwnProperty(cell) && cell !== '!ref') {
+                worksheet[cell].s = {
+                    alignment: { horizontal: 'center', vertical: 'center', wrapText: true },
+                    border: {
+                        top: { style: 'thin', color: { auto: 1 } },
+                        right: { style: 'thin', color: { auto: 1 } },
+                        bottom: { style: 'thin', color: { auto: 1 } },
+                        left: { style: 'thin', color: { auto: 1 } }
+                    }
+                };
+            }
+        }
+    }
 
+    // Function to download Excel file
+    document.getElementById('downloadExcel').addEventListener('click', function() {
+        var data = parseTableData();
+        var worksheet = XLSX.utils.json_to_sheet(data);
+        styleWorksheet(worksheet);
+
+        var workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+        var wbout = XLSX.write(workbook, {bookType:'xlsx', type: 'binary'});
+
+        function s2ab(s) {
+            var buf = new ArrayBuffer(s.length);
+            var view = new Uint8Array(buf);
+            for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+            return buf;
+        }
+
+        saveAs(new Blob([s2ab(wbout)], {type: "application/octet-stream"}), "data.xlsx");
+    });
 </script>
+
 
 
 </html>
