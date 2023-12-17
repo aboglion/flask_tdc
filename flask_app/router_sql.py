@@ -214,6 +214,7 @@ def xxToSql(mode=False):
         #     table_name = os.path.basename(file_path).split('.')[0]
         #     process_file(file_path,DB_SQL+"/TDC99.db",table_name) 
         if update:
+            print("main_xxsql start")
             with ThreadPoolExecutor(max_workers=4) as executor:
                 try:
                     DB_SQL = DB_SQL + "/TDC.db"
@@ -225,6 +226,7 @@ def xxToSql(mode=False):
                     import traceback
                     traceback.print_exc()
                     print(f"Error: {e}")
+        print("main_xxsql=false")
     main_xxsql(mode)
 
 
