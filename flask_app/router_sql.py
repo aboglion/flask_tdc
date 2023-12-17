@@ -7,11 +7,14 @@ from TDC_parse_eb.TDC_parse_eb_utils.hebrew import fix_if_reversed
 import sqlite3,os,glob
 import threading
 from concurrent.futures import ThreadPoolExecutor
+import threading
 xx_path=EB_FILES_DIR[:-2]+"Rep/*.XX"
 print("xx_path:",xx_path)
 XX_FILES=glob.glob(xx_path)
 print("XX_FILES:",XX_FILES)
 
+
+db_lock = threading.Lock()
 
 
 if not os.path.exists(DB_SQL):
@@ -23,38 +26,39 @@ if not os.path.exists(DB_SQL):
 def router_SQL(app):
 
     def run_query(DB_file, query):
-        try:
-            conn = sqlite3.connect(DB_file)
-            cursor = conn.cursor()
-            cursor.execute(query)
-            rows = cursor.fetchall()
+        with db_lock:
+            try:
+                conn = sqlite3.connect(DB_file)
+                cursor = conn.cursor()
+                cursor.execute(query)
+                rows = cursor.fetchall()
 
-            if rows:
-                # Get column names
-                column_names = [description[0] for description in cursor.description]
+                if rows:
+                    # Get column names
+                    column_names = [description[0] for description in cursor.description]
 
-                # Start HTML structure with CSS
-                html_table = """ 
-                <table>
-                <tr>""" + "".join(f"<th>{name}</th>" for name in column_names) + "</tr>"
-                
-                # Add data rows
-                for row in rows:
-                    html_table += "<tr>" + "".join(f"<td>{value}</td>" for value in row) + "</tr>"
-                
-                html_table += """
-                </table>
-                """
+                    # Start HTML structure with CSS
+                    html_table = """ 
+                    <table>
+                    <tr>""" + "".join(f"<th>{name}</th>" for name in column_names) + "</tr>"
+                    
+                    # Add data rows
+                    for row in rows:
+                        html_table += "<tr>" + "".join(f"<td>{value}</td>" for value in row) + "</tr>"
+                    
+                    html_table += """
+                    </table>
+                    """
+                    conn.close()
+                    return html_table
+
+                else:
+                    conn.close()
+                    return "<h1>No data found.</h1>"
+
+            except sqlite3.Error as e:
                 conn.close()
-                return html_table
-
-            else:
-                conn.close()
-                return "<h1>No data found.</h1>"
-
-        except sqlite3.Error as e:
-            conn.close()
-            return f"<h1>An error occurred: {e}</h1>"
+                return f"<h1>An error occurred: {e}</h1>"
 
 
             
@@ -87,37 +91,39 @@ def router_SQL(app):
 
 def SAVE_sqlite(data, names, DB_file, Table):
     conn = None
-    try:
-        conn = sqlite3.connect(DB_file)
-        cursor = conn.cursor()
+    with db_lock:
+        try:
+            conn = sqlite3.connect(DB_file)
+            cursor = conn.cursor()
 
-        # Create table with dynamic columns
-        CREATE_TABLE_txt = f"CREATE TABLE IF NOT EXISTS {Table} ("
-        for n in names:
-            CREATE_TABLE_txt += f'''"{n}" {'INTEGER' if 'NUM' in n else 'TEXT'},'''
-        CREATE_TABLE_txt = CREATE_TABLE_txt.rstrip(',') + ', "UPDATING_DATA" TEXT)'
-        cursor.execute(CREATE_TABLE_txt)
-        
-        # Insert data with dynamic placeholders
-        placeholders = ', '.join(['?'] * len(names) + ['?'])  # one extra for UPDATING_DATA
-        INSERT_txt = f'INSERT INTO {Table} VALUES ({placeholders})'
-        
-        for line in data:
-            if len(line) != len(names) + 1:  # +1 for UPDATING_DATA
-                print(f"Data length mismatch in table {len(line)}: {len(names) + 1}")
-                print(names)
-                print(line)
-                print("------------")
-                continue  # Skip this row or handle as needed
-            cursor.execute(INSERT_txt, line)
-        
-        conn.commit()
-    except sqlite3.Error as e:
-        print(f"SQLite error: {e}")
-    finally:
-        if conn:
-            conn.close()
-        print("Finish SQL")
+            # Create table with dynamic columns
+            CREATE_TABLE_txt = f"CREATE TABLE IF NOT EXISTS {Table} ("
+            for n in names:
+                CREATE_TABLE_txt += f'''"{n}" {'INTEGER' if 'NUM' in n else 'TEXT'},'''
+            CREATE_TABLE_txt = CREATE_TABLE_txt.rstrip(',') + ', "UPDATING_DATA" TEXT)'
+            cursor.execute(CREATE_TABLE_txt)
+            
+            # Insert data with dynamic placeholders
+            placeholders = ', '.join(['?'] * len(names) + ['?'])  # one extra for UPDATING_DATA
+            INSERT_txt = f'INSERT INTO {Table} VALUES ({placeholders})'
+            
+            for line in data:
+                if len(line) != len(names) + 1:  # +1 for UPDATING_DATA
+                    print(f"Data length mismatch in table {len(line)}: {len(names) + 1}")
+                    print(names)
+                    print(line)
+                    print("------------")
+                    continue  # Skip this row or handle as needed
+            
+                cursor.execute(INSERT_txt, line)
+            
+            conn.commit()
+        except sqlite3.Error as e:
+            print(f"SQLite error: {e}")
+        finally:
+            if conn:
+                conn.close()
+            print("Finish SQL")
 
 
 
