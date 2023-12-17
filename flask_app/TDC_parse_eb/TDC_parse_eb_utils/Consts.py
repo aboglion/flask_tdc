@@ -6,15 +6,15 @@ defult_STATUS = "existed"
 # ####[1]-- BYCcompose  http://localhost --
 EB_FILES_DIR="/TDC/DB"
 DB_JASON="/TDC/DB_JASON"
-DB_SQL="/TDC/DB_SQL"
+DB_SQL="/TDC/DB_SQL"   # the folder
 def runmode(app):
     print("SERVER RUNING")
 
-# ###[2]-- debug_run  http://localhost:5000/ --
+###[2]-- debug_run  http://localhost:5000/ --
 # script_path = ("/").join(os.path.abspath(__file__).split("/")[:-5])
 # EB_FILES_DIR = f"{script_path}/TDC_DE/DB"
 # DB_JASON = f"{script_path}/TDC_DE/DB_JASON"
-# DB_SQL=f"{script_path}/TDC_DE/DB_SQL"
+# DB_SQL=f"{script_path}/TDC_DE/DB_SQL" # the folder
 # def runmode(app):
 #     app.run(debug=True)
 ###------------------------------
@@ -23,6 +23,7 @@ print("EB_FILES_DIR: ", EB_FILES_DIR)
 print("DB_JASON: ", DB_JASON)
 print("DB_SQL: ", DB_SQL)
 
+SQLFILE=DB_SQL+"/TDC_DB.db"                            
 
 
 back_2_DB_JASON=("/").join(DB_JASON.split("/")[:-1])

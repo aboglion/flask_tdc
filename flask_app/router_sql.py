@@ -1,8 +1,8 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect,Response
 from tinydb import TinyDB, Query
 import time,os,Plugins
 
-from TDC_parse_eb.TDC_parse_eb_utils.Consts import DB_SQL,EB_FILES_DIR,plant_map,PLANT_file_rev
+from TDC_parse_eb.TDC_parse_eb_utils.Consts import DB_SQL,EB_FILES_DIR,plant_map,PLANT_file_rev,SQLFILE
 from TDC_parse_eb.TDC_parse_eb_utils.hebrew import fix_if_reversed
 import sqlite3,os,glob
 import threading
@@ -12,7 +12,6 @@ xx_path=EB_FILES_DIR[:-2]+"Rep/*.XX"
 print("xx_path:",xx_path)
 XX_FILES=glob.glob(xx_path)
 print("XX_FILES:",XX_FILES)
-
 
 db_lock = threading.Lock()
 
@@ -26,39 +25,46 @@ if not os.path.exists(DB_SQL):
 def router_SQL(app):
 
     def run_query(DB_file, query):
-        with db_lock:
-            try:
-                conn = sqlite3.connect(DB_file)
-                cursor = conn.cursor()
-                cursor.execute(query)
-                rows = cursor.fetchall()
+        try:
+            SAVED_Q=False
+            conn = sqlite3.connect(DB_file)
+            cursor = conn.cursor()
+            cursor.execute(query)
+            rows = cursor.fetchall()
+            th= cursor.description
+            conn.close()
+            conn = sqlite3.connect(DB_file)
+            cursor = conn.cursor()
+            cursor.execute('SELECT * FROM SAVED_Q LIMIT 100;')
+            SAVED_Q = cursor.fetchall()
+            conn.close()
 
-                if rows:
-                    # Get column names
-                    column_names = [description[0] for description in cursor.description]
+            if rows:
+                # Get column names
+                column_names = [description[0] for description in th]
 
-                    # Start HTML structure with CSS
-                    html_table = """ 
-                    <table>
-                    <tr>""" + "".join(f"<th>{name}</th>" for name in column_names) + "</tr>"
-                    
-                    # Add data rows
-                    for row in rows:
-                        html_table += "<tr>" + "".join(f"<td>{value}</td>" for value in row) + "</tr>"
-                    
-                    html_table += """
-                    </table>
-                    """
-                    conn.close()
-                    return html_table
-
-                else:
-                    conn.close()
-                    return "<h1>No data found.</h1>"
-
-            except sqlite3.Error as e:
+                # Start HTML structure with CSS
+                html_table = """ 
+                <table>
+                <tr>""" + "".join(f"<th>{name}</th>" for name in column_names) + "</tr>"
+                
+                # Add data rows
+                for row in rows:
+                    html_table += "<tr>" + "".join(f"<td>{value}</td>" for value in row) + "</tr>"
+                
+                html_table += """
+                </table>
+                """
                 conn.close()
-                return f"<h1>An error occurred: {e}</h1>"
+                return [html_table,SAVED_Q]
+
+            else:
+                conn.close()
+                return ["<h1>No data found.</h1>",SAVED_Q]
+
+        except sqlite3.Error as e:
+            conn.close()
+            return [f"<h1>An error occurred: {e}</h1>",SAVED_Q]
 
 
             
@@ -72,58 +78,85 @@ def router_SQL(app):
     @app.route("/q_test/")
     @app.route("/q_test/<Q>")
     def q_test(Q=table_names):
+        global SQLFILE
         Q=unquote(Q) 
         print(Q)
-        # Saving the output to an HTML file
-        # output_file = "table_names.html"
-        # with open(output_file, 'w') as file:
-        #     file.write(run_query("TDC.db",table_names))
+        RES = run_query(SQLFILE,Q)
+        res_html=RES[0]
+        SAVED_Q=RES[1]
 
-        # # Saving the output to an HTML file
-        # output_file = "ALLDB_A_50.html"
-        # with open(output_file, 'w') as file:
-        #     file.write(run_query("TDC.db",ALLDB_A_50))
-        res_html = run_query("TDC.db",Q)
-        return render_template('QUERY.html', res_html=res_html,Q=Q)
+        return render_template('QUERY.html', res_html=res_html,Q=Q,SAVED_Q=SAVED_Q)
 
+    @app.route("/q_save/<name>/<query>")
+    def q_save(name,query):
+            try:
+                conn = sqlite3.connect(SQLFILE)
+                cursor = conn.cursor()
+                print(name)
+                CREATE_TABLE_txt = f'CREATE TABLE IF NOT EXISTS SAVED_Q ("NAMED" "TEXT", "VAL" "TEXT")'
+                cursor.execute(CREATE_TABLE_txt)
+                cursor.execute('INSERT INTO SAVED_Q ("NAMED", "VAL") VALUES (?, ?)', (str(name), str(query)))
+                conn.commit()
+                conn.close()
+                return q_test(query)
+            except sqlite3.Error as e:
+                return(f"SQLite error: {e}")
 
+    @app.route("/q_delete/<name>")
+    def q_delete(name):
+        try:
+            conn = sqlite3.connect(SQLFILE)
+            cursor = conn.cursor()
+            
+            # SQL query to delete the entry with the given name
+            cursor.execute('DELETE FROM SAVED_Q WHERE NAMED = ?', (name,))
 
+            # Commit the changes and close the connection
+            conn.commit()
+            conn.close()
+
+            return q_test('SELECT * FROM SAVED_Q LIMIT 100;')
+
+        except sqlite3.Error as e:
+            conn.close()
+            return f"SQLite error: {e}"
 
 def SAVE_sqlite(data, names, DB_file, Table):
     conn = None
-    with db_lock:
-        try:
-            conn = sqlite3.connect(DB_file)
-            cursor = conn.cursor()
+    try:
+        conn = sqlite3.connect(DB_file)
+        cursor = conn.cursor()
 
-            # Create table with dynamic columns
-            CREATE_TABLE_txt = f"CREATE TABLE IF NOT EXISTS {Table} ("
-            for n in names:
-                CREATE_TABLE_txt += f'''"{n}" {'INTEGER' if 'NUM' in n else 'TEXT'},'''
-            CREATE_TABLE_txt = CREATE_TABLE_txt.rstrip(',') + ', "UPDATING_DATA" TEXT)'
-            cursor.execute(CREATE_TABLE_txt)
-            
-            # Insert data with dynamic placeholders
-            placeholders = ', '.join(['?'] * len(names) + ['?'])  # one extra for UPDATING_DATA
-            INSERT_txt = f'INSERT INTO {Table} VALUES ({placeholders})'
-            
-            for line in data:
-                if len(line) != len(names) + 1:  # +1 for UPDATING_DATA
-                    print(f"Data length mismatch in table {len(line)}: {len(names) + 1}")
-                    print(names)
-                    print(line)
-                    print("------------")
-                    continue  # Skip this row or handle as needed
-            
-                cursor.execute(INSERT_txt, line)
-            
-            conn.commit()
-        except sqlite3.Error as e:
-            print(f"SQLite error: {e}")
-        finally:
-            if conn:
-                conn.close()
-            print("Finish SQL")
+        # Create table with dynamic columns
+        CREATE_TABLE_txt = f"CREATE TABLE IF NOT EXISTS {Table} ("
+        for n in names:
+            CREATE_TABLE_txt += f'''"{n}" {'INTEGER' if 'NUM' in n else 'TEXT'},'''
+        CREATE_TABLE_txt = CREATE_TABLE_txt.rstrip(',') + ', "UPDATING_DATA" TEXT)'
+        cursor.execute(CREATE_TABLE_txt)
+        
+        # Insert data with dynamic placeholders
+        placeholders = ', '.join(['?'] * len(names) + ['?'])  # one extra for UPDATING_DATA
+        INSERT_txt = f'INSERT INTO {Table} VALUES ({placeholders})'
+        
+        for line in data:
+            if len(line) != len(names) + 1:  # +1 for UPDATING_DATA
+                print(f"Data length mismatch in table {len(line)}: {len(names) + 1}")
+                print(names)
+                print(line)
+                print("------------")
+                continue  # Skip this row or handle as needed
+        
+            cursor.execute(INSERT_txt, line)
+        
+        conn.commit()
+        conn.close()
+    except sqlite3.Error as e:
+        conn.close()
+        print(f"SQLite error: {e}")
+    finally:
+        if conn:
+            conn.close()
+        print("Finish SQL")
 
 
 
@@ -215,20 +248,21 @@ def xxToSql(mode=0):
             print(f"Finished processing =|: {file_path}")
 
     def main_xxsql(modexx):
-        global DB_SQL,XX_FILES
-        # for file_path in XX_FILES:
-        #     table_name = os.path.basename(file_path).split('.')[0]
-        #     process_file(file_path,DB_SQL+"/TDC99.db",table_name) 
+        global DB_SQL,XX_FILES,SQLFILE
         if modexx==1:
-            print("main_xxsql start")
-            with ThreadPoolExecutor(max_workers=4) as executor:
-                try:
-                    DB_SQL = DB_SQL + "/TDC.db"
-                    for file_path in XX_FILES:
-                        table_name = os.path.basename(file_path).split('.')[0]
-                        executor.submit(process_file, file_path,DB_SQL,table_name)
+            try:
+                for file_path in XX_FILES:
+                    table_name = os.path.basename(file_path).split('.')[0]
+                    process_file(file_path,SQLFILE,table_name) 
+                print("main_xxsql start")
+                # with ThreadPoolExecutor(max_workers=4) as executor:
+                
+                #     DB_SQL = DB_SQL + "/TDC.db"
+                #     for file_path in XX_FILES:
+                #         table_name = os.path.basename(file_path).split('.')[0]
+                #         executor.submit(process_file, file_path,DB_SQL,table_name)
 
-                except Exception as e:
+            except Exception as e:
                     import traceback
                     traceback.print_exc()
                     print(f"Error: {e}")

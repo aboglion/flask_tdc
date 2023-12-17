@@ -5,10 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Input Redirect Example</title>
     <script>
-            function redirectToPage() {
+            function redirectToPage(n) {
                 var userInput = document.getElementById('userInput').value;
                 var encodedUserInput = encodeURIComponent(userInput); // Encode the user input
-                window.location.href = "/q_test/" + encodedUserInput;
+                if (n==1)
+                {
+                    window.location.href = "/q_test/" + encodedUserInput;
+                }
+                if (n==2)
+                {
+                    var q_name = document.getElementById('q_name').value;
+                    var q_nameInput = encodeURIComponent(q_name); 
+                    window.location.href = "/q_save/"+q_nameInput+"/"+ encodedUserInput;
+                }
             }
 
     </script>
@@ -21,19 +30,19 @@
             text-align:center;
             }
         table {
-            width: 80%;
+            width: 100%;
             border-collapse: collapse;
         }
         th, td {
             text-align:center;
-            font-size: 1vw;
-            border: 1.7px dotted #2b005e; 
+            font-size: 0.7vw;
+            border: 1.5px dotted #000000; 
             background-color: #eee6c6e3           
             }
         tr {
             text-align:center;
             font-size:2vw;
-            border: 1px solid #ddd;
+            border: 1px solid #340101;
             }
         th {
             background-color: #6f42c1;
@@ -46,12 +55,86 @@
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
+        
+        .M_L-button {
+            position: fixed;
+            z-index: 4;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            -webkit-transition-duration: 2s;
+            transition-duration: 2s;
+            width: 10vh;
+            height: 10vh;
+            background-color: rgba(51, 51, 95, 0.5);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 10vh;
+            border: 3px solid rgba(239, 202, 157, 0.5);
+            box-shadow: 0 0 10px rgba(255, 255, 0, 0);
+            color: white;
+            text-decoration: none;
+            padding: 0;
+            font-size: 5vh;
+            top: -3.7vh;
+        }
+
+        .M_L-button:hover {
+            transition-duration: 0.5s !important;
+            font-size: 5vh;
+            top: 1vh;
+            box-shadow: 0 0 10px rgba(255, 255, 0, 1);
+            border-color: orange;
+        }
         </style>
 </head>
 <body>
-    <input style="width: 80%;height: 20vh;background-color: burlywood;font-weight: 700;font-size: 1.3vw;" type="text" id="userInput" placeholder="Enter your query here" value="{{ Q }}">
-    <button style="width: 15%;height: 15vh;color:rgb(0, 193, 236);background-color:rgb(62, 27, 74);font-weight: 700;font-size: 1.3vw" onclick="redirectToPage()">Go</button>
-    <div>{{ res_html|safe }}</div>
+
+    <a style="left: 15vw" href="{{url_for('main_page')}}" class="M_L-button">
+        <i>🏠</i>
+    </a>
+    {% if session['logged_in'] %}
+    <a style="left: 20vw; color: red; font-size: medium;" href="{{url_for('log_out')}}" class="M_L-button">
+        <i>OUT</i>
+    </a>
+    {% else %}
+    <a style="left: 20vw" href="{{url_for('log_in')}}" class="M_L-button">
+        <i>🔑</i>
+    </a>
+    {% endif %}
+
+
+    <input style="width: 80%;height: 20vh;background-color: rgb(224, 201, 171);font-weight: 700;font-size: 1.3vw;" type="text" id="userInput" placeholder="Enter your query here" value="{{ Q }}">
+    <button style="width: 10%;height: 19vh;color:rgb(4, 127, 203);background-color:rgb(208, 176, 219);font-weight: 700;font-size: 1.3vw" onclick="redirectToPage(1)">Go</button>
+   
+    {% if session['logged_in'] %}
+    <input style="width: 13%;height: 5vh;background-color: rgb(181, 176, 170);font-weight: 700;font-size: 1.3vw;" type="text" id="q_name">
+    <button style="height: 5vh;color:rgb(25, 95, 63);background-color:rgb(28, 40, 132);font-weight: 700;font-size: 1.3vw" onclick="redirectToPage(2)">save</button>
+    {% endif %}
+
+    <hr>
+    {% if SAVED_Q %}
+
+    {% for item in SAVED_Q %}
+    <a style="margin:1.2vw;border: #000000; border-style: solid;border-width: thin;">
+        <a href='/q_test/{{ item[1] }}' style="text-decoration: none;">
+            <button style="background-color: #4CAF50; color: white; font-size: 1vw;">
+                {{ item[0] }}
+            </button>
+        </a>
+        {% if session['logged_in'] %}
+        <a href='/q_delete/{{ item[0] }}' style="text-decoration: none;">
+            <button  style="background-color:red; color: white; font-size: 0.9vw;">
+                🗑
+            </button>
+        </a>
+        {% endif %}
+    </a>
+
+    {% endfor %}
+    {% endif %}
+    <hr>
+    {{ res_html|safe }}
 </body>
 </html>
 
@@ -60,4 +143,3 @@
 
 
 
-<!-- {{res_html}} -->

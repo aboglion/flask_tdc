@@ -103,7 +103,10 @@ router_pvsrc(app)
 
 ####-------------SQL-lite router
 router_SQL(app)
-xxToSql(1)
+@app.route('/sql/', methods=['POST', 'GET'])
+def sq():
+    xxToSql(1)
+    return "Welcome"
 ##--------------------------  
 
 @app.route('/login/', methods=['POST', 'GET'])
