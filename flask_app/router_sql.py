@@ -121,8 +121,8 @@ def SAVE_sqlite(data, names, DB_file, Table):
 
 
 
-def xxToSql(mode=False):
-
+def xxToSql(mode=0):
+    print(mode,"<<----------")
 
     def process_file(file_path,DB_file,table_name):
         
@@ -208,12 +208,12 @@ def xxToSql(mode=False):
         finally:
             print(f"Finished processing =|: {file_path}")
 
-    def main_xxsql(update):
+    def main_xxsql(modexx):
         global DB_SQL,XX_FILES
         # for file_path in XX_FILES:
         #     table_name = os.path.basename(file_path).split('.')[0]
         #     process_file(file_path,DB_SQL+"/TDC99.db",table_name) 
-        if update:
+        if modexx==1:
             print("main_xxsql start")
             with ThreadPoolExecutor(max_workers=4) as executor:
                 try:
@@ -226,7 +226,7 @@ def xxToSql(mode=False):
                     import traceback
                     traceback.print_exc()
                     print(f"Error: {e}")
-        print("main_xxsql=false")
+        print("main_xxsql=false",modexx)
     main_xxsql(mode)
 
 

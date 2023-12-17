@@ -62,7 +62,7 @@ def update_LYOUT():
     print("run SMS_parse")
     Plugins.parse_SMS()
     stat_update=Plugins.RUN_Update(ALL_Plant)
-    try:xxToSql(True)
+    try:xxToSql(1)
     except Exception as e:pass
     print("updated --- ",stat_update)
     Plugins.DBJson.Replace_DBJson_Data("updating_runing.json",{"updating_runing":stat_update})
