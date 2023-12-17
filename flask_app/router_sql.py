@@ -209,7 +209,7 @@ def xxToSql(mode=False):
             print(f"Finished processing =|: {file_path}")
 
     def main_xxsql(update):
-        global DB_SQL
+        global DB_SQL,XX_FILES
         # for file_path in XX_FILES:
         #     table_name = os.path.basename(file_path).split('.')[0]
         #     process_file(file_path,DB_SQL+"/TDC99.db",table_name) 
