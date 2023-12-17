@@ -8,7 +8,9 @@ import sqlite3,os,glob
 import threading
 from concurrent.futures import ThreadPoolExecutor
 xx_path=EB_FILES_DIR[:-2]+"Rep/*.XX"
+print("xx_path:",xx_path)
 XX_FILES=glob.glob(xx_path)
+print("XX_FILES:",XX_FILES)
 
 
 
@@ -20,7 +22,6 @@ if not os.path.exists(DB_SQL):
 
 def router_SQL(app):
 
-    @app.route("/query/<DB_file>/<query>/")
     def run_query(DB_file, query):
         try:
             conn = sqlite3.connect(DB_file)
