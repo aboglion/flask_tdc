@@ -50,8 +50,14 @@ def Update_Data():
         #   
     updating_runing=False
     try:
-        updating_runing = Get_DBJson_Data("updating_runing.json")[0]["updating_runing"]
-    except Exception as e :return '/update_page'
+        updating_runing = Get_DBJson_Data("updating_runing.json")
+        if updating_runing and updating_runing[0]:
+            updating_runing=updating_runing[0]["updating_runing"]
+        else:
+            return False
+    except Exception as e :
+        print("Update_Data() err :", e)
+        return f'Update_Data() err : {e}'
     if updating_runing:
          print("wait_update_finsh")
          return '/wait_update_finsh'

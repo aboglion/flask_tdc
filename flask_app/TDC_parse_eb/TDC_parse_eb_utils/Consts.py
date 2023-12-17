@@ -6,6 +6,7 @@ defult_STATUS = "existed"
 ####[1]-- BYCcompose  http://localhost --
 EB_FILES_DIR="/TDC/DB"
 DB_JASON="/TDC/DB_JASON"
+DB_SQL="/TDC/DB_SQL"
 def runmode(app):
     print("SERVER RUNING")
 
@@ -13,11 +14,16 @@ def runmode(app):
 # script_path = ("/").join(os.path.abspath(__file__).split("/")[:-5])
 # EB_FILES_DIR = f"{script_path}/TDC_DE/DB"
 # DB_JASON = f"{script_path}/TDC_DE/DB_JASON"
-# print(EB_FILES_DIR)
-# print(DB_JASON)
+# DB_SQL=f"{script_path}/TDC_DE/DB_SQL"
 # def runmode(app):
 #     app.run(debug=True)
 ####------------------------------
+
+print("EB_FILES_DIR: ", EB_FILES_DIR)
+print("DB_JASON: ", DB_JASON)
+print("DB_SQL: ", DB_SQL)
+
+
 
 back_2_DB_JASON=("/").join(DB_JASON.split("/")[:-1])
 folderpath=back_2_DB_JASON+'/Rep/UCME_BACKUP'
@@ -50,6 +56,24 @@ PLANT_file_start = {
     "710": "71",
     "740": "74",
     "600": "60",
+}
+PLANT_file_rev = {
+    "ALL": "??",
+    "93": "930",
+    "80": "800",
+    "69": "690",
+    "65": "650",
+    "65": "651",
+    "64": "640",
+    "66": "660",
+    "63": "630",
+    "73": "730",
+    "72": "720",
+    "64": "640",
+    "61": "610",
+    "71": "710",
+    "74": "740",
+    "60": "600",
 }
 PLANT_LETTER = {
     "930": "M",

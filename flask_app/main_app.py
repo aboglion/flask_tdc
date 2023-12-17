@@ -4,10 +4,12 @@ from glob import glob
 from TDC_parse_eb.pvsrc_parser import pvsrc_parse
 import TDC_parse_eb.TDC_parse_eb_utils.Consts as Consts
 from pvsrc import router_pvsrc
+from router_sql import router_SQL,main_xxsql
 import Plugins
 if not os.path.exists(Consts.DB_JASON):
     os.makedirs(Consts.DB_JASON)
-
+if not os.path.exists(Consts.DB_SQL):
+    os.makedirs(Consts.DB_SQL)
 
 ALL_Plant = Consts.NET_B+Consts.NET_A
 
@@ -37,21 +39,20 @@ def main_page():
     EB_FILES_DIR_exist=False if not os.path.exists(Consts.EB_FILES_DIR) else True
     #get the logs of copy files
     DbLogs_Dates=Plugins.Get_DbLogs_Dates()
+    MainPage_Data=Plugins.Get_DBJson_Data("PMs.json")
+    print(MainPage_Data)
     if len(MainPage_Data)<1:
-        MainPage_Data=Plugins.Get_DBJson_Data("PMs.json")
-        return redirect("תקלה בכונן G ,לבדוק עם יובל- יונס - לאוניד")
-        # return redirect(url_for('wait_update_finsh'))
+        DbLogs_Dates={"A":["תקלה בכונן משותף גי',לבדוק עם יובל- יונס - לאוניד",],"B":["תקלה בכונן משותף גי',לבדוק עם יובל- יונס - לאוניד",]}
+        MainPage_Data=[[],]
     return render_template('main.html', data=MainPage_Data[0], dates_A=DbLogs_Dates["A"], dates_B=DbLogs_Dates["B"],EB_FILES_DIR_exist=EB_FILES_DIR_exist,updated_date=updated_date)
 
- 
+
 #-====== updateing data base parsing .. =====
 # דף להצגת הודעה ואנימאשין להמתנה
 @app.route('/wait_update_finsh/')
 def wait_update_finsh():
     return render_template('wait_update_finsh.html')
-# @app.route('/update_page/')
-# def update_page():
-#     return render_template('update_page.html', update_lyout_url=url_for('update_LYOUT'))
+
 @app.route('/update/')  # הפעלת הפונקציה של העדכון
 def update_LYOUT():
     Plugins.DBJson.Replace_DBJson_Data("updating_runing.json",{"updating_runing":True})
@@ -61,6 +62,8 @@ def update_LYOUT():
     print("run SMS_parse")
     Plugins.parse_SMS()
     stat_update=Plugins.RUN_Update(ALL_Plant)
+    try:main_xxsql()
+    except Exception as e:pass
     print("updated --- ",stat_update)
     Plugins.DBJson.Replace_DBJson_Data("updating_runing.json",{"updating_runing":stat_update})
     return redirect(url_for('main_page'))
@@ -97,6 +100,11 @@ def GROUPS():
 ####-------------PVSRC router
 router_pvsrc(app)
 ##--------------------------   
+
+####-------------SQL-lite router
+xxToSql()
+router_SQL(app)
+##--------------------------  
 
 @app.route('/login/', methods=['POST', 'GET'])
 def log_in():

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Redirect Example</title>
+    <script>
+            function redirectToPage() {
+                var userInput = document.getElementById('userInput').value;
+                var encodedUserInput = encodeURIComponent(userInput); // Encode the user input
+                window.location.href = "/q_test/" + encodedUserInput;
+            }
+
+    </script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f4f4f4;
+            margin-left: 1vw;
+            margin-right: 1vw;
+            text-align:center;
+            }
+        table {
+            width: 80%;
+            border-collapse: collapse;
+        }
+        th, td {
+            text-align:center;
+            font-size: 1vw;
+            border: 1.7px dotted #2b005e; 
+            background-color: #eee6c6e3           
+            }
+        tr {
+            text-align:center;
+            font-size:2vw;
+            border: 1px solid #ddd;
+            }
+        th {
+            background-color: #6f42c1;
+            color: white;
+        }
+        td:first-child {
+        font-weight: bold;
+        color: darkred;
+            }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        </style>
+</head>
+<body>
+    <input style="width: 80%;height: 20vh;background-color: burlywood;font-weight: 700;font-size: 1.3vw;" type="text" id="userInput" placeholder="Enter your query here" value="{{ Q }}">
+    <button style="width: 15%;height: 15vh;color:rgb(0, 193, 236);background-color:rgb(62, 27, 74);font-weight: 700;font-size: 1.3vw" onclick="redirectToPage()">Go</button>
+    <div>{{ res_html|safe }}</div>
+</body>
+</html>
+
+
+
+
+
+
+<!-- {{res_html}} -->
