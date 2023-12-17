@@ -4,7 +4,7 @@ from glob import glob
 from TDC_parse_eb.pvsrc_parser import pvsrc_parse
 import TDC_parse_eb.TDC_parse_eb_utils.Consts as Consts
 from pvsrc import router_pvsrc
-from router_sql import router_SQL,main_xxsql
+from router_sql import router_SQL,xxToSql
 import Plugins
 if not os.path.exists(Consts.DB_JASON):
     os.makedirs(Consts.DB_JASON)
@@ -62,7 +62,7 @@ def update_LYOUT():
     print("run SMS_parse")
     Plugins.parse_SMS()
     stat_update=Plugins.RUN_Update(ALL_Plant)
-    try:main_xxsql()
+    try:xxToSql(True)
     except Exception as e:pass
     print("updated --- ",stat_update)
     Plugins.DBJson.Replace_DBJson_Data("updating_runing.json",{"updating_runing":stat_update})
