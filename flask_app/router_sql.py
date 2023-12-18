@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request, redirect,Response
 from tinydb import TinyDB, Query
-import time,os,Plugins
+import time,os,Plugins,shutil
 
-from TDC_parse_eb.TDC_parse_eb_utils.Consts import DB_SQL,EB_FILES_DIR,plant_map,PLANT_file_rev,SQLFILE
+from TDC_parse_eb.TDC_parse_eb_utils.Consts import DB_SQL,EB_FILES_DIR,plant_map,PLANT_file_rev,SQLFILE,SQLFILE_COPYTO
 from TDC_parse_eb.TDC_parse_eb_utils.hebrew import fix_if_reversed
 import sqlite3,os,glob
 import threading
@@ -19,7 +19,17 @@ db_lock = threading.Lock()
 if not os.path.exists(DB_SQL):
     os.makedirs(DB_SQL)
 
- 
+def copy_file(local=SQLFILE, out=SQLFILE_COPYTO):
+    if not os.path.exists(local) and os.path.exists(out):
+        try:
+            shutil.copy(out, local)
+        except Exception as e:
+            print(f"SQL Error local out to local: {e}")
+    elif os.path.exists(local):
+        try:
+            shutil.copy(local, out)
+        except Exception as e:
+            print(f"SQL Error local copy to out : {e}")
  
 
 def router_SQL(app):
@@ -88,6 +98,7 @@ def router_SQL(app):
     @app.route("/q_test/<Q>")
     def q_test(Q=table_names):
         global SQLFILE
+        if not os.path.exists(SQLFILE):copy_file()
         Q=unquote(Q) 
         # print(Q)
         RES = run_query(Q)
@@ -95,6 +106,8 @@ def router_SQL(app):
         SAVED_Q=RES[1]
 
         return render_template('QUERY.html', res_html=res_html,Q=Q,SAVED_Q=SAVED_Q)
+
+
 
     @app.route("/q_save/<name>/<query>")
     def q_save(name,query):
@@ -111,6 +124,7 @@ def router_SQL(app):
             except sqlite3.Error as e:
                 conn.commit()
                 conn.close()
+                copy_file()
                 return(f"SQLite error: {e}")
 
     @app.route("/q_delete/<name>")
@@ -125,7 +139,7 @@ def router_SQL(app):
             # Commit the changes and close the connection
             conn.commit()
             conn.close()
-
+            copy_file()
             return q_test('SELECT * FROM SAVED_Q LIMIT 100;')
 
         except sqlite3.Error as e:
@@ -288,7 +302,7 @@ def xxToSql(mode=0):
                 #     for file_path in XX_FILES:
                 #         table_name = os.path.basename(file_path).split('.')[0]
                 #         executor.submit(process_file, file_path,DB_SQL,table_name)
-
+                copy_file()
             except Exception as e:
                     import traceback
                     traceback.print_exc()
