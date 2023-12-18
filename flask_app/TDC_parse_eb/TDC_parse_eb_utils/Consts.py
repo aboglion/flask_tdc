@@ -23,8 +23,8 @@ print("EB_FILES_DIR: ", EB_FILES_DIR)
 print("DB_JASON: ", DB_JASON)
 print("DB_SQL: ", DB_SQL)
 
-# SQLFILE=DB_SQL+"/TDC_DB.db"                            
-SQLFILE = os.path.expanduser("~/TDC_DB.db")
+SQLFILE=DB_SQL+"/TDC_DB.db"                            
+# SQLFILE = os.path.expanduser("~/TDC_DB.db")
 print("SQLFILE===>",SQLFILE)
                            
 

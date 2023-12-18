@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Redirect Example</title>
+    <title>מגרש המשחקים של לאוניד</title>
     <script>
             function redirectToPage(n) {
                 var userInput = document.getElementById('userInput').value;
@@ -111,7 +111,11 @@
     {% endif %}
 
 
-    <input style="margin-top:6vh;width: 80%;height: 20vh;background-color: rgba(220, 207, 191, 0.829);font-weight: 700;font-size: 1.3vw;" type="text" id="userInput" placeholder="Enter your query here" value="{{ Q }}">
+    <textarea 
+    style="margin-top:6vh; width: 80%; height: 20vh; background-color: rgba(220, 207, 191, 0.829); font-weight: 700; font-size: 1.3vw;" 
+    id="userInput" 
+    placeholder="Enter your query here">{{ Q }}</textarea>
+
     <button style="width: 10%;height: 19vh;color:rgb(4, 127, 203);background-color:rgba(220, 171, 48, 0.387);font-weight: 700;font-size: 1.3vw" onclick="redirectToPage(1)">Go</button>
    
     {% if session['logged_in'] %}

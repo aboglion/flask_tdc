@@ -30,11 +30,13 @@ def router_SQL(app):
             SAVED_Q=False
             conn = sqlite3.connect(SQLFILE)
             print(SQLFILE,"=<+++++++++++=")
-            cursor = conn.cursor()
-            cursor.execute(query)
-            rows = cursor.fetchall()
-            th= cursor.description
-            conn.close()
+            if "SELECT" in query:
+                cursor = conn.cursor()
+                cursor.execute(query)
+                rows = cursor.fetchall()
+                th= cursor.description
+                conn.close()
+            else:rows=False
             conn = sqlite3.connect(SQLFILE)
             cursor = conn.cursor()
             cursor.execute('CREATE TABLE IF NOT EXISTS SAVED_Q ("NAMED" "TEXT", "VAL" "TEXT")')
@@ -65,7 +67,9 @@ def router_SQL(app):
                 return [html_table,SAVED_Q]
 
             else:
-                conn.close()
+                if conn:
+                    conn.close()
+                if rows==False:return ["<h1>קלט לא חוקי</h1>",SAVED_Q]
                 return ["<h1>No data found.</h1>",SAVED_Q]
 
         except sqlite3.Error as e:
@@ -73,7 +77,6 @@ def router_SQL(app):
             return [f"<h1>An error occurred: {e}</h1>",SAVED_Q]
 
 
-            
     table_names='''
                 SELECT * FROM sqlite_master WHERE type='table';
                 '''
