@@ -120,7 +120,11 @@ def router_SQL(app):
         except sqlite3.Error as e:
             conn.close()
             return f"SQLite error: {e}"
-
+    @app.route('/sql/', methods=['POST', 'GET'])
+    def sq():
+            xxToSql(1)
+            return redirect("/q_test")
+    
 def SAVE_sqlite(data, names, DB_file, Table):
     conn = None
     try:
