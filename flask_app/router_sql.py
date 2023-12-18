@@ -49,7 +49,7 @@ def router_SQL(app):
             else:rows=False
             conn = sqlite3.connect(SQLFILE)
             cursor = conn.cursor()
-            cursor.execute('CREATE TABLE IF NOT EXISTS SAVED_Q ("NAMED" "TEXT", "VAL" "TEXT")')
+            cursor.execute('CREATE TABLE IF NOT EXISTS SAVED_Q ("NAMED"  TEXT PRIMARY KEY, "VAL" TEXT)')
             conn.close()
             conn = sqlite3.connect(SQLFILE)
             cursor = conn.cursor()
@@ -117,7 +117,7 @@ def router_SQL(app):
                 print(name)
                 CREATE_TABLE_txt = f'CREATE TABLE IF NOT EXISTS SAVED_Q ("NAMED" "TEXT", "VAL" "TEXT")'
                 cursor.execute(CREATE_TABLE_txt)
-                cursor.execute('INSERT INTO SAVED_Q ("NAMED", "VAL") VALUES (?, ?)', (str(name), str(query)))
+                cursor.execute('INSERT OR REPLACE INTO SAVED_Q ("NAMED", "VAL") VALUES (?, ?)', (str(name), str(query)))
                 conn.commit()
                 conn.close()
                 return q_test(query)
