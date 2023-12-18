@@ -17,14 +17,16 @@ def runmode(app):
 # DB_SQL=f"{script_path}/TDC_DE/DB_SQL" # the folder
 # def runmode(app):
 #     app.run(debug=True)
-##------------------------------
+#------------------------------
 
 print("EB_FILES_DIR: ", EB_FILES_DIR)
 print("DB_JASON: ", DB_JASON)
 print("DB_SQL: ", DB_SQL)
 
-# SQLFILE=DB_SQL+"/TDC_DB.db"                            
-SQLFILE="./TDC_DB.db"                            
+SQLFILE=DB_SQL+"/TDC_DB.db"                            
+# SQLFILE = os.path.expanduser("~/TDC_DB.db")
+print("SQLFILE===>",SQLFILE)
+                           
 
 
 back_2_DB_JASON=("/").join(DB_JASON.split("/")[:-1])
@@ -65,7 +67,7 @@ PLANT_file_rev = {
     "80": "800",
     "69": "690",
     "65": "650",
-    "65": "651",
+    "51": "651",
     "64": "640",
     "66": "660",
     "63": "630",

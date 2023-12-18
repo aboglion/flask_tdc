@@ -24,16 +24,22 @@ if not os.path.exists(DB_SQL):
 
 def router_SQL(app):
 
-    def run_query(DB_file, query):
+    def run_query(query):
+        global SQLFILE
         try:
             SAVED_Q=False
-            conn = sqlite3.connect(DB_file)
+            conn = sqlite3.connect(SQLFILE)
+            print(SQLFILE,"=<+++++++++++=")
             cursor = conn.cursor()
             cursor.execute(query)
             rows = cursor.fetchall()
             th= cursor.description
             conn.close()
-            conn = sqlite3.connect(DB_file)
+            conn = sqlite3.connect(SQLFILE)
+            cursor = conn.cursor()
+            cursor.execute('CREATE TABLE IF NOT EXISTS SAVED_Q ("NAMED" "TEXT", "VAL" "TEXT")')
+            conn.close()
+            conn = sqlite3.connect(SQLFILE)
             cursor = conn.cursor()
             cursor.execute('SELECT * FROM SAVED_Q LIMIT 100;')
             SAVED_Q = cursor.fetchall()
@@ -69,7 +75,7 @@ def router_SQL(app):
 
             
     table_names='''
-                SELECT name FROM sqlite_master WHERE type='table';
+                SELECT * FROM sqlite_master WHERE type='table';
                 '''
     ALLDB_A_50='SELECT * FROM ALLDB_A LIMIT 50;'
 
@@ -80,8 +86,8 @@ def router_SQL(app):
     def q_test(Q=table_names):
         global SQLFILE
         Q=unquote(Q) 
-        print(Q)
-        RES = run_query(SQLFILE,Q)
+        # print(Q)
+        RES = run_query(Q)
         res_html=RES[0]
         SAVED_Q=RES[1]
 
@@ -100,6 +106,8 @@ def router_SQL(app):
                 conn.close()
                 return q_test(query)
             except sqlite3.Error as e:
+                conn.commit()
+                conn.close()
                 return(f"SQLite error: {e}")
 
     @app.route("/q_delete/<name>")
@@ -125,22 +133,24 @@ def router_SQL(app):
             xxToSql(1)
             return redirect("/q_test")
     
-def SAVE_sqlite(data, names, DB_file, Table):
+def SAVE_sqlite(data, names, SQLFILE, Table):
     conn = None
     try:
-        conn = sqlite3.connect(DB_file)
+        conn = sqlite3.connect(SQLFILE)
         cursor = conn.cursor()
 
+        print("Finish SQL")
         # Create table with dynamic columns
-        CREATE_TABLE_txt = f"CREATE TABLE IF NOT EXISTS {Table} ("
-        for n in names:
+        CREATE_TABLE_txt = f'CREATE TABLE IF NOT EXISTS {Table} ("{names[0].strip()}" TEXT PRIMARY KEY,'
+        for n in names[1:]:
             CREATE_TABLE_txt += f'''"{n}" {'INTEGER' if 'NUM' in n else 'TEXT'},'''
         CREATE_TABLE_txt = CREATE_TABLE_txt.rstrip(',') + ', "UPDATING_DATA" TEXT)'
+        print(CREATE_TABLE_txt)
         cursor.execute(CREATE_TABLE_txt)
         
         # Insert data with dynamic placeholders
         placeholders = ', '.join(['?'] * len(names) + ['?'])  # one extra for UPDATING_DATA
-        INSERT_txt = f'INSERT INTO {Table} VALUES ({placeholders})'
+        INSERT_txt = f'INSERT OR REPLACE INTO {Table} VALUES ({placeholders})'
         
         for line in data:
             if len(line) != len(names) + 1:  # +1 for UPDATING_DATA
@@ -167,11 +177,11 @@ def SAVE_sqlite(data, names, DB_file, Table):
 def xxToSql(mode=0):
     print(mode,"<<----------")
 
-    def process_file(file_path,DB_file,table_name):
+    def process_file(file_path,SQLFILE,table_name):
         
-        updated=False
+        updated,NO_PTDESC=False,False
         names,data =[],[]
-        Columns=0
+        Columns,CMPLTIME_index=0,0
         print(f"Processing file => : {file_path}")
         TABLE_EXISTS = False 
         try:
@@ -179,7 +189,7 @@ def xxToSql(mode=0):
                 updated="-----"
                 dicrption_index=0
                 for index,line in enumerate(file):
-                    if "Data type changed" in line or 'ERRORS DETECTE' in line or "Request failed" in line:
+                    if "Data type changed" in line or 'ERRORS DETECTE' in line or "Request failed" in line or "NO MATCH FOUND" in line:
                         continue
                     # print(index,line)
                     if index==0 and "QUERY DESCRIPTOR:" in line:
@@ -203,13 +213,23 @@ def xxToSql(mode=0):
 
                     if index==2 and parts[0] == "ENTITY":
                         names = [p.replace('(', '_').replace(')', '') for p in parts]
-                        dicrption_index=parts.index("PTDESC")
+                        if "PTDESC" in parts:dicrption_index=parts.index("PTDESC")
+                        else:NO_PTDESC=True
+                        if "CMPLTIME" in parts: #fix date '05/23/21 07:36:03' to be one
+                            CMPLTIME_index=parts.index("CMPLTIME")
                         Columns=len(parts)
                         continue
                     if index==2 and not(parts[0] == "ENTITY"):
                         raise Exception(f"Invalid FILE \n , the file must have titles in thered line (({index}))  <<<<<<<<<<<|\n")
 
+                    #fix date '05/23/21 07:36:03' to be one
+                    if CMPLTIME_index and not parts[CMPLTIME_index]=="0-00:00:00":
+                        parts[CMPLTIME_index]=parts[CMPLTIME_index]+" "+parts[CMPLTIME_index+1]
+                        parts.remove(parts[CMPLTIME_index + 1])
+                        Columns=len(parts)-1
 
+
+                    
                     # add pant name
                     if "PLANT" not in names:names.append("PLANT")
                     if parts[0][:2].isdigit() and str(parts[0][:2]) in PLANT_file_rev:
@@ -221,30 +241,30 @@ def xxToSql(mode=0):
                     # print(Columns,parts)
                     # exit()
 
-                    
+                    if not NO_PTDESC:
                     #>תיקון התיאור
-                    if len(parts) > Columns:
-                        part2=(Columns-(dicrption_index))
+                        if len(parts) > Columns:
+                            part2=(Columns-(dicrption_index))
 
-                        # if dicrption at the end 
-                        if part2==0:
-                            dicrption = " ".join(parts[dicrption_index:])
-                            parts = parts[:dicrption_index]
-                            parts.insert(dicrption_index,fix_if_reversed(dicrption))
+                            # if dicrption at the end 
+                            if part2==0:
+                                dicrption = " ".join(parts[dicrption_index:])
+                                parts = parts[:dicrption_index]
+                                parts.insert(dicrption_index,fix_if_reversed(dicrption))
 
-                        # if dicrption in the middle 
-                        else:
-                            dicrption = " ".join(parts[dicrption_index:-part2])
-                            parts = parts[:dicrption_index] + parts[-part2:]
-                            parts.insert(dicrption_index,fix_if_reversed(dicrption))
+                            # if dicrption in the middle 
+                            else:
+                                dicrption = " ".join(parts[dicrption_index:-part2])
+                                parts = parts[:dicrption_index] + parts[-part2:]
+                                parts.insert(dicrption_index,fix_if_reversed(dicrption))
 
-                        #if dicrption is empty
-                    if len(parts) <= Columns:parts.insert(dicrption_index,"----")
+                            #if dicrption is empty
+                        if len(parts) <= Columns:parts.insert(dicrption_index,"----")
 
 
                     parts.append(updated)
                     data.append(parts)
-            SAVE_sqlite(data,names,DB_file,table_name)
+            SAVE_sqlite(data,names,SQLFILE,table_name)
 
         except Exception as e:
             print(f"Error processing file {file_path}: {e}")
