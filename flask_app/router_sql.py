@@ -20,11 +20,15 @@ if not os.path.exists(DB_SQL):
     os.makedirs(DB_SQL)
 
 def GET_file_encoding(file):
-    with open(file, 'rb') as f:
-        result = chardet.detect(f.read())
-        encoding_ = result['encoding']
-    if encoding_ == "utf-8":return "utf-8"
-    else:return "windows-1255"
+    encoding_=""
+    try:
+        with open(file, 'rb') as f:
+            result = chardet.detect(f.read())
+            encoding_ = result['encoding']
+        if encoding_ == "utf-8":return "utf-8"
+        else:return "windows-1255"
+    except Exception as e:
+        print(f"SQL GET_file_encoding : {e}")
 
 def copy_file(local=SQLFILE, out=SQLFILE_COPYTO):
     if not os.path.exists(local) and os.path.exists(out):
