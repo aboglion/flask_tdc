@@ -24,7 +24,7 @@ def GET_file_encoding(file):
         result = chardet.detect(f.read())
         encoding_ = result['encoding']
         if encoding_ == "utf-8":return "utf-8"
-	else:return "windows-1255"
+        else:return "windows-1255"
 
 def copy_file(local=SQLFILE, out=SQLFILE_COPYTO):
     if not os.path.exists(local) and os.path.exists(out):
