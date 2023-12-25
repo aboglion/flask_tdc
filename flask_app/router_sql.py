@@ -23,8 +23,7 @@ def GET_file_encoding(file):
     with open(file, 'rb') as f:
         result = chardet.detect(f.read())
         encoding_ = result['encoding']
-        if encoding_ == "utf-8":
-            return encoding_
+        if encoding_ == "utf-8":return encoding_
 	else:return "windows-1255"
 
 def copy_file(local=SQLFILE, out=SQLFILE_COPYTO):
