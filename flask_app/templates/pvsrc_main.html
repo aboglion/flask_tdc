@@ -373,7 +373,18 @@ body {
             border-color: orange;
         }
 
-     
+        .blinking-background {
+            background-color: rgba(255, 0, 0, 0.548);
+            animation: blinker 2s linear infinite;
+            color: rgb(225, 255, 0);
+            border-radius: 10%;
+        }
+
+        @keyframes blinker {
+            50% {
+                opacity: 3%;
+            }
+        }
       
     </style>
     <!-- Include xlsx.js -->
@@ -432,16 +443,47 @@ body {
 
                 </td>
                 <td>{{ row.START_AT }}</td>
-                <td style="display: none;">{{ row.NEW }}</td>
+                <td id="days{{ loop.index }}"> </td>
                 </tr>
                 {% endfor %}
     </table>
 </body>
 
-    
 
-    <script>
-    // Function to parse table data
+<script>
+    //coutine days
+    /////////////////////////////////////////////////////////////////////////////
+    function calculateDaysDifference(startDate) {
+    var today = new Date();
+    var start = new Date(startDate);
+    var diffTime = Math.abs(today - start);
+    var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+}
+document.addEventListener("DOMContentLoaded", function() {
+    var table = document.getElementById('tableId');
+    var rows = table.getElementsByTagName('tr');
+
+    for (var i = 0; i < rows.length; i++) {
+        var dateCell = rows[i].getElementsByTagName('td')[5]; // Assuming the date is in the 6th column
+        var daysCell = rows[i].getElementsByTagName('td')[6]; // The new "Days Elapsed" column
+        if (dateCell && daysCell) {
+            var daysElapsed = calculateDaysDifference(dateCell.innerText);
+            daysCell.innerText = daysElapsed;
+
+            if (daysElapsed > 20) {
+                daysCell.classList.add("blinking-background");
+                        }
+            daysCell.innerText+="\ndays"
+        }
+    }
+});
+
+</script>
+
+<script>
+        /////////////////////////////////////////////////////////////////////////
+    // EXCIL 
     function parseTableData() {
         var table = document.getElementById('tableId');
         var rows = table.getElementsByTagName('tr');
@@ -483,7 +525,6 @@ body {
   // Return an array with number and tags
   return [parts[0], parts[1]]; // [number, tag]
 }
-
 
     // Function to apply styles to the worksheet
     function styleWorksheet(worksheet) {
