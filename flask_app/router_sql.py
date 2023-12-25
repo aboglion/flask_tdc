@@ -19,6 +19,14 @@ db_lock = threading.Lock()
 if not os.path.exists(DB_SQL):
     os.makedirs(DB_SQL)
 
+def GET_file_encoding(file):
+    with open(file, 'rb') as f:
+        result = chardet.detect(f.read())
+        encoding_ = result['encoding']
+        if encoding_ == "utf-8":
+            return encoding_
+		else:return "windows-1255"
+
 def copy_file(local=SQLFILE, out=SQLFILE_COPYTO):
     if not os.path.exists(local) and os.path.exists(out):
         try:
@@ -202,7 +210,7 @@ def xxToSql(mode=0):
         print(f"Processing file => : {file_path}")
         TABLE_EXISTS = False 
         try:
-            with open(file_path, 'r', encoding='windows-1255') as file:              
+            with open(file_path, 'r', encoding=GET_file_encoding(file_path)) as file:              
                 updated="-----"
                 dicrption_index=0
                 for index,line in enumerate(file):
