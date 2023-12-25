@@ -25,7 +25,7 @@ def GET_file_encoding(file):
         encoding_ = result['encoding']
         if encoding_ == "utf-8":
             return encoding_
-		else:return "windows-1255"
+	else:return "windows-1255"
 
 def copy_file(local=SQLFILE, out=SQLFILE_COPYTO):
     if not os.path.exists(local) and os.path.exists(out):
