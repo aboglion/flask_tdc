@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect,Response
 from tinydb import TinyDB, Query
-import time,os,Plugins,shutil
+import time,os,Plugins,shutil,chardet
 
 from TDC_parse_eb.TDC_parse_eb_utils.Consts import DB_SQL,EB_FILES_DIR,plant_map,PLANT_file_rev,SQLFILE,SQLFILE_COPYTO
 from TDC_parse_eb.TDC_parse_eb_utils.hebrew import fix_if_reversed
