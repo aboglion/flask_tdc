@@ -31,6 +31,6 @@ log_2:
 in:
 	docker-compose exec flask_io sh
 push:
-	git add . && git commit -m "teat" &&git push
+	git add . && git commit -m "teat" && git push origin main
 
 	
