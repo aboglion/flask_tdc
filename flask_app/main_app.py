@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, make_response
-import os,hashlib
+import os,hashlib,json,requests
 from glob import glob
 from TDC_parse_eb.pvsrc_parser import pvsrc_parse
 import TDC_parse_eb.TDC_parse_eb_utils.Consts as Consts
@@ -194,10 +194,57 @@ def updateit():
         response = make_response('Success', 200)
         return response
 
+# post שינוי תג ידני מהדף של הטבלה LYOUT
+@app.route('/sms_log')
+def sms_log():
+        return render_template('sms_logs.html')
+@app.route('/get_sms_log')
+def get_sms_log():
+    uri = "http://api.multisend.co.il/MultiSendAPI/outbound"
+    # Retrieve the username and password from the configuration
+    api_username = os.getenv('APIUsername')
+    api_password = os.getenv('APIPassword')
+    # Construct API string
+    api_string = f"{uri}?user={api_username}&password={api_password}&limit=3000"
+  # Make a request to the API
+    response = requests.get(api_string)
+    # print(response.json()["outbound_message"][:20])
+    # Convert the response to JSON
+    try:
+        api_response = response.json()
+
+    except ValueError as e:
+        print("Error", "Error parsing response JSON: " + str(e))
+        return
+    # Process the messages
+    html = "<table><tr><th class='timetd' >Time</th><th class='msgtd'>Message</th><th class='idtd'>Id</th></tr>"
+    last_id_messages=0
+    for i in api_response['outbound_message']:
+            not_us=False
+            if not("ENGR" in i["message"]):not_us=True
+            Id=i["message"].split("##")
+            if len(Id)>1:Id=Id[1]
+            else: continue # ignore the missage that sent form the api directly
+            if last_id_messages== Id:continue 
+            last_id_messages=Id
+            if "password"  in i["message"]: #cript the password that lioned send
+                i["message"]= " \npassword:***** :)\n"+i["message"].split("will")[1]
+            if not_us:
+                html += f"<tr class='nono'><td class='timetd'>{i['time']}</td><td class='msgtd'>{i['message']}</td><td class='idtd'>{Id}</td></tr>"
+            else:
+                html += f"<tr><td class='timetd'>{i['time']}</td><td class='msgtd'>{i['message']}</td><td class='idtd'>{Id}</td></tr>"
+    html += "</table>"
+
+    return html
+
+
+
+    
 
 
 if __name__ == '__main__':
     Consts.runmode(app)
+
 
 
 
