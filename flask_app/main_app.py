@@ -1,11 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, session, make_response
 import os,hashlib,json,requests
-from glob import glob
 from TDC_parse_eb.pvsrc_parser import pvsrc_parse
 import TDC_parse_eb.TDC_parse_eb_utils.Consts as Consts
 from pvsrc import router_pvsrc
 from router_sql import router_SQL,xxToSql
-import Plugins
+import Plugins,time
 if not os.path.exists(Consts.DB_JASON):
     os.makedirs(Consts.DB_JASON)
 if not os.path.exists(Consts.DB_SQL):
@@ -195,6 +194,25 @@ def updateit():
         return response
 
 # post שינוי תג ידני מהדף של הטבלה LYOUT
+def is_weekend_or_after_4pm(time_str):
+    try:
+        # פרקם את המחרוזת לתאריך ושעה
+        time_struct = time.strptime(time_str, "%Y-%m-%d %H:%M:%S")
+        
+        # בדוק אם התאריך הוא שישי (5) או שבת (6)
+        if time_struct.tm_wday == 5 or time_struct.tm_wday == 6:
+            return True
+        
+        # בדוק אם השעה היא אחרי 16:00
+        if time_struct.tm_hour >= 10:
+            return True
+        
+        return False
+    except ValueError:
+        # אם המחרוזת לא בפורמט הנדרש
+        return False
+
+
 @app.route('/sms_log')
 def sms_log():
         return render_template('sms_logs.html')
@@ -205,7 +223,7 @@ def get_sms_log():
     api_username = os.getenv('APIUsername')
     api_password = os.getenv('APIPassword')
     # Construct API string
-    api_string = f"{uri}?user={api_username}&password={api_password}&limit=3000"
+    api_string = f"{uri}?user={api_username}&password={api_password}"
   # Make a request to the API
     response = requests.get(api_string)
     # print(response.json()["outbound_message"][:20])
@@ -232,7 +250,9 @@ def get_sms_log():
             if not_us:
                 html += f"<tr class='nono'><td class='timetd'>{i['time']}</td><td class='msgtd'>{i['message']}</td><td class='idtd'>{Id}</td></tr>"
             else:
-                html += f"<tr><td class='timetd'>{i['time']}</td><td class='msgtd'>{i['message']}</td><td class='idtd'>{Id}</td></tr>"
+                if is_weekend_or_after_4pm(i['time']):
+                    html += f"<tr class='no_working'><td class='timetd'>{i['time']}</td><td class='msgtd'>{i['message']}</td><td class='idtd'>{Id}</td></tr>"
+                else:html += f"<tr><td class='timetd'>{i['time']}</td><td class='msgtd'>{i['message']}</td><td class='idtd'>{Id}</td></tr>"
     html += "</table>"
 
     return html

@@ -400,7 +400,13 @@ body {
 
     <h1>תגים מאולצים</h1>
     <button id="downloadExcel">Download Excel</button>
-    <h4 style="color: #2196f3;text-align: center">מעודכן ליום {{date}} לחודש</h4>
+
+<div style="text-align: center; color: #2196f3;">
+    <h4 style="display: inline; margin-right: 10px;">מעודכן ליום {{date}} לחודש</h4>
+    <h2 style="display: inline;">| &nbsp;Total: {{data_len}}</h2>
+</div>
+
+
     <a style="left: 5vw" href="{{url_for('main_page')}}" class="M_L-button">
         <i>🏠</i>
     </a>

@@ -25,7 +25,7 @@ def router_pvsrc(app):
         sorted_data = sorted(data, key=lambda item: item['ENTITY'][:3])
         print("*"*20)
         for d in sorted_data :print(d['ENTITY'])
-        return render_template("pvsrc_main.html", data=sorted_data,date=updated_date)
+        return render_template("pvsrc_main.html", data=sorted_data,date=updated_date,data_len=len(sorted_data))
 
     @app.route("/save", methods=["POST"])
     def save_reason():
