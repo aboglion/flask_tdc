@@ -27,26 +27,30 @@ def sms_s(app) :
             return render_template('sms_logs.html')
     @app.route('/get_sms_log')
     def get_sms_log():
-        uri = "http://api.multisend.co.il/MultiSendAPI/outbound"
-        # Retrieve the username and password from the configuration
+        uri_History = "http://api.multisend.co.il/MultiSendAPI/outboundHistory"
+        uri_Today = "http://api.multisend.co.il/MultiSendAPI/outbound"
+        # Retrieve the username and password from the configuration   
         api_username = os.getenv('APIUsername')
         api_password = os.getenv('APIPassword')
         # Construct API string
-        api_string = f"{uri}?user={api_username}&password={api_password}"
+        api_string = [f"{uri_Today}?user={api_username}&password={api_password}&limit=600",\
+            f"{uri_History}?user={api_username}&password={api_password}&limit=3000"]
+             
+        data=[]
     # Make a request to the API
-        response = requests.get(api_string)
-        # print(response.json()["outbound_message"][:20])
-        # Convert the response to JSON
-        try:
-            api_response = response.json()
-
-        except ValueError as e:
-            print("Error", "Error parsing response JSON: " + str(e))
-            return
+        for api_s in api_string: 
+            response = requests.get(api_s)
+            try:data.extend(response.json()['outbound_message'])
+            except ValueError as e:
+                print("Error", "Error parsing response JSON: " + str(e))
+                data=[]
+                pass
+        
         # Process the messages
         html = "<table><tr><th class='timetd' >Time</th><th class='msgtd'>Message</th><th class='idtd'>Id</th></tr>"
         last_id_messages=0
-        for i in api_response['outbound_message']:
+        print(len(data))
+        for i in data:
                 not_us=False
                 if not("ENGR" in i["message"]):not_us=True
                 Id=i["message"].split("##")
