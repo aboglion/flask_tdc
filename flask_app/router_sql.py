@@ -34,6 +34,7 @@ def copy_file(local=SQLFILE, out=SQLFILE_COPYTO):
     if not os.path.exists(local) and os.path.exists(out):
         try:
             shutil.copy(out, local)
+            print("copyed: ",out,"\n to ",local)
         except Exception as e:
             print(f"SQL Error local out to local: {e}")
     elif os.path.exists(local):

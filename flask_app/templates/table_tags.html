@@ -201,7 +201,10 @@
         }
 
 
-
+        .keys_titals:hover{
+            color:rgb(255, 174, 0);
+            cursor: pointer;
+        }
         
         .search {
             /* display: none; */
@@ -212,6 +215,9 @@
             font-weight: bold;
             width:5vw;
 
+        }
+        #in1 ,#in0{
+            width:10vw;
         }
 
         .M-button {
@@ -296,10 +302,31 @@ color: #4DC3FA;
                 {% set titals =["NAME","DESCRIPTION","SLOTNUM","ADRESS","STATUS","TYPE","NODENUM","PLANT","DB_FILE","DI-1","DI-2","DO-1","DO-2","RC-OUT","RC-IN1","RC-IN2"]%}
                 {% set real_keys=["NAME","PTDESC","SLOTNUM","ID","STATUS","TYPE","NODENUM","PLANT","DB_FILE","DISRC(1)","DISRC(2)","DODSTN(1)","DODSTN(2)","CODSTN(1)","CISRC(1)","CISRC(2)"]%}
                 {% for key in titals%}
-                <th onclick="sortTable({{ loop.index0 }})">
-                    <div onmouseover="resizein('in{{loop.index0}}')">{{ key }}</div>
+                <th >
+                    <div class="keys_titals" onclick="sortTable({{ loop.index0 }})">{{ key }}</div>
+                    {% if loop.index0==5 %}
+                    <div >
+                        <input style="width: 5vw;height: 1.3em;cursor: pointer;" id="in{{loop.index0}}"  type="text"  list="typeSuggestions" onkeyup="searchTable(event,{{ loop.index0 }})">
+                        <datalist id="typeSuggestions">
+                            <option value="SEQ">
+                            <option value="DI">
+                            <option value="DO">
+                            <option value="AI">
+                            <option value="AO">
+                            <option value="DC">
+                            <option value="RC">
+                            <option value="RPV">
+                            <option value="NM">
+                            <option value="ARR">
+                            <option value="TM">
+                        </datalist>
+                    </div>
+                    {% else %}
                     <div><input id="in{{loop.index0}}" class="search" placeholder="" type="text"
                             onkeyup="searchTable(event,{{ loop.index0 }})"></div>
+
+                    {% endif %}
+
                 </th>
                 {% endfor %}
             </tr>
@@ -378,16 +405,16 @@ color: #4DC3FA;
             window.location.href = url_parts.join('/')
         }
 
-        function resizein(id) {
-            var element = document.getElementById(id);
-            if (element) {
-                if (element.value == "~") element.value = ""
+        // function resizein(id) {
+        //     var element = document.getElementById(id);
+        //     if (element) {
+        //         if (element.value == "~") element.value = ""
                
-                element.style.visibility ="visible";
-            } else {
-                // console.log('No element found with id: ' + id);
-            }
-        }
+        //         element.style.visibility ="visible";
+        //     } else {
+        //         // console.log('No element found with id: ' + id);
+        //     }
+        // }
 
         function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms))
@@ -418,18 +445,18 @@ color: #4DC3FA;
                 let the_inp_char = v.slice(-1)
                 // del last char
                 if (!(ligal_chr.includes(the_inp_char) || e.keyCode == 8)) {
-                    if (v.length < 2) { e.value = '~'; e.style.visibility = "hidden";enter=true}
+                    if (v.length < 2 && (e.value != '~'||e.value != '')) { v = '~'}
                     else e.value = v.slice(0, -1)
                 }
-                if (v == "") { e.value = '~'; e.style.visibility = "hidden";enter=true }
-                v = e.value
+                if (e.value == '~'||e.value == '') { v = '~';e.value  == ""}
+                else v = e.value   
+                
                 input[i] = v
             }
 
             url = input.join("/");
             console.log(url)
             url = "{{url_for('tags_table')}}" + url + "/{{l}}/" + e_id
-
             if (enter) window.location.href = url
 
 
@@ -471,7 +498,7 @@ color: #4DC3FA;
             {% for variable in variables %}
                 e = document.getElementById("in{{ loop.index0 }}")
                 e.value = '{{variable}}'
-                if ('{{variable}}' == "~") e.style.visibility = "hidden";
+                if ('{{variable}}' == "~") e.value="";
             {% endfor %}
             console.log({{foucs_id}});
     if ('{{foucs_id}}' !== "") {

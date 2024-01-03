@@ -97,22 +97,23 @@ def TAGS_parsing(path, type_):
                                           NIM, PM, new_tag["CODSTN(1)"][3:5]])
             new_tag["ID"] = new_tag["CARD_ID"]+"-"+index
             # print("the new -->","card:",new_tag["CARD_ID"], "id:", new_tag["ID"],"\n===================\n\n")
-
-        with open('templates/duplication.html', 'a', encoding="utf-8") as file:
-            # בדיקה אם יש כפליות של כתובת בבסיס הנתונים
-            for tag_index in all_tags:
-                if tag_index["ID"] == new_tag["ID"]:
-                    duplication_ = {
-                        "PLANT": PLANT,
-                        "ADDRESS": new_tag["ID"],
-                        "NAME1": tag_index["NAME"],
-                        "DB_FILE1": tag_index["DB_FILE"],
-                        "TYPE1": tag_index["TYPE"],
-                        "NAME2": new_tag["NAME"],
-                        "DB_FILE2": new_tag["DB_FILE"],
-                        "TYPE2": new_tag["TYPE"]
-                    }
-                    save_to_db_duplication(duplication_)
+        try:
+            with open('templates/duplication.html', 'a', encoding="utf-8") as file:
+                # בדיקה אם יש כפליות של כתובת בבסיס הנתונים
+                for tag_index in all_tags:
+                    if tag_index["ID"] == new_tag["ID"]:
+                        duplication_ = {
+                            "PLANT": PLANT,
+                            "ADDRESS": new_tag["ID"],
+                            "NAME1": tag_index["NAME"],
+                            "DB_FILE1": tag_index["DB_FILE"],
+                            "TYPE1": tag_index["TYPE"],
+                            "NAME2": new_tag["NAME"],
+                            "DB_FILE2": new_tag["DB_FILE"],
+                            "TYPE2": new_tag["TYPE"]
+                        }
+                        save_to_db_duplication(duplication_)
+        except Exception  as e:pass
         all_tags.append(new_tag)
 
     RETOEN.extend(all_tags)
