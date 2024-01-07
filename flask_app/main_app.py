@@ -39,7 +39,7 @@ def main_page():
     #get the logs of copy files
     DbLogs_Dates=Plugins.Get_DbLogs_Dates()
     MainPage_Data=Plugins.Get_DBJson_Data("PMs.json")
-    print(MainPage_Data)
+    # print(MainPage_Data)
     if len(MainPage_Data)<1:
         DbLogs_Dates={"A":["תקלה בכונן משותף גי',לבדוק עם יובל- יונס - לאוניד",],"B":["תקלה בכונן משותף גי',לבדוק עם יובל- יונס - לאוניד",]}
         MainPage_Data=[[],]
@@ -163,7 +163,7 @@ def tags_table( NAME="~", PTDESC="~", SLOTNUM="~", ID="~", STATUS="~", TYPE='~',
             realkeys = ["NAME", "PTDESC", "SLOTNUM", "ID", "STATUS", "TYPE", "NODENUM", "PLANT", "DB_FILE", "DISRC(1)", "DISRC(2)", "DODSTN(1)", "DODSTN(2)", "CODSTN(1)", "CISRC(1)", "CISRC(2)"]
             sortedkey = realkeys[sorting]
             
-            print(True, sorting, sortedkey, "sort by")
+            # print(True, sorting, sortedkey, "sort by")
 
             if sorting in [2, 6, 7]:  # Assuming these are the numeric fields
                 points = sorted(points, key=lambda x: str(x[sortedkey]).zfill(10))  # pad numbers with zeros

@@ -299,9 +299,11 @@ def xxToSql(mode=0):
             print(f"Error processing file {file_path}: {e}")
         finally:
             print(f"Finished processing =|: {file_path}")
+            copy_file()
 
     def main_xxsql(modexx):
         global DB_SQL,XX_FILES,SQLFILE
+        if not os.path.exists(SQLFILE):copy_file()
         if modexx==1:
             try:
                 for file_path in XX_FILES:
@@ -320,6 +322,7 @@ def xxToSql(mode=0):
                     traceback.print_exc()
                     print(f"Error: {e}")
         print("main_xxsql=false",modexx)
+
     main_xxsql(mode)
 
 
