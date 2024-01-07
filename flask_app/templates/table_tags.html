@@ -209,7 +209,7 @@
         .search {
             /* display: none; */
             /* width: 80px; */
-            height: 1em;
+            height: 1.08em;
             font-size: 1.01vw;
             color: darkblue;
             font-weight: bold;
@@ -303,10 +303,21 @@ color: #4DC3FA;
                 {% set real_keys=["NAME","PTDESC","SLOTNUM","ID","STATUS","TYPE","NODENUM","PLANT","DB_FILE","DISRC(1)","DISRC(2)","DODSTN(1)","DODSTN(2)","CODSTN(1)","CISRC(1)","CISRC(2)"]%}
                 {% for key in titals%}
                 <th >
-                    <div class="keys_titals" onclick="sortTable({{ loop.index0 }})">{{ key }}</div>
-                    {% if loop.index0==5 %}
+                    <div class="keys_titals" onclick="searchTable(event,{{ loop.index0 }},{{loop.index0}},'1')">{{ key }}</div>
+
+                    {% if loop.index0==4 %}
                     <div >
-                        <input style="width: 5vw;height: 1.3em;cursor: pointer;" id="in{{loop.index0}}"  type="text"  list="typeSuggestions" onkeyup="searchTable(event,{{ loop.index0 }})">
+                        <input style="width: 5vw;height: 1.3em;cursor: pointer;" id="in{{loop.index0}}"  type="text"  list="SatusSuggestions"  onclick="this.value='';focus()" oninput="searchTable(event,{{ loop.index0 }})"  onkeyup="searchTable(event,{{ loop.index0 }})" >
+                        <datalist id="SatusSuggestions">
+                            <option value="EXISTED">
+                            <option value="MANUAL">
+                            <option value="DELETED">
+                        </datalist>
+                    </div>
+
+                    {% elif loop.index0==5 %}
+                    <div >
+                        <input style="width: 5vw;height: 1.3em;cursor: pointer;" id="in{{loop.index0}}"  type="text"  list="typeSuggestions"  onclick="this.value='';focus()" oninput="searchTable(event,{{ loop.index0 }})"  onkeyup="searchTable(event,{{ loop.index0 }})" >
                         <datalist id="typeSuggestions">
                             <option value="SEQ">
                             <option value="DI">
@@ -339,7 +350,16 @@ color: #4DC3FA;
                 {% for v in real_keys %}
                 <td 
                     title={{loop.cycle("NAME","DESCRIPTION","SLOTNUM","ADRESS","STATUS","TYPE","NODENUM","PLANT","DB_FILE","DI-1","DI-2","DO-1","DO-2","RC-OUT","RC-IN1","RC-IN2")}}>
-                    {{ tag.get(v) }} </td>
+                    {% set value = tag.get(v) %}
+                    {% if value is string %}
+                        {% set value = value.strip() %}
+                    {% endif %}
+                    {% if value is number and value < 10 %}
+                        {{ "%02d"|format(value) }}
+                    {% else %}
+                        {{ value }}
+                    {% endif %}
+                </td>
                 {% endfor %}
             </tr>
             {% endfor %}
@@ -354,79 +374,36 @@ color: #4DC3FA;
     <div id="popup" class="popup"></div>
 
     <script>
-        function sortTable(n) {
-            var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-            table = document.getElementById("myTable");
-            switching = true;
-            dir = "asc";
-            while (switching) {
-                switching = false;
-                rows = table.rows;
-                for (i = 1; i < (rows.length - 1); i++) {
-                    shouldSwitch = false;
-                    x = rows[i].getElementsByTagName("td")[n];
-                    y = rows[i + 1].getElementsByTagName("td")[n];
-                    if (dir == "asc") {
-                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                            shouldSwitch = true;
-                            break;
-                        }
-                    } else if (dir == "desc") {
-                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-                            shouldSwitch = true;
-                            break;
-                        }
-                    }
-                }
-                if (shouldSwitch) {
-                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                    switching = true;
-                    switchcount++;
-                } else {
-                    if (switchcount == 0 && dir == "asc") {
-                        dir = "desc";
-                        switching = true;
-                    }
-                }
-            }
-        }
+        
 
         function next100() {
             let url_parts = window.location.href.split('/');
-            url_parts[url_parts.length - 2] = '{{l+1}}'
-            url_parts[url_parts.length - 1] = '{{foucs_id}}'
+            url_parts[url_parts.length - 3] = '{{l+1}}'
+            url_parts[url_parts.length - 2] = '{{foucs_id}}'
+            url_parts[url_parts.length - 1] = '{{sorting}}'
             window.location.href = url_parts.join('/')
         }
 
         function last100() {
             let url_parts = window.location.href.split('/');
-            url_parts[url_parts.length - 2] = '{{l-1}}'
-            url_parts[url_parts.length - 1] = '{{foucs_id}}'
+            url_parts[url_parts.length - 3] = '{{l-1}}'
+            url_parts[url_parts.length - 2] = '{{foucs_id}}'
+            url_parts[url_parts.length - 1] = '{{sorting}}'
             window.location.href = url_parts.join('/')
         }
-
-        // function resizein(id) {
-        //     var element = document.getElementById(id);
-        //     if (element) {
-        //         if (element.value == "~") element.value = ""
-               
-        //         element.style.visibility ="visible";
-        //     } else {
-        //         // console.log('No element found with id: ' + id);
-        //     }
-        // }
 
         function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms))
         }
 
         // async function searchTable(e, e_id) {
-             function searchTable(e, e_id) {
+             function searchTable(e, e_id,sorting='{{sorting}}',first_page="0") {
             let enter=false;
-              
-            if (e.key === "Enter") enter=true;
+            if (sorting!='{{sorting}}') enter=true;
+            if (e.key === "Enter" ) enter=true;
             const inputElement = document.getElementById("in"+e_id);
-            inputElement.classList.add("none_entered_input");
+            inputElement.classList.add("none_entered_input");         
+
 
             let ligal_chr = [
                 "-", ".", ",", "_", "[", "]", "!", "~", "$", "'", "(", ")",
@@ -453,11 +430,16 @@ color: #4DC3FA;
                 
                 input[i] = v
             }
+            // go to first page when click on sorting 
+            if (first_page=="0") first_page= {{l}}
+            else first_page= "0"
 
             url = input.join("/");
-            console.log(url)
-            url = "{{url_for('tags_table')}}" + url + "/{{l}}/" + e_id
-            if (enter) window.location.href = url
+            url = "{{url_for('tags_table')}}" + url + "/"+first_page+"/" + e_id+"/"+sorting
+            console.log("url is =>",url)
+            if (enter ) window.location.href = url
+           
+  
 
 
         }

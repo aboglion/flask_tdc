@@ -338,8 +338,8 @@
         <i>דוח כפליות</i>
     </a>
     
-    <a style="top:48vh" href="{{url_for("sms_log")}}" class="lM-button">
-        <i>Latest Alerts</i>
+    <a style="top:48vh;font-size:15px;color:rgb(255, 243, 15) !important;direction: inherit;" href="{{url_for("sms_log")}}" class="lM-button">
+        <i>תחנות הפעלה והתרעות</i>
     </a>
     <a style="top:56vh" href="{{url_for("SMS_UCME")}}" class="lM-button">
         <i>SMS UCME</i>
@@ -351,7 +351,7 @@
     <div>
         {% for plant in data %}
         <hr class="linked" id="{{plant}}">
-        <a class="planet_class" href="tags_table/~/~/~/~/~/~/~/{{plant}}/~/~/~/~/~/~/~/~/0/0">
+        <a class="planet_class" href="tags_table/~/~/~/~/~/~/~/{{plant}}/~/~/~/~/~/~/~/~/0/0/no_sorting">
             <h1>🔍 {{plant}} </h1>
         </a>
         <h1 class="net_letter">&nbsp; NET: {{data[plant][-1]}} &nbsp; &nbsp; LETTER: {{data[plant][-2]}}</h1>

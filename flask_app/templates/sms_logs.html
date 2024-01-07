@@ -462,45 +462,53 @@ width: 10vw;
     font-weight: 900;
     color: orange;
 }
-/* Existing styles for the toggle... */
+/*<!-- Hide .nono elements --> Existing styles for the toggle... */
+.nono {
+    display: none;
+}
+
 </style>
-<!-- Hide .nono elements when checkbox is checked  -->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        document.getElementById('screenToggle').addEventListener('change', function() {
-            var nonoElements = document.querySelectorAll('.nono');
-            nonoElements.forEach(function(element) {
-                element.style.display = this.checked ? 'none' : 'block';
-                document.getElementById('aspen_link').style.display =this.checked ? 'block':'none';
-            }.bind(this));
-        });
-    });
-</script>
 
 
 
     
 
     <script>
-        // Function to fetch data from your Flask route
-        function fetchData() {
-            fetch('/get_sms_log')
-                .then(response => response.text())
-                .then(response => {
-                    // Hide the loading indicator
-                    document.getElementById('load').style.display = 'none';
-                    // Show and populate the table with data
-                    let table = document.getElementById('table');
-                    let all_swich= document.getElementById('tagall_swich');
-                    table.innerHTML=response
-                    table.style.display = 'block';
-                    all_swich.style.display = 'block';
-                });
-        }
 
-        // Fetch data when the page loads
-        window.onload = fetchData;
-    </script>
+    // Global function
+    function toggleDisplay() {
+        var screenToggle = document.getElementById('screenToggle');
+        var nonoElements = document.querySelectorAll('.nono');
+        nonoElements.forEach(function(element) {
+            element.style.display = screenToggle.checked ? 'block' : 'none';
+        });
+        document.getElementById('aspen_link').style.display = screenToggle.checked ? 'none' : 'block';
+    }
+
+    // Function to fetch data from your Flask route
+    function fetchData() {
+        fetch('/get_sms_log')
+            .then(response => response.text())
+            .then(response => {
+                // Hide the loading indicator
+                document.getElementById('load').style.display = 'none';
+                // Show and populate the table with data
+                let table = document.getElementById('table');
+                let all_swich = document.getElementById('tagall_swich');
+                table.innerHTML = response;
+                table.style.display = 'block';
+                all_swich.style.display = 'block';
+
+                // Call toggleDisplay to set the initial state
+                toggleDisplay();
+            });
+    }
+
+    // Fetch data when the page loads
+    window.onload = fetchData;
+</script>
+
+
 </head>
 <body>
     <a style="left: 5vw" href="{{url_for('main_page')}}" class="M_L-button">
@@ -517,14 +525,17 @@ width: 10vw;
     {% endif %}
     <div id="load"><div>G</div><div>N</div><div>I</div><div>D</div><div>A</div><div>O</div><div>L</div></div>
         <div style="display: none;" id="tagall_swich" class="all_swich">
-        <b>תחנות הפעלה</b>
+        <b>הצג את כל ההודעות</b>
       <br>
         <div class="toggle-switch">
-          <input type="checkbox" id="screenToggle" class="checkbox">
-          <label for="screenToggle" class="label"></label>
+            <input type="checkbox" id="screenToggle" class="checkbox" onchange="toggleDisplay()">
+            <label for="screenToggle" class="label"></label>
         </div>
       </div>
-      <a href="http://nhfe-a1pe/processexplorer/aspenONE.html?ProcessExplorerReport?nav=true&file=Public%2FMofet%2FReports%2Fworkstations_report_24h.appid-7.pt-44.cat-7.def-0.s-a.rpt" id="aspen_link">מצב תחנות עדכני מהאספין 💻</a>
+      <a href="http://nhfe-a1pe/processexplorer/aspenONE.html?ProcessExplorerReport?nav=true&file=Public%2FMofet%2FReports%2FTDC%20ACCESS%20Report.appid-7.pt-44.cat-7.def-0.s-a.rpt" id="aspen_link">מצב תחנות עדכני מהאספין 💻</a>
     <div id="table" style="display: none;"></div>
+
+
+
 </body>
 </html>

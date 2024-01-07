@@ -133,16 +133,16 @@ def log_out():
     else:redirect(url_for('main_page'))
 
 # http://localhost:5000/tags_table/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/0/0
-@app.route('/tags_table/<NAME>/<PTDESC>/<SLOTNUM>/<ID>/<STATUS>/<TYPE>/<NODENUM>/<PLANT>/<DB_FILE>/<DISRC_1>/<DISRC_2>/<DODSTN_1>/<DODSTN_2>/<CODSTN_1>/<CISRC_1>/<CISRC_2>/<num>/<foucs_id>')
+@app.route('/tags_table/<NAME>/<PTDESC>/<SLOTNUM>/<ID>/<STATUS>/<TYPE>/<NODENUM>/<PLANT>/<DB_FILE>/<DISRC_1>/<DISRC_2>/<DODSTN_1>/<DODSTN_2>/<CODSTN_1>/<CISRC_1>/<CISRC_2>/<num>/<foucs_id>/<sorting>')
 @app.route('/tags_table/')
-def tags_table( NAME="~", PTDESC="~", SLOTNUM="~", ID="~", STATUS="~", TYPE='~', NODENUM="~", PLANT="~", DB_FILE="~", DISRC_1="~", DISRC_2="~", DODSTN_1="~", DODSTN_2="~", CODSTN_1="~", CISRC_1="~", CISRC_2="~", num='0',foucs_id=""):
+def tags_table( NAME="~", PTDESC="~", SLOTNUM="~", ID="~", STATUS="~", TYPE='~', NODENUM="~", PLANT="~", DB_FILE="~", DISRC_1="~", DISRC_2="~", DODSTN_1="~", DODSTN_2="~", CODSTN_1="~", CISRC_1="~", CISRC_2="~", num='0',foucs_id="",sorting="no_sorting"):
     
     #CHECK Update_Data
     actionUpdateData=Plugins.Update_Data()
     if actionUpdateData:return redirect(actionUpdateData)
     
     # var_dict קבלת המשתנים מהלינק
-    var_dict = dict(list(locals().items())[:-3])
+    var_dict = dict(list(locals().items())[:-4])
     points = []
     variables_all = []  # כל המשתנים
     varibles_for_search = {}  # יכיל את כל המתשנים שלא ריקים
@@ -156,6 +156,22 @@ def tags_table( NAME="~", PTDESC="~", SLOTNUM="~", ID="~", STATUS="~", TYPE='~',
 
     
     points = Plugins.Filtered_Sarch(ALL_Plant, varibles_for_search)
+    #---sort data
+    try:
+        sorting = int(sorting)
+        if sorting < 16:
+            realkeys = ["NAME", "PTDESC", "SLOTNUM", "ID", "STATUS", "TYPE", "NODENUM", "PLANT", "DB_FILE", "DISRC(1)", "DISRC(2)", "DODSTN(1)", "DODSTN(2)", "CODSTN(1)", "CISRC(1)", "CISRC(2)"]
+            sortedkey = realkeys[sorting]
+            
+            print(True, sorting, sortedkey, "sort by")
+
+            if sorting in [2, 6, 7]:  # Assuming these are the numeric fields
+                points = sorted(points, key=lambda x: str(x[sortedkey]).zfill(10))  # pad numbers with zeros
+            else:
+                points = sorted(points, key=lambda x: str(x[sortedkey]))
+    except Exception as e:
+        print(e, "Error in sorting")
+        pass
 
     try:  # num זה מספר העמוד
         num = int(num)  # אם לא הוכנס מספר עמוד או שהוא לא תקין אז תקח עמוד 0
@@ -163,10 +179,10 @@ def tags_table( NAME="~", PTDESC="~", SLOTNUM="~", ID="~", STATUS="~", TYPE='~',
         num = 0
     if num <= 0:  # כדי לעשות את הגלילה מעגלית של העמודים  אם שלילי אז תבוא להתחלה עמוד 0
         # foucs_id =איזה תא חיפוש הפוקס היה נמצא כדי להחזיר אותו לשם
-        return render_template('table_tags.html', data=points[:100], l=0, variables=variables_all, foucs_id=foucs_id)
+        return render_template('table_tags.html', data=points[:100], l=0, variables=variables_all, foucs_id=foucs_id,sorting=sorting)
     if len(points) > (num)*100:  # כל פעם קח 100
-        return render_template('table_tags.html', data=points[(num-1)*100:(num)*100], l=num, variables=variables_all, foucs_id=foucs_id)
-    return render_template('table_tags.html', data=points[(num-1)*100:], l=0, variables=variables_all, foucs_id=foucs_id)
+        return render_template('table_tags.html', data=points[(num-1)*100:(num)*100], l=num, variables=variables_all, foucs_id=foucs_id,sorting=sorting)
+    return render_template('table_tags.html', data=points[(num-1)*100:], l=0, variables=variables_all, foucs_id=foucs_id,sorting=sorting)
 
 
 # http://localhost:5000/LYOUT/800/7/ : דוגמה 

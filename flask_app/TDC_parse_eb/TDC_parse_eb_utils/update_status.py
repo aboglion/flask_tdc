@@ -19,8 +19,8 @@ def update_status(parse_EB_DATA, which_plant):
     for i in DB_DATA:
         # ביצוע חיפוש לפי המזהה (ID) במילון במקום לסנן את הרשימה
         if i["ID"] not in parse_dict:
-            if i["STATUS"] == "existed":
-                i["STATUS"] = "deleted"
+            if i["STATUS"] == "EXISTED":
+                i["STATUS"] = "DELETED"
             UPDATED.append(i)
     parse_EB_DATA.extend(UPDATED)
     TAGS_DB.close()

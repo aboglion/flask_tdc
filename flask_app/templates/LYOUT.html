@@ -257,7 +257,7 @@
                     </td>
                     {% endif %}
                     <!-- אם מנה ל + תא שהוא ידני או מחוק או תא לא קיים -->
-                    {% if session['logged_in'] and ((Point["STATUS"] is defined and not (Point["STATUS"]=="existed")) or
+                    {% if session['logged_in'] and ((Point["STATUS"] is defined and not (Point["STATUS"]=="EXISTED")) or
                     Point["STATUS"] is not defined) %}
                     {% set click_func = "addInput({cell:this,CARD_NUM:parseInt(" ~ Point['CARD_NUM'] ~
                     "),POINT_NUM:parseInt(" ~ loop.index ~ "),TYPE:'" ~ Point['TYPE'] ~ "'})" %}
@@ -271,11 +271,11 @@
                     <td onclick="{{click_func}}"
                         title="TYPE:{{Point['TYPE']}}  PM:{{Point['PM']}} CARD:{{Point['CARD_NUM']}} SLOT:{{loop.index}}"
                         style="background-color:#9aa1b0;">-[{{loop.index}}]-</td>
-                    {% elif Point["STATUS"]=="existed" %}
+                    {% elif Point["STATUS"]=="EXISTED" %}
                     <td onclick="{{click_func}}"
                         title="TYPE:{{Point['TYPE']}}  PM:{{Point['PM']}} CARD:{{Point['CARD_NUM']}} SLOT:{{Point['POINT_NUM']}}"
                         class="card-name">[{{Point["POINT_NUM"]}}] {{ Point["NAME"]}}</td>
-                    {% elif Point["STATUS"]=="manual" %}
+                    {% elif Point["STATUS"]=="MANUAL" %}
                     <td onclick="{{click_func}}" style="background-color:#9aa1b0;color:rgb(25, 0, 255);">
                         [{{Point["POINT_NUM"]}}] {{ Point["NAME"]}}</td>
                     {% else %}
@@ -299,7 +299,7 @@
     <script>
         function GOTO(name_, mitkan) {
             let name = name_.split(" ")[0]
-            let url = `{{url_for('tags_table')}}${name}/~/~/~/~/~/~/${mitkan}/~/~/~/~/~/~/~/~/0/0`
+            let url = `{{url_for('tags_table')}}${name}/~/~/~/~/~/~/${mitkan}/~/~/~/~/~/~/~/~/0/0/no_sorting"`
             console.log(url)
             window.location.href = url
         }
@@ -353,15 +353,15 @@
                 data["NAME"] = inputValue;
                 data["PM"] = '{{pm}}';
                 data["PLANT"] = '{{plant}}';
-                data["STATUS"] = "manual";
-                data['DB_FILE'] = "manual"
+                data["STATUS"] = "MANUAL";
+                data['DB_FILE'] = "MANUAL"
                 if (data["PM"].charAt(0) == "0") {
                     data["PM"] = data["PM"].slice(1);
                 }
                 data["NODENUM"] = data["PM"]
                 data["CARD_ID"] = "{{net_ucn.value}}-" + data["PM"] + "-" + data['CARD_NUM']
                 data["ID"] = data["CARD_ID"] + "-" + data["POINT_NUM"]
-                data["PTDESC"] = "manual"
+                data["PTDESC"] = "MANUAL"
                 data["SLOTNUM"] = data["POINT_NUM"]
                 console.log(data)
 

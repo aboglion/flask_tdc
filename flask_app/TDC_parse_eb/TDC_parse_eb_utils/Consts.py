@@ -1,6 +1,6 @@
 
 import os
-defult_STATUS = "existed"
+defult_STATUS = "EXISTED"
 
 # ####-====== RUN MODE TOGALS .. =====
 # ####[1]-- BYCcompose  http://localhost --
