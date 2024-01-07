@@ -16,8 +16,15 @@ print("XX_FILES:",XX_FILES)
 db_lock = threading.Lock()
 
 
-if not os.path.exists(DB_SQL):
-    os.makedirs(DB_SQL)
+def copy_file_first():
+    if not os.path.exists(DB_SQL):os.makedirs(DB_SQL)
+    if not os.path.exists(SQLFILE) :
+        try:
+            shutil.copy(SQLFILE_COPYTO, SQLFILE)
+            print("copyed: ",SQLFILE_COPYTO,"\n to ",SQLFILE,'======== first run sql copy')
+        except Exception:pass
+    
+copy_file_first()
 
 def GET_file_encoding(file):
     encoding_=""
@@ -303,7 +310,7 @@ def xxToSql(mode=0):
 
     def main_xxsql(modexx):
         global DB_SQL,XX_FILES,SQLFILE
-        if not os.path.exists(SQLFILE):copy_file()
+        copy_file_first()
         if modexx==1:
             try:
                 for file_path in XX_FILES:

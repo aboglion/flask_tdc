@@ -3,7 +3,7 @@ import os,hashlib,json,requests
 from TDC_parse_eb.pvsrc_parser import pvsrc_parse
 import TDC_parse_eb.TDC_parse_eb_utils.Consts as Consts
 from pvsrc import router_pvsrc
-from router_sql import router_SQL,xxToSql
+from router_sql import router_SQL,xxToSql,copy_file_first
 import Plugins,time
 if not os.path.exists(Consts.DB_JASON):
     os.makedirs(Consts.DB_JASON)
@@ -29,7 +29,7 @@ def main_page():
     actionUpdateData=Plugins.Update_Data()
     if actionUpdateData:
         return redirect(actionUpdateData)
-
+    
     # global MainPage_Data,updated_date
     if not os.path.exists(Consts.DB_JASON):
         try:os.makedirs(Consts.DB_JASON)
@@ -101,6 +101,7 @@ router_pvsrc(app)
 ##--------------------------   
 
 ####-------------SQL-lite router
+copy_file_first()
 router_SQL(app)
 ##--------------------------  
 ####-------------SMS-lite router
