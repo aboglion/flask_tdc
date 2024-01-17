@@ -1,6 +1,6 @@
 import os
 import time
-import glob
+import glob,re
 from tinydb import TinyDB, Query
 from shutil import copytree, rmtree, ignore_patterns
 from TDC_parse_eb.TDC_parse_eb_utils.Consts import DB_JASON, plant_map, EB_FILES_DIR, epks
@@ -23,6 +23,31 @@ today_ = time.strftime("%d-%b-%Y", time.gmtime())
 date_files = {"A": " ", "B": " "}
 
 
+def extract_date_from_file():
+    formatted_date=[]
+    for NET in ["A", "B"]:
+        try:
+            # קוראים את הטקסט מהקובץ
+            with open(paths[NET], "r", encoding='windows-1255') as file:
+                content = file.read()
+            # משימים לפרצן את התאריך מהטקסט באמצעות ביטוי רגולרי
+            date_matches = re.findall(r'INVOCATION TIME:\s+(\d{2}/\d{2}/\d{2}\s+\d{2}:\d{2}:\d{2}:\d{4})', content)
+            if date_matches:
+                # חולצים את התאריך הראשון מהמצאים
+                first_date = date_matches[0]
+                 # ממירים את התאריך לפורמט הרצוי
+                formatted_date.append(time.strftime("%d-%b-%Y", time.strptime(first_date, "%m/%d/%y %H:%M:%S:%f")))
+            else:
+                return None
+        except Exception as e:
+            print(e)
+            pass
+            return None
+        if len(formatted_date)==2:
+            if formatted_date[0]>formatted_date[1]:return formatted_date[0]
+            if formatted_date[1]>formatted_date[0]:return formatted_date[1]
+        if len(formatted_date)==1:return formatted_date[0]
+        return None
 
 def pvsrc_parse():
     # Initialize the TinyDB database and table

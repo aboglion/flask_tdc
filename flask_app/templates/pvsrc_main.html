@@ -385,7 +385,53 @@ body {
                 opacity: 3%;
             }
         }
-      
+    .bar-chart-container {
+    display: flex;
+    align-items: flex-end;
+    height: 20vh;
+    width: 100%;
+    border: 1px solid #ddd;
+    }
+
+    .bar-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    border-right: 2px solid;
+    margin: 0.1vw;
+    width: 100%;
+    }
+
+    .bar {
+    width: 0.3vw;
+    margin-right: 0.3vw;
+    border: 1px solid black;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    position: relative;
+    }
+
+    .bar-value {
+    position: absolute;
+    bottom: 15vh;
+    padding-left: 0.9vw;
+    font-size: 2.5vh;
+    text-decoration: underline overline rgb(255, 90, 255);
+    color: #f3ff00;
+    }
+
+    .bar-label {
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+    font-size: 2.2vh;
+    height: 20vh;
+    }
+
+    .last-bar {
+    background-color: rgb(58, 52, 86); /* רקע ירוק כבוי לאלמנט האחרון */
+    text-decoration: underline overline #f3ff00 ;
+     color: rgb(251, 255, 0) !important;
+     font-size: 2.9vh;
+    }
     </style>
     <!-- Include xlsx.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -399,12 +445,9 @@ body {
     <img>
 
     <h1>תגים מאולצים</h1>
-    <button id="downloadExcel">Download Excel</button>
 
-<div style="text-align: center; color: #2196f3;">
-    <h4 style="display: inline; margin-right: 10px;">מעודכן ליום {{date}} לחודש</h4>
-    <h2 style="display: inline;">| &nbsp;Total: {{data_len}}</h2>
-</div>
+
+{{bars_DIV}}
 
 
     <a style="left: 5vw" href="{{url_for('main_page')}}" class="M_L-button">
@@ -419,6 +462,10 @@ body {
         <i>🔑</i>
     </a>
     {% endif %}
+    <button style="left: 18vw"  class="M_L-button" id="downloadExcel"> <i>📥</i> </button>
+       
+    
+    
 
     <table id="tableId">
 

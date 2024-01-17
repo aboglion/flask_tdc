@@ -1,11 +1,14 @@
 from flask import Flask, render_template, request, redirect
+from markupsafe import Markup
 from tinydb import TinyDB, Query
 import time,os,Plugins
 from TDC_parse_eb.TDC_parse_eb_utils.Consts import DB_JASON
 from TDC_parse_eb.TDC_parse_eb_utils.hebrew import fix_if_reversed
+from TDC_parse_eb.pvsrc_parser import extract_date_from_file
 
 if not os.path.exists(DB_JASON):
     os.makedirs(DB_JASON)
+
 
 def router_pvsrc(app):
     today_ = time.strftime("%d-%b-%Y", time.gmtime())
@@ -23,9 +26,10 @@ def router_pvsrc(app):
         data=Plugins.Get_DBJson_Data('PVSRC_TODAY_DB.json')
         for d in data :print(d['ENTITY'])
         sorted_data = sorted(data, key=lambda item: item['ENTITY'][:3])
-        print("*"*20)
-        for d in sorted_data :print(d['ENTITY'])
-        return render_template("pvsrc_main.html", data=sorted_data,date=updated_date,data_len=len(sorted_data))
+        data_len=len(sorted_data)
+        files_update_date=extract_date_from_file()
+        bars_DIV=Markup(Plugins.get_PvsrcBars(files_update_date if files_update_date else today_,data_len))
+        return render_template("pvsrc_main.html", data=sorted_data,bars_DIV=bars_DIV)
 
     @app.route("/save", methods=["POST"])
     def save_reason():

@@ -219,7 +219,13 @@
         #in1 ,#in0{
             width:10vw;
         }
-
+        .deleted{
+            background-color: red;
+        }
+        .man{
+            color:rgb(203, 150, 252);
+            text-decoration: underline overline rgb(166, 231, 24);
+        }
         .M-button {
             position: fixed;
 
@@ -349,15 +355,17 @@ color: #4DC3FA;
             <tr onclick="openPopup({{tag}});">
                 {% for v in real_keys %}
                 <td 
-                    title={{loop.cycle("NAME","DESCRIPTION","SLOTNUM","ADRESS","STATUS","TYPE","NODENUM","PLANT","DB_FILE","DI-1","DI-2","DO-1","DO-2","RC-OUT","RC-IN1","RC-IN2")}}>
+                    title={{loop.cycle("NAME","DESCRIPTION","SLOTNUM","ADRESS","STATUS","TYPE","NODENUM","PLANT","DB_FILE","DI-1","DI-2","DO-1","DO-2","RC-OUT","RC-IN1","RC-IN2")}}
                     {% set value = tag.get(v) %}
                     {% if value is string %}
                         {% set value = value.strip() %}
                     {% endif %}
                     {% if value is number and value < 10 %}
-                        {{ "%02d"|format(value) }}
-                    {% else %}
-                        {{ value }}
+                        >{{ "%02d"|format(value) }}
+                    {% elif value=='DELETED' %} class="deleted" >{{ value }}
+                    {% elif value=='MANUAL' %} class="man" >{{ value }}
+                    {%else%}
+                       >{{ value }}
                     {% endif %}
                 </td>
                 {% endfor %}

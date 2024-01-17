@@ -12,8 +12,8 @@ def sms_s(app) :
             if time_struct.tm_wday == 5 or time_struct.tm_wday == 6:
                 return True
             
-            # בדוק אם השעה היא אחרי 16:00
-            if time_struct.tm_hour >= 16:
+            # בדוק אם השעה היא אחרי 17:00
+            if time_struct.tm_hour >= 17:
                 return True
             
             return False
