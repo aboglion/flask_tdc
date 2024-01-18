@@ -3,7 +3,7 @@ from datetime import datetime
 import random,os
 from TDC_parse_eb.TDC_parse_eb_utils.Consts import DB_JASON
 
-csv_file_path = "{DB_JASON}/bar_pvsrc_data.cvs"
+csv_file_path = f"{DB_JASON}/bar_pvsrc_data.cvs"
 
 def get_color(value, max_value):
     proportion = value / max_value
@@ -13,26 +13,20 @@ def get_color(value, max_value):
 
 def get_PvsrcBars(current_date,new_value):
     try:
-        if os.path.exists(csv_file_path): 
+            print(csv_file_path,"/n/n")
             with open(csv_file_path, "r") as file:
                 csv_reader = csv.reader(file)
                 data = list(csv_reader)
-
-
-            
+                print(data[-1][0])
             last_date = data[-1][0] if len(data) > 1 else None
 
-            if last_date != current_date:
+            if last_date != str(current_date):
                 data.append([current_date, new_value])
                 if len(data)>31:data=data[-31:]
-
-
                 with open(csv_file_path, "w", newline='') as file:
                     csv_writer = csv.writer(file)
                     csv_writer.writerows(data)
-        else:
-            data=[]
-            data.append([current_date, new_value])
+
     except Exception as e:
         print(e)
         data = []

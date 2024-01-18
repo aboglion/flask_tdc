@@ -24,29 +24,23 @@ date_files = {"A": " ", "B": " "}
 
 
 def extract_date_from_file():
-    formatted_date=[]
+    formatted_dates = []
     for NET in ["A", "B"]:
         try:
-            # קוראים את הטקסט מהקובץ
-            with open(paths[NET], "r", encoding='windows-1255') as file:
-                content = file.read()
-            # משימים לפרצן את התאריך מהטקסט באמצעות ביטוי רגולרי
-            date_matches = re.findall(r'INVOCATION TIME:\s+(\d{2}/\d{2}/\d{2}\s+\d{2}:\d{2}:\d{2}:\d{4})', content)
-            if date_matches:
-                # חולצים את התאריך הראשון מהמצאים
-                first_date = date_matches[0]
-                 # ממירים את התאריך לפורמט הרצוי
-                formatted_date.append(time.strftime("%d-%b-%Y", time.strptime(first_date, "%m/%d/%y %H:%M:%S:%f")))
-            else:
-                return None
+            # Get the creation time of the file
+            created = os.path.getctime(paths[NET])
+            created_time = time.localtime(created)
+            formatted_dates.append(created_time)
+            # print(f"Created time for NET {NET}: {time.strftime('%d-%b-%Y', created_time)}")
         except Exception as e:
             print(e)
-            pass
-            return None
-        if len(formatted_date)==2:
-            if formatted_date[0]>formatted_date[1]:return formatted_date[0]
-            if formatted_date[1]>formatted_date[0]:return formatted_date[1]
-        if len(formatted_date)==1:return formatted_date[0]
+
+    # Compare dates and return the latest
+    if len(formatted_dates) == 2:
+        return time.strftime('%d-%b-%Y', max(formatted_dates))
+    elif formatted_dates:
+        return time.strftime('%d-%b-%Y', formatted_dates[0])
+    else:
         return None
 
 def pvsrc_parse():
