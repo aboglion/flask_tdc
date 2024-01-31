@@ -306,11 +306,11 @@
         {% endfor %}
 
         {% if session['logged_in'] %}
-        <i style="color: rgb(19, 74, 255)"> ___[_updated-date :  {{updated_date}}_]<a href="javascript:void(0);" onclick="fetch('/update')">עדכן עכשיו </a></i>
-        <i class="key">LOGOUT</i>
+        <a href="{{url_for('log_out')}}" >
+        <i  class="key">LOGOUT</i>
             {% else %}
         </a>
-        <a style="font-size:50px ;" href="{{url_for("log_in")}}">
+        <a style="font-size:50px ;" href="{{url_for('log_in')}}">
             <i class="key">🔑</i>
         </a>
         {% endif %}
@@ -318,14 +318,14 @@
     </div>
 
     <div class="logs">
-        <p> <i class="logs_tit">A תאריכי עדכון רשת =></i> : | {% for log in dates_A %}<i>{{log}}</i>] _ |{% endfor %}</p>
-        <p> <i class="logs_tit">B תאריכי עדכון רשת =></i> : | {% for log in dates_B %}<i>{{log}}</i>] _ |{% endfor %}</p>
+        <!-- <p> <i class="logs_tit">A תאריכי עדכון רשת =></i> : | {% for log in dates_A %}<i>{{log}}</i>] _ |{% endfor %}</p>
+        <p> <i class="logs_tit">B תאריכי עדכון רשת =></i> : | {% for log in dates_B %}<i>{{log}}</i>] _ |{% endfor %}</p> -->
             {% if EB_FILES_DIR_exist %}
             <p style="color: rgba(0, 128, 0, 0.664);padding: 0;margin-top: 0;font-size: smaller;">EB DIR STATUS: exist
             {% else %}
             <p class="error-message">"EB" FILSE FOLDER OF DATABASE NOT FOUND
             {% endif %}
-                <i style="color: rgb(19, 74, 255)"> ___[_updated-date :  {{updated_date}}_]<a href="/update" >עדכן עכשיו </a></i>
+                <i style="color: rgb(19, 74, 255)"> ___[_updated-date :  {{updated_date}}_]</i>
             </p>
     
 
@@ -337,15 +337,18 @@
     <a style="top:38vh" href="{{url_for("duplication")}}" class="lM-button">
         <i>דוח כפליות</i>
     </a>
+
+    <a style="top:48vh;font-size:15px;color:rgb(255, 243, 15) !important;direction: inherit;" href="http://nhfe-a1pe/processexplorer/aspenONE.html?ProcessExplorerGraphic?nav=true&file=Public%2FMofet%2FWS%20Dashboard.JSON&t1=1705819509606&t2=1706424309606" class="lM-button">
+        <i>תחנות הפעלה פירוט</i>
     
-    <a style="top:48vh;font-size:15px;color:rgb(255, 243, 15) !important;direction: inherit;" href="{{url_for("sms_log")}}" class="lM-button">
-        <i>תחנות הפעלה והתרעות</i>
+    <a style="top:56vh;font-size:15px;color:rgb(255, 243, 15) !important;direction: inherit;" href="{{url_for("sms_log")}}" class="lM-button">
+        <i>תחנות הפעלה\SMS</i>
     </a>
-    <a style="top:56vh" href="{{url_for("SMS_UCME")}}" class="lM-button">
+    <a style="top:64vh ;color:rgb(123, 255, 15) !important;" href="{{url_for("SMS_UCME")}}" class="lM-button">
         <i>SMS UCME</i>
     </a>
 
-    <a style="top:66vh" href="{{url_for("q_test")}}" class="lM-button">
+    <a style="top:74vh ;color:rgb(242, 171, 5) !important;" href="{{url_for("q_test")}}" class="lM-button">
         <i>SQL</i>
     </a>
     <div>
