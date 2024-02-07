@@ -86,6 +86,7 @@ def pvsrc_parse():
                     epks_file, "r", encoding='windows-1255').read().splitlines()[startline:]
                 print(datastring)
                 mitkan_epks = epks_file.split("\\")[1].split(" ")[0]
+                print(mitkan_epks)
                 for l in datastring:
 
                     l = l.split(",")
