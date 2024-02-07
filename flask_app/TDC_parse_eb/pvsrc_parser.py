@@ -85,8 +85,8 @@ def pvsrc_parse():
                 datastring = open(
                     epks_file, "r", encoding='windows-1255').read().splitlines()[startline:]
                 # print(datastring)
-                if "915" in mitkan_epks :mitkan_epks ="915"
-                elif "700" in mitkan_epks:mitkan_epks ="700"
+                if "915" in epks_file :mitkan_epks ="915"
+                elif "700" in epks_file:mitkan_epks ="700"
                 else :mitkan_epks ="0_0"
                 # print(mitkan_epks)
                 for l in datastring:
