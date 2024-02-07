@@ -72,9 +72,9 @@ def pvsrc_parse():
                     data.append({"ENTITY": ENTITY, "PVSOURCE":"SOURCE => ALL" if PVSOURCE=="AUTO" else PVSOURCE,
                                 "PTDESC": PTDESC, "REASON": ""})
         # exprian files =-=-=============================================
+        epks_file_list = glob.glob(epks)
+        print("\n all experina files ---> ",epks_file,"\n----------------\n\n")
         if os.path.exists(epks):
-            epks_file_list = glob.glob(epks)
-            print("\n all experina files ---> ",epks_file,"\n----------------\n\n")
             if len(epks_file_list) > 0:
                 epks_file_list = sorted(
                     epks_file_list, key=lambda x: os.path.getmtime(x), reverse=True)
