@@ -74,11 +74,13 @@ def pvsrc_parse():
         # exprian files =-=-=============================================
         if os.path.exists(epks):
             epks_file_list = glob.glob(epks)
+            print("\n all experina files ---> ",epks_file,"\n----------------\n\n")
             if len(epks_file_list) > 0:
                 epks_file_list = sorted(
                     epks_file_list, key=lambda x: os.path.getmtime(x), reverse=True)
                 newest_files = epks_file_list[:2]
-            for epks_file in epks_file_list:
+            for epks_file in newest_files:
+                print("\n experina file ---> ",epks_file,"\n==================\n\n")
                 startline = 2
                 datastring = open(
                     epks_file, "r", encoding='windows-1255').read().splitlines()[startline:]

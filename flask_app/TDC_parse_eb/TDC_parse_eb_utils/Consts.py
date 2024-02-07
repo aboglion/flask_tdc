@@ -2,6 +2,7 @@
 import os
 defult_STATUS = "EXISTED"
 
+
 # ####-====== RUN MODE TOGALS .. =====
 ####[1]-- BYCcompose  http://localhost --
 EB_FILES_DIR="/TDC/DB"
@@ -35,10 +36,15 @@ path_out=back_2_DB_JASON+'/REP/UCME_BACKUP'
 SMS_HTML_outmain=path_out+'/USME_sms.html'
 SMS_out_groups=path_out+'/GROUPS.html'
 
+# FOR EXPRIAN PVSORC FILES
+epks = back_2_DB_JASON+'/REP/experion/*.csv'
+print("epks====>",epks)
+
 abs_path=("/").join(os.path.abspath(__file__).split("/")[:-3])     
 
 update_hour = 9
 lastDate_update_path=abs_path+'/Plugins/UPDATE_DATE.log'
+
 
 TAGS_TYPE = ["*", "RC", "DI", "DO", "AI", "AO",
              "DC", "RPV", "SEQ", "NM", "FL", "ARR", "TM"]
@@ -130,5 +136,4 @@ lyout_sizes = {
     "LLMUX": 30,
     "SI": 0
 }
-# FOR EXPRIAN PVSORC FILES
-epks = back_2_DB_JASON+'/REP/experion'
+
