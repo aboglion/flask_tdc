@@ -30,8 +30,8 @@ print("SQLFILE===>",SQLFILE)
 
 
 back_2_DB_JASON=("/").join(DB_JASON.split("/")[:-1])
-folderpath=back_2_DB_JASON+'/Rep/UCME_BACKUP'
-path_out=back_2_DB_JASON+'/Rep/UCME_BACKUP'
+folderpath=back_2_DB_JASON+'/REP/UCME_BACKUP'
+path_out=back_2_DB_JASON+'/REP/UCME_BACKUP'
 SMS_HTML_outmain=path_out+'/USME_sms.html'
 SMS_out_groups=path_out+'/GROUPS.html'
 
@@ -131,4 +131,4 @@ lyout_sizes = {
     "SI": 0
 }
 # FOR EXPRIAN PVSORC FILES
-epks = "//ilnhv-fs01/Shares/WF-OUT/Rep/Experion/*.*"
+epks = back_2_DB_JASON+'/REP/experion'
