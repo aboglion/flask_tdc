@@ -31,9 +31,6 @@ def get_PvsrcBars(current_date,new_value):
         print(e)
         data = []
         data.append([current_date, new_value])
-        with open(csv_file_path, "w+", newline='') as file:
-            csv_writer = csv.writer(file)
-            csv_writer.writerows(data)
         pass
 
     while(len(data)<31):
