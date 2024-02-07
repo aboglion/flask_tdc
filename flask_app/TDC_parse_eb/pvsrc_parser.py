@@ -74,29 +74,29 @@ def pvsrc_parse():
         # exprian files =-=-=============================================
         epks_file_list = glob.glob(epks)
         print("\n all experina files ---> ",epks_file_list,"\n----------------\n\n")
-        if os.path.exists(epks):
-            if len(epks_file_list) > 0:
-                epks_file_list = sorted(
-                    epks_file_list, key=lambda x: os.path.getmtime(x), reverse=True)
-                newest_files = epks_file_list[:2]
-            for epks_file in newest_files:
-                print("\n experina file ---> ",epks_file,"\n==================\n\n")
-                startline = 2
-                datastring = open(
-                    epks_file, "r", encoding='windows-1255').read().splitlines()[startline:]
 
-                mitkan_epks = epks_file.split("\\")[1].split(" ")[0]
-                for l in datastring:
+        if len(epks_file_list) > 0:
+            epks_file_list = sorted(
+                epks_file_list, key=lambda x: os.path.getmtime(x), reverse=True)
+            newest_files = epks_file_list[:2]
+        for epks_file in newest_files:
+            print("\n experina file ---> ",epks_file,"\n==================\n\n")
+            startline = 2
+            datastring = open(
+                epks_file, "r", encoding='windows-1255').read().splitlines()[startline:]
 
-                    l = l.split(",")
-                    if len(l) > 3:
-                        if "ERRORS" in l[0] or "Request" in l[0]:
-                            continue
-                        ENTITY = f"{mitkan_epks} => {l[0]}"
-                        PVSOURCE = l[1]
-                        PTDESC = " ".join(l[2:])
-                        data.append(
-                            {"ENTITY": ENTITY, "PVSOURCE": PVSOURCE, "PTDESC": PTDESC, "REASON": ""})
+            mitkan_epks = epks_file.split("\\")[1].split(" ")[0]
+            for l in datastring:
+
+                l = l.split(",")
+                if len(l) > 3:
+                    if "ERRORS" in l[0] or "Request" in l[0]:
+                        continue
+                    ENTITY = f"{mitkan_epks} => {l[0]}"
+                    PVSOURCE = l[1]
+                    PTDESC = " ".join(l[2:])
+                    data.append(
+                        {"ENTITY": ENTITY, "PVSOURCE": PVSOURCE, "PTDESC": PTDESC, "REASON": ""})
            # ------
         for t in LAST_DATA:
             if (t["ENTITY"] in data):
