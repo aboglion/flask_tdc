@@ -14,7 +14,7 @@ def get_color(value, max_value):
 def get_PvsrcBars(current_date,new_value):
     try:
             print(csv_file_path,"/n/n")
-            with open(csv_file_path, "r+") as file:
+            with open(csv_file_path, "r") as file:
                 csv_reader = csv.reader(file)
                 data = list(csv_reader)
                 print(data[-1][0])
@@ -31,6 +31,9 @@ def get_PvsrcBars(current_date,new_value):
         print(e)
         data = []
         data.append([current_date, new_value])
+        with open(csv_file_path, "w+", newline='') as file:
+            csv_writer = csv.writer(file)
+            csv_writer.writerows(data)
         pass
 
     while(len(data)<31):
