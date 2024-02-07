@@ -73,7 +73,7 @@ def pvsrc_parse():
                                 "PTDESC": PTDESC, "REASON": ""})
         # exprian files =-=-=============================================
         epks_file_list = glob.glob(epks)
-        print("\n all experina files ---> ",epks_file,"\n----------------\n\n")
+        print("\n all experina files ---> ",epks_file_list,"\n----------------\n\n")
         if os.path.exists(epks):
             if len(epks_file_list) > 0:
                 epks_file_list = sorted(
