@@ -80,13 +80,15 @@ def pvsrc_parse():
                 epks_file_list, key=lambda x: os.path.getmtime(x), reverse=True)
             newest_files = epks_file_list[:2] if len(epks_file_list)>=3 else epks_file_list
             for epks_file in newest_files:
-                print("\n experina file ---> ",epks_file,"\n==================\n\n")
+                # print("\n experina file ---> ",epks_file,"\n==================\n\n")
                 startline = 2
                 datastring = open(
                     epks_file, "r", encoding='windows-1255').read().splitlines()[startline:]
-                print(datastring)
-                mitkan_epks = epks_file.split("/")[1].split(" ")[0]
-                print(mitkan_epks)
+                # print(datastring)
+                if "915" in mitkan_epks :mitkan_epks ="915"
+                elif "700" in mitkan_epks:mitkan_epks ="700"
+                else :mitkan_epks ="0_0"
+                # print(mitkan_epks)
                 for l in datastring:
 
                     l = l.split(",")
