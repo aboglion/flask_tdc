@@ -19,6 +19,7 @@ def Update_Pms_Data(ALL_Plant):
         pms = []
         for pm in PMs_DATA:
             pm_ = f'{pm}'
+            if pm_=="11" and plant=="740":continue
             sub_is_done = False
             L = {pm_: {"AO": [0, 0], "AI": [0, 0], "DI": [
                 0, 0], "DO": [0, 0], "LLMUX": [0, 0], "ELSE": [0, 0]}}
