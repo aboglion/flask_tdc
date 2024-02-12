@@ -42,7 +42,7 @@ def Update_Pms_Data(ALL_Plant):
 
                     LEN = len(card_)
                     for point in card_:
-                        if not point.get("NAME") == None:
+                        if (not (point.get("NAME") == None)) and point.get("STATUS") =="EXISTED":
                             CONTER += 1
                             if plant == ("630") and not sub_is_done:
                                 F_LEETER = point["NAME"][0]
