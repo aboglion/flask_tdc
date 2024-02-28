@@ -82,8 +82,10 @@ def pvsrc_parse():
             print("\n experina file ---> ",newest_files,"\n==================\n\n")
             for epks_file in newest_files:
                 startline = 2
-                datastring = open(
-                    epks_file, "r", encoding='windows-1255').read().splitlines()[startline:]
+                datastring = open(epks_file, "r", encoding='windows-1255').read().splitlines()
+                if len(datastring)>startline:
+                    datastring=datastring[startline-1:]
+                else :continue
                 # print(datastring)
                 if "915" in epks_file :mitkan_epks ="915"
                 elif "700" in epks_file:mitkan_epks ="700"
