@@ -17,14 +17,14 @@ def get_PvsrcBars(current_date, new_value):
         print(csv_file_path, "\n\n")
         with open(csv_file_path, "r") as file:
             csv_reader = csv.reader(file)
-            data = sorted(list(csv_reader), key=lambda x: datetime.strptime(x[0], '%d-%m-%y'))
+            data = sorted(list(csv_reader), key=lambda x: datetime.strptime(x[0], '%d-%b-%Y'))
             print(data[-1][0])
         last_date = data[-1][0] if len(data) > 1 else None
 
         if last_date != str(current_date):
             data.append([current_date, new_value])
             # Sort again after appending the new entry to ensure correct order
-            data = sorted(data, key=lambda x: datetime.strptime(x[0], '%d-%m-%y'))
+            data = sorted(data, key=lambda x: datetime.strptime(x[0], '%d-%b-%Y'))
             if len(data) > 31:
                 # Ensure we keep the most recent 31 records
                 data = data[-31:]
