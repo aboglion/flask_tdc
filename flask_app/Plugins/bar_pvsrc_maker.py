@@ -40,7 +40,7 @@ def get_PvsrcBars(current_date, new_value):
 
     while(len(data) < 31):
         data.insert(0, ['00.00.00', '0'])
-
+    print(data)
     bars_html = """
      <div class="bar-chart-container">
     """
