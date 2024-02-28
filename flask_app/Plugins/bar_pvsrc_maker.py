@@ -36,7 +36,7 @@ def get_PvsrcBars(current_date, new_value):
         print(e)
         data = []
         data.append([current_date, new_value])
-        # No need for 'pass' after handling the exception
+
 
     while(len(data) < 31):
         data.insert(0, ['00.00.00', '0'])
