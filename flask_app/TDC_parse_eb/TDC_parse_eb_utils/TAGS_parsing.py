@@ -3,15 +3,16 @@ import os
 from .hebrew import fix_if_reversed
 from .save_to_db import save_to_db_duplication
 
-def format_number(num_str):
+def format_number(num):
     try:
-        if len(num_str)>=2 and num_str[0]=="0":
-            return num_str[1:]
+        if 0<int(num)<10 :
+            return f"0{num}"
         else:
-            return num_str
-    except Exception :
+            return str(num)
+    except Exception:
         pass
-        return num_str
+        return num
+
     
 def TAGS_parsing(path, type_):
     all_tags = []
@@ -56,9 +57,9 @@ def TAGS_parsing(path, type_):
                     if "NODENUM" in word:
                         PM = nextword
                     if "SLOTNUM" in word:
-                        index = nextword
+                        index = format_number(nextword)
                     if "MODNUM" in word:
-                        CARD = nextword
+                        CARD = format_number(nextword)
                     if "PTDESC" in word:
                         PTDESC = fix_if_reversed(nextword)
                         # TO MAKE INPOUT DCTAG AND OUT_DC TAG WITH INDEX IN CARD ADRI..
@@ -66,8 +67,8 @@ def TAGS_parsing(path, type_):
                         dctag = {}
                         dctag["TYPE"] = word[:2]
                         dctag["NAME"] = f"{NAME} [DC-{dctag['TYPE']}]"
-                        dc_card = format_number(nextword[3:5])
-                        ds_index = format_number(nextword[6:8])
+                        dc_card = nextword[3:5]
+                        ds_index = nextword[6:8]
                         dctag["DC_index"] = ds_index
                         if dc_card == "######":
                             dc_card = type_
