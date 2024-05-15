@@ -84,4 +84,3 @@ def main_parser(which_plant,which_pm='*', which_type='*'):
             print(e)
             print(f"LYOUT ERROR IN {current_plant}")
             continue
-
