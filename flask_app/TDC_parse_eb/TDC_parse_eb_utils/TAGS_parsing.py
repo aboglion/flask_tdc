@@ -6,7 +6,7 @@ from .save_to_db import save_to_db_duplication
 def format_number(num):
     try:
         num_int = int(num)
-        if 0 <= num_int < 10:
+        if 0 < num_int < 10:
             return f"0{num_int}"
         else:
             return str(num_int)
@@ -75,8 +75,8 @@ def TAGS_parsing(path, type_):
         new_tag.update({
             "DB_FILE": DB_FILE,
             "CARD_ID": "-".join([NET, NIM, PM, CARD]),
-            "ID": "-".join([NET, NIM, PM, CARD, index]),
-            "STATUS": defult_status,
+            "ID": "-".join([NET, NIM, PM, CARD, format_number(index)]),
+            "STATUS": defult_STATUS,
             "TYPE": type_,
             "PLANT": PLANT
         })
