@@ -13,15 +13,15 @@ def update_status(parse_EB_DATA, which_plant):
         print(f"קובץ מידע JSON של {which_plant} חסר")
         return parse_EB_DATA
     # המרת parse_EB_DATA למילון לצורך חיפוש מהיר יותר
-    parse_dict = {item['ID']: item for item in parse_EB_DATA}
+    the_new_dic_ids = {item['NAME']: item for item in parse_EB_DATA}
     # print(parse_dict)
     ii = 0
-    for i in DB_DATA:
+    for old in DB_DATA:
         # ביצוע חיפוש לפי המזהה (ID) במילון במקום לסנן את הרשימה
-        if i["ID"] not in parse_dict:
-            if i["STATUS"] == "EXISTED":
-                i["STATUS"] = "DELETED"
-            UPDATED.append(i)
+        if old["NAME"] not in the_new_dic_ids:
+            if old["STATUS"] == "EXISTED":
+                old["STATUS"] = "DELETED"
+            UPDATED.append(old)
     parse_EB_DATA.extend(UPDATED)
     TAGS_DB.close()
     return parse_EB_DATA
