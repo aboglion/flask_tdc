@@ -3,7 +3,16 @@ import os
 from .hebrew import fix_if_reversed
 from .save_to_db import save_to_db_duplication
 
-
+def format_number(num_str):
+    try:
+        if len(num_str)>=2 and num_str[0]=="0":
+            return num_str[1:]
+        else:
+            return num_str
+    except Exception :
+        pass
+        return num_str
+    
 def TAGS_parsing(path, type_):
     all_tags = []
     RETOEN = []
@@ -57,8 +66,8 @@ def TAGS_parsing(path, type_):
                         dctag = {}
                         dctag["TYPE"] = word[:2]
                         dctag["NAME"] = f"{NAME} [DC-{dctag['TYPE']}]"
-                        dc_card = nextword[3:5]
-                        ds_index = nextword[6:8]
+                        dc_card = format_number(nextword[3:5])
+                        ds_index = format_number(nextword[6:8])
                         dctag["DC_index"] = ds_index
                         if dc_card == "######":
                             dc_card = type_
