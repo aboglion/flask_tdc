@@ -67,8 +67,8 @@ def TAGS_parsing(path, type_):
                         dctag = {}
                         dctag["TYPE"] = word[:2]
                         dctag["NAME"] = f"{NAME} [DC-{dctag['TYPE']}]"
-                        dc_card = nextword[3:5]
-                        ds_index = nextword[6:8]
+                        dc_card = format_number(nextword[3:5])
+                        ds_index = format_number(nextword[6:8])
                         dctag["DC_index"] = ds_index
                         if dc_card == "######":
                             dc_card = type_
@@ -100,11 +100,11 @@ def TAGS_parsing(path, type_):
             new_tag["TYPE"] = "LLMUX"
 
         if new_tag["TYPE"] == "RC" and "!AO" in new_tag["CODSTN(1)"] and ".OP" in new_tag["CODSTN(1)"]:
-            index = new_tag["CODSTN(1)"].split(".")[0][-2:]
+            index = format_number(new_tag["CODSTN(1)"].split(".")[0][-2:])
             # print(index)
             # print("the old -->","card:",new_tag["CARD_ID"] ,"id:", new_tag["ID"])
             new_tag["CARD_ID"] = "-".join([NET,
-                                          NIM, PM, new_tag["CODSTN(1)"][3:5]])
+                                          NIM, PM, format_number(new_tag["CODSTN(1)"][3:5])])
             new_tag["ID"] = new_tag["CARD_ID"]+"-"+index
             # print("the new -->","card:",new_tag["CARD_ID"], "id:", new_tag["ID"],"\n===================\n\n")
         try:
