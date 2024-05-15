@@ -17,9 +17,16 @@ def update_status(parse_EB_DATA, which_plant):
     # print(parse_dict)
     ii = 0
     for old in DB_DATA:
-        courcting_num_id=old["ID"].split("-")[-1]
+        courcting_num_id_num=old["ID"].split("-")[-1]
+        courcting_num_id_card=old["ID"].split("-")[-2:-1]
+        if len(courcting_num_id_num)>=2 and courcting_num_id_num[0]=="0":
+            courcting_num_id_num=courcting_num_id_num[1:]
+            old["ID"]="-".join(old["ID"].split("-")[:-1],courcting_num_id_num)
+        if len(courcting_num_id_card)>=2 and courcting_num_id_card[0]=="0":
+            courcting_num_id_card=courcting_num_id_card[1:]
+            old["ID"]="-".join(old["ID"].split("-")[:-2],courcting_num_id_card,courcting_num_id_num)            
         # ביצוע חיפוש לפי המזהה (ID) במילון במקום לסנן את הרשימה
-        if old["ID"] not in the_new_dic_ids and not(len(courcting_num_id)>=2 and courcting_num_id[0]=="0"):
+        if old["ID"] not in the_new_dic_ids:
             if old["STATUS"] == "EXISTED":
                 old["STATUS"] = "DELETED"
             UPDATED.append(old)
