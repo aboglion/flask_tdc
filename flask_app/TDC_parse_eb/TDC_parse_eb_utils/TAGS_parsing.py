@@ -5,7 +5,7 @@ from .save_to_db import save_to_db_duplication
 
 def format_number(num):
     try:
-        if 0<int(num)<10 :
+        if len(str(num))==1 and not (str(num)=='0') :
             return f"0{num}"
         else:
             return str(num)
