@@ -55,7 +55,7 @@ def TAGS_parsing(path, type_):
                     if "NTWKNUM" in word:
                         NIM = nextword
                     if "NODENUM" in word:
-                        PM = nextword
+                        PM = format_number(nextword)
                     if "SLOTNUM" in word:
                         index = format_number(nextword)
                     if "MODNUM" in word:
