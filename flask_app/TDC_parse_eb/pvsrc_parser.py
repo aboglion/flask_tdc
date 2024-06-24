@@ -138,13 +138,13 @@ def pvsrc_parse():
             if len(tag_new) == 0:
                 tag = (find_data(entity, data))
                 PVSRC_TODAY_DB.insert(tag)
-            PVSRC_TODAY_DB.update({"START_AT": today_, "NEW": True}, TAG["ENTITY"] == entity)
+            PVSRC_TODAY_DB.update({"START_AT": time.strftime("%d-%b-%Y", time.gmtime()), "NEW": True}, TAG["ENTITY"] == entity)
 
     if not_in_data:
         for entityarry in not_in_data:
             entity=entityarry[0]
             e = PVSRC_LAST_DB.search(TAG["ENTITY"] == entity)
-            e[0].update({"END_AT": today_})
+            e[0].update({"END_AT": time.strftime("%d-%b-%Y", time.gmtime())})
             e[0].pop("NEW", None)
             PVSRC_HISTORY_DB.insert(dict(e[0]))
             tag_his = PVSRC_TODAY_DB.search(TAG["ENTITY"] == entity)
